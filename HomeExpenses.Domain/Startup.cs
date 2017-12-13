@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 
 namespace HomeExpenses.Domain
 {
@@ -11,11 +13,11 @@ namespace HomeExpenses.Domain
     {
         public IConfigurationRoot Configuration { get; }
 
-        protected Startup()
+        public Startup(IHostingEnvironment env)
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{environmentName}.json", true);
 
@@ -28,13 +30,9 @@ namespace HomeExpenses.Domain
                                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
-        public void Configure(IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app)
         {
-            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
-                context.Database.Migrate();
-            }
+            app.UseStaticFiles();
         }
     }
 }
