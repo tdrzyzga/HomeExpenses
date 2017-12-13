@@ -1,4 +1,4 @@
-﻿using HomeExpenses.Core.Entities;
+﻿using HomeExpenses.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

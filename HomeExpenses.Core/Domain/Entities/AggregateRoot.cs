@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeExpenses.Core.Entities
+namespace HomeExpenses.Core.Domain.Entities
 {
     public abstract class AggregateRoot : Entity
     {

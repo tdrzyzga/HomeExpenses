@@ -27,7 +27,7 @@ namespace HomeExpenses.Domain
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<HomeExpensesDbContext>(options =>
-                                                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                                                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
         }
 
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
