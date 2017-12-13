@@ -27,5 +27,14 @@ namespace HomeExpenses.Domain
             services.AddDbContext<HomeExpensesDbContext>(options =>
                                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
+
+        public void Configure(IServiceProvider serviceProvider)
+        {
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
+                context.Database.Migrate();
+            }
+        }
     }
 }
