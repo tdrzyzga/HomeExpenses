@@ -30,9 +30,15 @@ namespace HomeExpenses.Domain
                                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
             app.UseStaticFiles();
+
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }
