@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace HomeExpenses.Core.Domain.Infrastructure
+namespace Core.Infrastructure.Database
 {
     public class GenericContextFactory<TDbContext> : IDesignTimeDbContextFactory<TDbContext> where TDbContext : DbContext
     {

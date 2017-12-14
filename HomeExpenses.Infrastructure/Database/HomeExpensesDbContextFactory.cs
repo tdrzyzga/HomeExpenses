@@ -1,9 +1,9 @@
-﻿using HomeExpenses.Core.Domain.Infrastructure;
+﻿using Core.Infrastructure.Database;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HomeExpenses.Host.Infrastructure.Database
+namespace HomeExpenses.Infrastructure.Database
 {
     public class HomeExpensesDbContextFactory : GenericContextFactory<HomeExpensesDbContext>
     {

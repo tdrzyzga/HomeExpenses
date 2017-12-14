@@ -1,4 +1,4 @@
-﻿using HomeExpenses.Host.Entities.Bill.Model;
+﻿using HomeExpenses.Domain.Bill;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HomeExpenses.Host.Infrastructure.Database
+namespace HomeExpenses.Infrastructure.Database
 {
     public class HomeExpensesDbContext : DbContext
     {

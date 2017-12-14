@@ -1,10 +1,10 @@
-﻿using HomeExpenses.Core.Domain.Entities;
+﻿using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeExpenses.Host.Entities.Bill.Model
+namespace HomeExpenses.Domain.Bill
 {
     public class Bill : AggregateRoot
     {

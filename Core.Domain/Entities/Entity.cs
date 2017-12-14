@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HomeExpenses.Core.Domain.Entities
+namespace Core.Domain.Entities
 {
     public abstract class Entity
     {

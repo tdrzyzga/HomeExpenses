@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HomeExpenses.Host.Infrastructure.Migrations
+namespace HomeExpenses.Infrastructure.Migrations
 {
     public partial class Init : Migration
     {
@@ -16,13 +16,13 @@ namespace HomeExpenses.Host.Infrastructure.Migrations
                 schema: "Expense",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatorId = table.Column<Guid>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

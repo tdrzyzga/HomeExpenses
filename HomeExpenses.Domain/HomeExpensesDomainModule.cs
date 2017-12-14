@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace HomeExpenses.Host
+namespace HomeExpenses.Domain
 {
     public class HomeExpensesDomainModule : Module
     {
