@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HomeExpenses.Domain.Infrastructure.Migrations
+namespace HomeExpenses.Host.Infrastructure.Migrations
 {
     public partial class Init : Migration
     {

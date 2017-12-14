@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeExpenses.Domain.Entities.Bill.Model
+namespace HomeExpenses.Host.Entities.Bill.Model
 {
     public class Bill : AggregateRoot
     {

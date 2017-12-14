@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HomeExpenses.Domain.Infrastructure.Database
+namespace HomeExpenses.Host.Infrastructure.Database
 {
     public class HomeExpensesDbContextFactory : GenericContextFactory<HomeExpensesDbContext>
     {
