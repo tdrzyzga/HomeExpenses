@@ -47,6 +47,7 @@ namespace HomeExpenses.Host
             builder.RegisterModule<HomeExpensesPresentationModule>();
 
             builder.Register(ctx => new LocalActorSystemManager("HostActorSystem", AkkaConfig)).AsImplementedInterfaces().SingleInstance();
+            builder.Register(ctx => new RemoteActorSystemManager("HostActorSystem")).AsImplementedInterfaces().SingleInstance();
         }
     }
 }

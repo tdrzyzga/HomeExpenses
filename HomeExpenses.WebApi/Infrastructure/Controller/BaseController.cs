@@ -12,11 +12,16 @@ using System.Threading.Tasks;
 
 namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
-    public class BaseController : Microsoft.AspNetCore.Mvc.Controller
+    public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IRemoteActorProvider _remoteActorProvider;
 
+        protected BaseController(IServiceProvider serviceProvider, IRemoteActorProvider remoteActorProvider)
+        {
+            _serviceProvider = serviceProvider;
+            _remoteActorProvider = remoteActorProvider;
+        }
 
         protected async Task<IActionResult> SendCommand<TCommand>(string dispatcherActorName, TCommand command) where TCommand : ICommand
         {

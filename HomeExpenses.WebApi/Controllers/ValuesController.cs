@@ -2,13 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Akka.ActorSystem;
+using HomeExpenses.Message.Bill.Command;
+using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeExpenses.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : BaseController
     {
+        public ValuesController(IServiceProvider serviceProvider, IRemoteActorProvider remoteActorProvider) : base(serviceProvider, remoteActorProvider)
+        {
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
@@ -25,8 +32,9 @@ namespace HomeExpenses.WebApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody]AddBillCommand command)
         {
+            return await SendCommand("BillCommandActor", command);
         }
 
         // PUT api/values/5
