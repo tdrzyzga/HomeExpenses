@@ -15,22 +15,21 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IRemoteActorProvider _remoteActorProvider;
+        private readonly ILocalActorSystemManager _localActorSystemManager;
 
-        protected BaseController(IServiceProvider serviceProvider, IRemoteActorProvider remoteActorProvider)
+        protected BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager)
         {
             _serviceProvider = serviceProvider;
-            _remoteActorProvider = remoteActorProvider;
+            _localActorSystemManager = localActorSystemManager;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(string dispatcherActorName, TCommand command) where TCommand : ICommand
         {
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.UserId));
+            string path = $"akka.tcp://HostActorSystem@localhost:9991/user/{dispatcherActorName}";
 
-
-
-            var actor = await _remoteActorProvider.GetOne(dispatcherActorName);
+            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
             var response = await actor.Ask(command);
 
             return BadRequest();

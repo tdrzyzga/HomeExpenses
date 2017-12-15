@@ -9,16 +9,12 @@ using System.Threading.Tasks;
 
 namespace Core.Infrastructure.Repository
 {
-    public class Repository<TAggregateRoot>:
-        IWriteRepository<TAggregateRoot>,
-        IReadRepository<TAggregateRoot>,
-        ISourceRespository<TAggregateRoot>
-        where TAggregateRoot : AggregateRoot
+    public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : AggregateRoot
     {
         private DbContext _context;
         private DbSet<TAggregateRoot> _dbSet;
 
-        public Repository(DbContext context)
+        public BaseRepository(DbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TAggregateRoot>();

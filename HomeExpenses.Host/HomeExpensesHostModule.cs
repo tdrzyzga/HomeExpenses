@@ -32,22 +32,20 @@ namespace HomeExpenses.Host
                                                                         }
                                                                         ");
         protected override void Load(ContainerBuilder builder)
-        {            
-            builder.RegisterModule<CoreAkkaModule>();
-            builder.RegisterModule<CoreApplicationModule>();
-            builder.RegisterModule<CoreDomainModule>();
-            builder.RegisterModule<CoreMessageModule>();
+        {
             builder.RegisterModule<CoreInfrastructureModule>();
+            builder.RegisterModule<CoreDomainModule>();            
+            builder.RegisterModule<CoreApplicationModule>();            
             builder.RegisterModule<CorePresentationModule>();
+            builder.RegisterModule<CoreAkkaModule>();
 
-            builder.RegisterModule<HomeExpensesApplicationModule>();
-            builder.RegisterModule<HomeExpensesDomainModule>();
-            builder.RegisterModule<HomeExpensesMessageModule>();
             builder.RegisterModule<HomeExpensesInfrastructureModule>();
+            builder.RegisterModule<HomeExpensesDomainModule>();
+            builder.RegisterModule<HomeExpensesApplicationModule>();            
             builder.RegisterModule<HomeExpensesPresentationModule>();
 
             builder.Register(ctx => new LocalActorSystemManager("HostActorSystem", AkkaConfig)).AsImplementedInterfaces().SingleInstance();
-            builder.Register(ctx => new RemoteActorSystemManager("HostActorSystem")).AsImplementedInterfaces().SingleInstance();
+            //builder.Register(ctx => new RemoteActorSystemManager("HostActorSystem")).AsImplementedInterfaces().SingleInstance();
         }
     }
 }

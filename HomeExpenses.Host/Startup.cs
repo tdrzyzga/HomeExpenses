@@ -46,7 +46,7 @@ namespace HomeExpenses.Host
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
-            builder.RegisterGeneric(typeof(Repository<>)).AsImplementedInterfaces().InstancePerDependency();
+            builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
             builder.Populate(services);
             DiContainer = builder.Build();
 

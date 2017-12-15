@@ -11,5 +11,6 @@ namespace Core.Domain.Repository
     {
         IQueryable<TAggregateRoot> Query();
         IQueryable<TAggregateRoot> ReadOnlyQuery();
+        Task<TAggregateRoot> FindByIdAsync(Guid id);
     }
 }

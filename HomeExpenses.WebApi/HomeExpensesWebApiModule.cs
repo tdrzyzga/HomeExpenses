@@ -45,7 +45,7 @@ namespace HomeExpenses.WebApi
         {
             builder.RegisterModule<CoreAkkaModule>();
             builder.Register(ctx => new LocalActorSystemManager("WebApiActorSystem", AkkaConfigLocal)).AsImplementedInterfaces().SingleInstance();
-            builder.Register(ctx => new RemoteActorSystemManager("HostActorSystem", "localhost:9991")).AsImplementedInterfaces().SingleInstance();
+            //builder.Register(ctx => new RemoteActorSystemManager("HostActorSystem", "localhost:9991")).AsImplementedInterfaces().SingleInstance();
         }
     }
 }

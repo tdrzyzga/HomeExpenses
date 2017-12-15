@@ -13,8 +13,6 @@ namespace Core.Domain.Repository
         void Update(TAggregateRoot aggregate);
         Task RemoveAsync(Guid id);
         void Remove(TAggregateRoot aggregate);
-        IQueryable<TAggregateRoot> Query();
-        Task<TAggregateRoot> FindByIdAsync(Guid id);
         Task SaveChangesAsync();
     }
 }

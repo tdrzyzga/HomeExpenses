@@ -12,9 +12,10 @@ namespace HomeExpenses.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(IServiceProvider serviceProvider, IRemoteActorProvider remoteActorProvider) : base(serviceProvider, remoteActorProvider)
+        public ValuesController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager) : base(serviceProvider, localActorSystemManager)
         {
         }
+
 
         // GET api/values
         [HttpGet]
