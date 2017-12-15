@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
+using Core.Infrastructure.Repository;
 using HomeExpenses.Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,7 @@ namespace HomeExpenses.Host
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
+            builder.RegisterGeneric(typeof(Repository<>)).AsImplementedInterfaces().InstancePerDependency();
             builder.Populate(services);
             DiContainer = builder.Build();
 
