@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Akka\Core.Akka.csproj" />
+    <ProjectReference Include="..\HomeExpenses.Message\HomeExpenses.Message.csproj" />
   </ItemGroup>
 
 </Project>
