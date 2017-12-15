@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Hosting;
+using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
-namespace HomeExpenses.AkkaHost
+namespace HomeExpenses.Host
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
-        }
+            var environmentName = "ASPNETCORE_ENVIRONMENT";
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSetting("detailedErrors", "true")
+                .UseIISIntegration()
                 .UseStartup<Startup>()
+                .UseEnvironment(environmentName)
+                .CaptureStartupErrors(true)
                 .Build();
+
+            host.Run();
+        }
     }
 }

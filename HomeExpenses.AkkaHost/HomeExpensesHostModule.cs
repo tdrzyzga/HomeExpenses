@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Core.Akka;
-using Core.Akka.ActorSystem;
 using Core.Application;
 using Core.Domain;
 using Core.Infrastructure;
@@ -30,8 +29,6 @@ namespace HomeExpenses.Host
             builder.RegisterModule<HomeExpensesMessageModule>();
             builder.RegisterModule<HomeExpensesInfrastructureModule>();
             builder.RegisterModule<HomeExpensesPresentationModule>();
-
-            builder.Register(ctx => new LocalActorSystemManager("MainActorSystem")).AsImplementedInterfaces().SingleInstance();
         }
     }
 }

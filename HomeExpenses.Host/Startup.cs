@@ -1,5 +1,8 @@
-﻿using Autofac;
+﻿using Akka.DI.AutoFac;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Core.Akka.ActorAutostart;
+using Core.Akka.ActorSystem;
 using HomeExpenses.Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,11 +48,13 @@ namespace HomeExpenses.Host
             builder.Populate(services);
             DiContainer = builder.Build();
 
+            new AutoFacDependencyResolver(DiContainer, DiContainer.Resolve<ILocalActorSystemManager>().ActorSystem);
+
             return new AutofacServiceProvider(DiContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env, IAutostartActorInitializer autostartActorInitializer)
         {
             //if (env.IsDevelopment())
             //{
@@ -61,6 +66,8 @@ namespace HomeExpenses.Host
                 var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
                 context.Database.Migrate();
             }
+
+            autostartActorInitializer.FindAndStartActors();
 
             app.Run(async (context) =>
             {
