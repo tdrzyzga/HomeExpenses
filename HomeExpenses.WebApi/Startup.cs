@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorSystem;
+using Microsoft.AspNetCore.Mvc.Razor;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace HomeExpenses.WebApi
 {
@@ -36,7 +39,9 @@ namespace HomeExpenses.WebApi
         {
             services.AddSingleton<IConfiguration>(Configuration);
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
+                                         options => options.ResourcesPath = "Resources");
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesWebApiModule>();
@@ -55,6 +60,21 @@ namespace HomeExpenses.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo("pl-PL"),
+                new CultureInfo("en-US")
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pl-PL"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseMvc();
         }
