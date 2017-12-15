@@ -1,4 +1,5 @@
 ﻿using Core.Akka.ActorSystem;
+using Akka.Actor;
 using Core.Message;
 using Core.Message.Command;
 using HomeExpenses.WebApi.Infrastructure.Seed;
@@ -14,13 +15,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     public class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILocalActorSystemManager _localActorSystemManager;
-
-        public BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager)
-        {
-            _serviceProvider = serviceProvider;
-            _localActorSystemManager = localActorSystemManager;
-        }
+        private readonly IRemoteActorProvider _remoteActorProvider;
 
 
         protected async Task<IActionResult> SendCommand<TCommand>(string dispatcherActorName, TCommand command) where TCommand : ICommand
@@ -28,7 +23,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.UserId));
 
-            var actor = _localActorSystemManager.ActorSystem.
+            var actor = await _remoteActorProvider.GetOne(dispatcherActorName);
+            var response = await actor.Ask(command);
 
             return BadRequest();
         }
