@@ -1,6 +1,6 @@
 echo off
 
-cd .\HomeExpenses.Domain\
+cd .\HomeExpenses.Infrastructure\
 
 echo Migration: Bill
 
