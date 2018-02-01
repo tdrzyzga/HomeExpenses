@@ -26,7 +26,6 @@ namespace HomeExpenses.Host
 
             builder.RegisterModule<HomeExpensesApplicationModule>();
             builder.RegisterModule<HomeExpensesDomainModule>();
-            builder.RegisterModule<HomeExpensesMessageModule>();
             builder.RegisterModule<HomeExpensesInfrastructureModule>();
             builder.RegisterModule<HomeExpensesPresentationModule>();
         }
