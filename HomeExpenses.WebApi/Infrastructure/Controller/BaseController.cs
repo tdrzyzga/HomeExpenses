@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Message.Response;
 
 namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
@@ -31,6 +32,13 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 
             var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
             var response = await actor.Ask(command);
+
+            if (response == null)
+                return NotFound();
+            if (response is ErrorResponse)
+                return BadRequest();
+            if (response is CommandSuccessResponse)
+                return Ok();
 
             return BadRequest();
         }
