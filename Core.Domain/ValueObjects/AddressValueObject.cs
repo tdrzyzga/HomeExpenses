@@ -36,7 +36,7 @@
             Number = number;
         }
 
-        public void New(AddressValueObject address)
+        public AddressValueObject(AddressValueObject address)
         {
             Country = address.Country;
             Voivodeship = address.Voivodeship;
