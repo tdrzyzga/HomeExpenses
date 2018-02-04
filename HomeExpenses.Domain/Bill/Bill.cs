@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Domain.Entities;
+using Core.Domain.ValueObjects;
 
 namespace HomeExpenses.Domain.Bill
 {
@@ -14,15 +15,24 @@ namespace HomeExpenses.Domain.Bill
         {
         }
 
-        public Bill(Guid id, Guid creatorId, string name, decimal amount) : base(id, creatorId)
+        public Bill(Guid id, Guid creatorId, string name, Recipient recipient, decimal amount) : base(id, creatorId)
         {
             Name = name;
+            Recipient = recipient;
             Amount = amount;
         }
 
         public Task ChangeName(string name)
         {
             Name = name;
+
+            return Task.CompletedTask;
+        }
+
+        public Task ChangeRecipient(string name, AddressValueObject address)
+        {
+            Recipient.ChangeName(name);
+            Recipient.ChangeAddress(address);
 
             return Task.CompletedTask;
         }
