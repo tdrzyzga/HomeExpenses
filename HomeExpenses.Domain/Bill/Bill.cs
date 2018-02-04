@@ -1,14 +1,13 @@
-﻿using Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Core.Domain.Entities;
 
 namespace HomeExpenses.Domain.Bill
 {
     public class Bill : AggregateRoot
     {
         public string Name { get; private set; }
+        public Recipient Recipient { get; private set; }
         public decimal Amount { get; private set; }
 
         protected Bill()
