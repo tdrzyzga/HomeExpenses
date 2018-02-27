@@ -17,10 +17,11 @@ namespace HomeExpenses.Domain.Bill
         {
         }
 
-        public Bill(Guid id, Guid creatorId, string name, Recipient recipient, decimal amount) : base(id, creatorId)
+        public Bill(Guid id, Guid creatorId, string name, Recipient recipient, ICollection<Payment> payments) : base(id, creatorId)
         {
             Name = name;
             Recipient = recipient;
+            Payments = payments;
         }
 
         public Task ChangeName(string name)
@@ -38,8 +39,10 @@ namespace HomeExpenses.Domain.Bill
             return Task.CompletedTask;
         }
 
-        public Task ChangeAmount(decimal amount)
+        public Task AddPayment(decimal amount, DateTime dateTime)
         {
+            Payments.Add(new Payment(Guid.NewGuid(), amount, dateTime));
+
             return Task.CompletedTask;
         }
     }
