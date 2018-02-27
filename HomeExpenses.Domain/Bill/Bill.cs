@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Domain.Entities;
 using Core.Domain.ValueObjects;
@@ -9,7 +11,7 @@ namespace HomeExpenses.Domain.Bill
     {
         public string Name { get; private set; }
         public Recipient Recipient { get; private set; }
-        public decimal Amount { get; private set; }
+        public ICollection<Payment> Payments { get; private set; }
 
         protected Bill()
         {
@@ -19,7 +21,6 @@ namespace HomeExpenses.Domain.Bill
         {
             Name = name;
             Recipient = recipient;
-            Amount = amount;
         }
 
         public Task ChangeName(string name)
@@ -39,8 +40,6 @@ namespace HomeExpenses.Domain.Bill
 
         public Task ChangeAmount(decimal amount)
         {
-            Amount = amount;
-
             return Task.CompletedTask;
         }
     }
