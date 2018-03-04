@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Akka.Actor;
 using Akka.DI.Core;
 using Core.Akka.ActorSystem;
@@ -11,8 +10,8 @@ namespace Core.Akka.ActorAutostart
 {
     public class AutostartActorInitializer : IAutostartActorInitializer
     {
-        private readonly ILocalActorSystemManager _localActorSystemManager;
         private readonly List<IActorRef> _autostartedActors;
+        private readonly ILocalActorSystemManager _localActorSystemManager;
 
         public List<IActorRef> AutostartedActors => _autostartedActors.ToList();
 
@@ -30,7 +29,7 @@ namespace Core.Akka.ActorAutostart
             }
 
             var allActorsToStart = assembliesToScan.SelectMany(assembly => assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(ActorBase))))
-                                                   .Select(x => new { Type = x, Attribute = x.GetCustomAttribute<AutostartActorAttribute>() })
+                                                   .Select(x => new {Type = x, Attribute = x.GetCustomAttribute<AutostartActorAttribute>()})
                                                    .Where(x => x.Attribute != null);
 
             foreach (var actorToStart in allActorsToStart)

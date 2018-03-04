@@ -5,12 +5,10 @@ using Core.Akka.ActorSystem;
 using Core.Application;
 using Core.Domain;
 using Core.Infrastructure;
-using Core.Message;
 using Core.Presentation;
 using HomeExpenses.Application;
 using HomeExpenses.Domain;
 using HomeExpenses.Infrastructure;
-using HomeExpenses.Message;
 using HomeExpenses.Presentation;
 
 namespace HomeExpenses.Host
@@ -31,17 +29,18 @@ namespace HomeExpenses.Host
                                                                             }
                                                                         }
                                                                         ");
+
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule<CoreInfrastructureModule>();
-            builder.RegisterModule<CoreDomainModule>();            
-            builder.RegisterModule<CoreApplicationModule>();            
+            builder.RegisterModule<CoreDomainModule>();
+            builder.RegisterModule<CoreApplicationModule>();
             builder.RegisterModule<CorePresentationModule>();
             builder.RegisterModule<CoreAkkaModule>();
 
             builder.RegisterModule<HomeExpensesInfrastructureModule>();
             builder.RegisterModule<HomeExpensesDomainModule>();
-            builder.RegisterModule<HomeExpensesApplicationModule>();            
+            builder.RegisterModule<HomeExpensesApplicationModule>();
             builder.RegisterModule<HomeExpensesPresentationModule>();
 
             builder.Register(ctx => new LocalActorSystemManager("HostActorSystem", AkkaConfig)).AsImplementedInterfaces().SingleInstance();

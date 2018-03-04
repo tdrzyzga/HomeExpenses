@@ -1,11 +1,6 @@
-﻿using HomeExpenses.Domain.Bill;
-using JetBrains.Annotations;
+﻿using HomeExpenses.Domain.Bill.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using HomeExpenses.Domain.Bill.Model;
 
 namespace HomeExpenses.Infrastructure.Database
 {

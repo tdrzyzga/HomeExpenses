@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Akka.ActorSystem
+﻿namespace Core.Akka.ActorSystem
 {
     public class RemoteActorSystemManager : IRemoteActorSystemManager
     {
@@ -15,9 +11,8 @@ namespace Core.Akka.ActorSystem
             Name = name;
 
             BasePath = !string.IsNullOrWhiteSpace(tcpHostAndPort)
-                           ? $"akka.tcp://{name}@{tcpHostAndPort}".Trim('/', '\\')
-                           : $"akka://{name}".Trim().Trim('/', '\\');
-
+                ? $"akka.tcp://{name}@{tcpHostAndPort}".Trim('/', '\\')
+                : $"akka://{name}".Trim().Trim('/', '\\');
         }
 
         public string FullPathForActor(string actorPath)

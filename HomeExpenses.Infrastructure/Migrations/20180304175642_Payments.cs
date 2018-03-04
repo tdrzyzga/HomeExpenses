@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HomeExpenses.Infrastructure.Migrations
 {
@@ -9,18 +8,18 @@ namespace HomeExpenses.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Amount",
+                "Amount",
                 schema: "Expense",
                 table: "Bill");
 
             migrationBuilder.AddColumn<Guid>(
-                name: "RecipientId",
+                "RecipientId",
                 schema: "Expense",
                 table: "Bill",
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "Payment",
+                "Payment",
                 schema: "Expense",
                 columns: table => new
                 {
@@ -33,8 +32,8 @@ namespace HomeExpenses.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Payment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payment_Bill_BillId",
-                        column: x => x.BillId,
+                        "FK_Payment_Bill_BillId",
+                        x => x.BillId,
                         principalSchema: "Expense",
                         principalTable: "Bill",
                         principalColumn: "Id",
@@ -42,7 +41,7 @@ namespace HomeExpenses.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Recipient",
+                "Recipient",
                 schema: "Expense",
                 columns: table => new
                 {
@@ -57,13 +56,10 @@ namespace HomeExpenses.Infrastructure.Migrations
                     Address_Street = table.Column<string>(nullable: true),
                     Address_Voivodeship = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Recipient", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Recipient", x => x.Id); });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bill_RecipientId",
+                "IX_Bill_RecipientId",
                 schema: "Expense",
                 table: "Bill",
                 column: "RecipientId",
@@ -71,13 +67,13 @@ namespace HomeExpenses.Infrastructure.Migrations
                 filter: "[RecipientId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_BillId",
+                "IX_Payment_BillId",
                 schema: "Expense",
                 table: "Payment",
                 column: "BillId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Bill_Recipient_RecipientId",
+                "FK_Bill_Recipient_RecipientId",
                 schema: "Expense",
                 table: "Bill",
                 column: "RecipientId",
@@ -90,30 +86,30 @@ namespace HomeExpenses.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Bill_Recipient_RecipientId",
+                "FK_Bill_Recipient_RecipientId",
                 schema: "Expense",
                 table: "Bill");
 
             migrationBuilder.DropTable(
-                name: "Payment",
-                schema: "Expense");
+                "Payment",
+                "Expense");
 
             migrationBuilder.DropTable(
-                name: "Recipient",
-                schema: "Expense");
+                "Recipient",
+                "Expense");
 
             migrationBuilder.DropIndex(
-                name: "IX_Bill_RecipientId",
+                "IX_Bill_RecipientId",
                 schema: "Expense",
                 table: "Bill");
 
             migrationBuilder.DropColumn(
-                name: "RecipientId",
+                "RecipientId",
                 schema: "Expense",
                 table: "Bill");
 
             migrationBuilder.AddColumn<decimal>(
-                name: "Amount",
+                "Amount",
                 schema: "Expense",
                 table: "Bill",
                 nullable: false,

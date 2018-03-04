@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Core.Infrastructure.Repository;
-using System;
 
 namespace Core.Infrastructure
 {

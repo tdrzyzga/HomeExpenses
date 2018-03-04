@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
+using System.Globalization;
 using Akka.DI.AutoFac;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorSystem;
-using Microsoft.AspNetCore.Mvc.Razor;
-using System.Globalization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HomeExpenses.WebApi
 {
@@ -27,10 +22,10 @@ namespace HomeExpenses.WebApi
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-                .AddEnvironmentVariables();
+                          .SetBasePath(env.ContentRootPath)
+                          .AddJsonFile("appsettings.json", true, true)
+                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                          .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
@@ -40,7 +35,7 @@ namespace HomeExpenses.WebApi
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddMvc()
-                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
+                    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
                                          options => options.ResourcesPath = "Resources");
 
             var builder = new ContainerBuilder();

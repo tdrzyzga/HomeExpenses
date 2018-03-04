@@ -1,7 +1,5 @@
-﻿using Core.Message.Command;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Core.Message.Command;
 
 namespace HomeExpenses.Message.Bill.Command
 {

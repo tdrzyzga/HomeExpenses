@@ -1,20 +1,18 @@
-﻿using Core.Domain.Entities;
-using Core.Domain.Repository;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
+using Core.Domain.Entities;
 using Core.Infrastructure.Database;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Infrastructure.Repository
 {
     public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : AggregateRoot
     {
-        private DbContext _context;
+        private readonly DbContext _context;
         private readonly DbSet<TAggregateRoot> _dbSet;
 
         protected BaseRepository(DbContext context)

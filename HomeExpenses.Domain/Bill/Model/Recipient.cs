@@ -31,7 +31,8 @@ namespace HomeExpenses.Domain.Bill.Model
         {
             Address = new AddressValueObject(address);
 
-            return Task.CompletedTask;;
+            return Task.CompletedTask;
+            ;
         }
     }
 }

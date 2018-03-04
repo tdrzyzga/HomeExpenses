@@ -1,13 +1,11 @@
-﻿using Akka.Actor;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Akka.Actor;
 using Core.Akka.ActorAutostart;
 using Core.Domain.Repository;
-using HomeExpenses.Domain.Bill;
-using HomeExpenses.Message.Bill.Command;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using HomeExpenses.Domain.Bill.Model;
+using HomeExpenses.Message.Bill.Command;
 
 namespace HomeExpenses.Application.Bill
 {
