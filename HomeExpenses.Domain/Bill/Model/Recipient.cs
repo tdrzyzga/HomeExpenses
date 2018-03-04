@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Core.Domain.Entities;
 using Core.Domain.ValueObjects;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
-namespace HomeExpenses.Domain.Bill
+namespace HomeExpenses.Domain.Bill.Model
 {
     public class Recipient : Entity
     {

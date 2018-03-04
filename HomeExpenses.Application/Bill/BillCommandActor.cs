@@ -13,9 +13,9 @@ namespace HomeExpenses.Application.Bill
     [AutostartActor("BillCommandActor")]
     public class BillCommandActor : ReceiveActor
     {
-        private readonly IWriteRepository<Domain.Bill.Bill> _billWriteRepository;
+        private readonly IWriteRepository<Domain.Bill.Model.Bill> _billWriteRepository;
 
-        public BillCommandActor(IWriteRepository<Domain.Bill.Bill> billWriteRepository)
+        public BillCommandActor(IWriteRepository<Domain.Bill.Model.Bill> billWriteRepository)
         {
             _billWriteRepository = billWriteRepository;
 
@@ -24,7 +24,7 @@ namespace HomeExpenses.Application.Bill
 
         private async Task Handle(AddBillCommand command)
         {
-            await _billWriteRepository.AddAsync(new Domain.Bill.Bill(command.Id, command.Metadata.UserId.Value, command.Name, command.Amount));
+            await _billWriteRepository.AddAsync(new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, command.Amount));
 
             await _billWriteRepository.SaveChangesAsync();
 

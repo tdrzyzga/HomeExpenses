@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Domain.Entities;
 using Core.Domain.ValueObjects;
 
-namespace HomeExpenses.Domain.Bill
+namespace HomeExpenses.Domain.Bill.Model
 {
     public class Bill : AggregateRoot
     {
