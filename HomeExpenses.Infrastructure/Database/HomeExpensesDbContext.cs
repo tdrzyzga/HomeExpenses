@@ -22,6 +22,7 @@ namespace HomeExpenses.Infrastructure.Database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BillConfiguration());
+            modelBuilder.ApplyConfiguration(new RecipientConfiguration());
         }
     }
 
@@ -31,7 +32,26 @@ namespace HomeExpenses.Infrastructure.Database
         {
             builder.HasKey(x => x.Id);
 
+            builder.HasOne(x => x.Recipient)
+                   .WithOne()
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.Payments)
+                   .WithOne()
+                   .HasForeignKey("BillId")
+                   .OnDelete(DeleteBehavior.Cascade);
+
             builder.ToTable(nameof(Bill), HomeExpensesDbContext.Schema);
+        }
+    }
+
+    public class RecipientConfiguration : IEntityTypeConfiguration<Recipient>
+    {
+        public void Configure(EntityTypeBuilder<Recipient> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.ToTable(nameof(Recipient), HomeExpensesDbContext.Schema);
         }
     }
 }
