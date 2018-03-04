@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using HomeExpenses.Domain.Bill.Model;
 
 namespace HomeExpenses.Application.Bill
 {
@@ -24,7 +25,7 @@ namespace HomeExpenses.Application.Bill
 
         private async Task Handle(CreateBillCommand command)
         {
-            await _billWriteRepository.AddAsync(new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, command.Amount));
+            await _billWriteRepository.AddAsync(new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, null, new List<Payment>()));
 
             await _billWriteRepository.SaveChangesAsync();
 
