@@ -1,22 +1,20 @@
-﻿using Core.Akka.ActorSystem;
+﻿using System;
+using System.Threading.Tasks;
 using Akka.Actor;
+using Core.Akka.ActorSystem;
 using Core.Message;
 using Core.Message.Command;
+using Core.Message.Response;
 using HomeExpenses.WebApi.Infrastructure.Seed;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Message.Response;
 
 namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly ILocalActorSystemManager _localActorSystemManager;
+        private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager)
         {

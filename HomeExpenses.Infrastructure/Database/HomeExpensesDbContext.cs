@@ -1,10 +1,6 @@
-﻿using HomeExpenses.Domain.Bill;
-using JetBrains.Annotations;
+﻿using HomeExpenses.Domain.Bill.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HomeExpenses.Infrastructure.Database
 {
@@ -21,6 +17,8 @@ namespace HomeExpenses.Infrastructure.Database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BillConfiguration());
+            modelBuilder.ApplyConfiguration(new RecipientConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
         }
     }
 
@@ -30,7 +28,37 @@ namespace HomeExpenses.Infrastructure.Database
         {
             builder.HasKey(x => x.Id);
 
+            builder.HasOne(x => x.Recipient)
+                   .WithOne()
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.Payments)
+                   .WithOne()
+                   .HasForeignKey("BillId")
+                   .OnDelete(DeleteBehavior.Cascade);
+
             builder.ToTable(nameof(Bill), HomeExpensesDbContext.Schema);
+        }
+    }
+
+    public class RecipientConfiguration : IEntityTypeConfiguration<Recipient>
+    {
+        public void Configure(EntityTypeBuilder<Recipient> builder)
+        {
+            builder.HasKey(x => x.Id);
+            builder.OwnsOne(x => x.Address);
+
+            builder.ToTable(nameof(Recipient), HomeExpensesDbContext.Schema);
+        }
+    }
+
+    public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+    {
+        public void Configure(EntityTypeBuilder<Payment> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.ToTable(nameof(Payment), HomeExpensesDbContext.Schema);
         }
     }
 }

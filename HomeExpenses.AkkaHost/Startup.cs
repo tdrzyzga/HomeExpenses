@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using HomeExpenses.Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
@@ -7,26 +8,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 
 namespace HomeExpenses.Host
 {
     public class Startup
     {
-        public Autofac.IContainer DiContainer { get; private set; }
+        public IContainer DiContainer { get; private set; }
 
         public IConfigurationRoot Configuration { get; }
 
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-                .AddEnvironmentVariables();
+                          .SetBasePath(env.ContentRootPath)
+                          .AddJsonFile("appsettings.json", true, true)
+                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                          .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
@@ -38,7 +35,7 @@ namespace HomeExpenses.Host
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddDbContext<HomeExpensesDbContext>(options =>
-                                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                                                             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
@@ -62,10 +59,7 @@ namespace HomeExpenses.Host
                 context.Database.Migrate();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync($"Hello World!");
-            });
+            app.Run(async context => { await context.Response.WriteAsync($"Hello World!"); });
         }
     }
 }

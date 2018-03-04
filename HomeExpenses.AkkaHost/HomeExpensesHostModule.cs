@@ -8,7 +8,6 @@ using Core.Presentation;
 using HomeExpenses.Application;
 using HomeExpenses.Domain;
 using HomeExpenses.Infrastructure;
-using HomeExpenses.Message;
 using HomeExpenses.Presentation;
 
 namespace HomeExpenses.Host
@@ -16,7 +15,7 @@ namespace HomeExpenses.Host
     public class HomeExpensesHostModule : Module
     {
         protected override void Load(ContainerBuilder builder)
-        {            
+        {
             builder.RegisterModule<CoreAkkaModule>();
             builder.RegisterModule<CoreApplicationModule>();
             builder.RegisterModule<CoreDomainModule>();
