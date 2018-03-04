@@ -25,9 +25,9 @@ namespace HomeExpenses.Application.Bill
 
         private async Task Handle(CreateBillCommand command)
         {
-            await _billWriteRepository.AddAsync(new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, null, new List<Payment>()));
+            var bill = new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, null, new List<Payment>());
 
-            await _billWriteRepository.SaveChangesAsync();
+            await _billWriteRepository.SaveAsync(bill);
 
             Console.Write("Zrobione");
 

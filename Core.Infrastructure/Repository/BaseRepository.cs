@@ -23,30 +23,6 @@ namespace Core.Infrastructure.Repository
             _dbSet = _context.Set<TAggregateRoot>();
         }
 
-        public virtual async Task AddAsync(TAggregateRoot aggregate)
-        {
-            await _dbSet.AddAsync(aggregate);
-        }
-
-
-        public virtual void Update(TAggregateRoot aggregate)
-        {
-            _dbSet.Update(aggregate);
-        }
-
-        public virtual async Task RemoveAsync(Guid id)
-        {
-            var query = _dbSet.IncludeAll().Where(x => x.Id == id && x.IsDeleted == false);
-
-            var aggregateRoot = await query.SingleOrDefaultAsync();
-            _dbSet.Remove(aggregateRoot);
-        }
-
-        public virtual void Remove(TAggregateRoot aggregate)
-        {
-            _dbSet.Remove(aggregate);
-        }
-
         public virtual async Task<ICollection<TAggregateRoot>> Filter(Expression<Func<TAggregateRoot, bool>> filter)
         {
             filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
@@ -63,8 +39,36 @@ namespace Core.Infrastructure.Repository
             return await query.SingleOrDefaultAsync();
         }
 
-        public virtual async Task SaveChangesAsync()
+        public virtual async Task SaveAsync(TAggregateRoot aggregate)
         {
+            var state = _context.Entry(aggregate).State;
+            if (state == EntityState.Detached)
+            {
+                await _dbSet.AddAsync(aggregate);
+            }
+            else
+            {
+                aggregate.ModifyOn(DateTime.UtcNow);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SaveAllAsync(ICollection<TAggregateRoot> aggregates)
+        {
+            foreach (var aggregateRoot in aggregates)
+            {
+                var state = _context.Entry(aggregateRoot).State;
+                if (state == EntityState.Detached)
+                {
+                    await _dbSet.AddAsync(aggregateRoot);
+                }
+                else
+                {
+                    aggregateRoot.ModifyOn(DateTime.UtcNow);
+                }
+            }
+
             await _context.SaveChangesAsync();
         }
     }
