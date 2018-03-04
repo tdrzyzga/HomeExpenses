@@ -4,17 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Infrastructure.Database;
 
 namespace Core.Infrastructure.Repository
 {
     public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : AggregateRoot
     {
         private DbContext _context;
-        private DbSet<TAggregateRoot> _dbSet;
+        private readonly DbSet<TAggregateRoot> _dbSet;
 
-        public BaseRepository(DbContext context)
+        protected BaseRepository(DbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TAggregateRoot>();
@@ -33,8 +35,10 @@ namespace Core.Infrastructure.Repository
 
         public virtual async Task RemoveAsync(Guid id)
         {
-            var entity = await _dbSet.FindAsync(id);
-            _dbSet.Remove(entity);
+            var query = _dbSet.IncludeAll().Where(x => x.Id == id);
+
+            var aggregateRoot = await query.SingleOrDefaultAsync();
+            _dbSet.Remove(aggregateRoot);
         }
 
         public virtual void Remove(TAggregateRoot aggregate)
@@ -42,19 +46,18 @@ namespace Core.Infrastructure.Repository
             _dbSet.Remove(aggregate);
         }
 
-        public virtual IQueryable<TAggregateRoot> Query()
+        public virtual async Task<ICollection<TAggregateRoot>> Filter(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            return _dbSet.AsQueryable();
+            var query = _dbSet.IncludeAll().Where(filter);
+
+            return await query.ToArrayAsync();
         }
 
-        public virtual IQueryable<TAggregateRoot> ReadOnlyQuery()
+        public virtual async Task<TAggregateRoot> Get(Guid aggregateId)
         {
-            return _dbSet.AsNoTracking();
-        }
+            var query = _dbSet.IncludeAll().Where(x => x.Id == aggregateId);
 
-        public virtual async Task<TAggregateRoot> FindByIdAsync(Guid id)
-        {
-            return await _dbSet.FindAsync(id);
+            return await query.SingleOrDefaultAsync();
         }
 
         public virtual async Task SaveChangesAsync()

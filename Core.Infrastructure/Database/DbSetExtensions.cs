@@ -5,7 +5,7 @@ using System.Reflection;
 using Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomeExpenses.Infrastructure.Database
+namespace Core.Infrastructure.Database
 {
     public static class DbSetExtensions
     {
