@@ -19,10 +19,10 @@ namespace HomeExpenses.Application.Bill
         {
             _billWriteRepository = billWriteRepository;
 
-            ReceiveAsync<AddBillCommand>(Handle);
+            ReceiveAsync<CreateBillCommand>(Handle);
         }
 
-        private async Task Handle(AddBillCommand command)
+        private async Task Handle(CreateBillCommand command)
         {
             await _billWriteRepository.AddAsync(new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, command.Amount));
 

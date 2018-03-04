@@ -33,7 +33,7 @@ namespace HomeExpenses.WebApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AddBillCommand command)
+        public async Task<IActionResult> Post([FromBody]CreateBillCommand command)
         {
             return await SendCommand("BillCommandActor", command);
         }
