@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Infrastructure.Database;
+using LinqKit;
 
 namespace Core.Infrastructure.Repository
 {
@@ -35,7 +36,7 @@ namespace Core.Infrastructure.Repository
 
         public virtual async Task RemoveAsync(Guid id)
         {
-            var query = _dbSet.IncludeAll().Where(x => x.Id == id);
+            var query = _dbSet.IncludeAll().Where(x => x.Id == id && x.IsDeleted == false);
 
             var aggregateRoot = await query.SingleOrDefaultAsync();
             _dbSet.Remove(aggregateRoot);
@@ -48,6 +49,8 @@ namespace Core.Infrastructure.Repository
 
         public virtual async Task<ICollection<TAggregateRoot>> Filter(Expression<Func<TAggregateRoot, bool>> filter)
         {
+            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+
             var query = _dbSet.IncludeAll().Where(filter);
 
             return await query.ToArrayAsync();
