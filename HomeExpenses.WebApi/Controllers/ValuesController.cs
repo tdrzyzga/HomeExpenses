@@ -11,7 +11,8 @@ namespace HomeExpenses.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager) : base(serviceProvider, localActorSystemManager)
+        public ValuesController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration) : base(
+            serviceProvider, localActorSystemManager, actorSystemConfiguration)
         {
         }
 
@@ -30,8 +31,7 @@ namespace HomeExpenses.WebApi.Controllers
             return "value";
         }
 
-        // POST api/values
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> Post([FromBody] CreateBillCommand command)
         {
             return await SendCommand("BillCommandActor", command);

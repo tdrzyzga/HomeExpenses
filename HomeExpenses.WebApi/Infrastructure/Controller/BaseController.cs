@@ -14,19 +14,21 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly ILocalActorSystemManager _localActorSystemManager;
+        private readonly ActorSystemConfiguration _actorSystemConfiguration;
         private readonly IServiceProvider _serviceProvider;
 
-        protected BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager)
+        protected BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration)
         {
             _serviceProvider = serviceProvider;
             _localActorSystemManager = localActorSystemManager;
+            _actorSystemConfiguration = actorSystemConfiguration;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(string dispatcherActorName, TCommand command) where TCommand : ICommand
         {
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.UserId));
-            string path = $"akka.tcp://HostActorSystem@localhost:9991/user/{dispatcherActorName}";
+            string path = $"{_actorSystemConfiguration.Path}{dispatcherActorName}";
 
             var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
             var response = await actor.Ask(command);
@@ -34,7 +36,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             if (response == null)
                 return NotFound();
             if (response is ErrorResponse)
-                return BadRequest();
+                return BadRequest(((ErrorResponse)response));
             if (response is CommandSuccessResponse)
                 return Ok();
 
