@@ -4,6 +4,7 @@ using Akka.DI.AutoFac;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorSystem;
+using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -40,6 +41,7 @@ namespace HomeExpenses.WebApi
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesWebApiModule>();
+            builder.Register(ctx => Configuration.GetSection("ActorSystemConfiguration").Get<ActorSystemConfiguration>()).AsSelf().SingleInstance();
             builder.Populate(services);
             DiContainer = builder.Build();
 

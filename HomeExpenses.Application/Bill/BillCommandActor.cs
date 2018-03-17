@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Akka.ActorAutostart;
 using Core.Domain.Repository;
+using Core.Message.Response;
 using HomeExpenses.Domain.Bill.Model;
 using HomeExpenses.Message.Bill.Command;
 
@@ -28,6 +29,8 @@ namespace HomeExpenses.Application.Bill
             await _billWriteRepository.SaveAsync(bill);
 
             Console.Write("Zrobione");
+
+            Sender.Tell(new CommandSuccessResponse());
 
             await Task.CompletedTask;
         }
