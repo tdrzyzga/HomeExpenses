@@ -8,44 +8,37 @@
       app
     >
       <v-list dense>
+        <router-link v-bind:to="'/'" class="list__tile list__tile--link">
         <v-list-tile>
           <v-list-tile-action>
             <v-icon>dashboard</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Dashboard</v-list-tile-title>
+            <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        </router-link>
+        <router-link v-bind:to="'/about'" class="list__tile list__tile--link">
         <v-list-tile>
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Settings</v-list-tile-title>
+            <v-list-tile-title>About</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        </router-link>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>Home Expense</v-toolbar-title>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>
-            <v-tooltip right>
-              <v-btn
-                icon
-                large
-                :href="source"
-                target="_blank"
-                slot="activator"
-              >
-                <v-icon large>code</v-icon>
-              </v-btn>
-              <span>Source</span>
-            </v-tooltip>
+            <router-view></router-view>
           </v-flex>
         </v-layout>
       </v-container>
