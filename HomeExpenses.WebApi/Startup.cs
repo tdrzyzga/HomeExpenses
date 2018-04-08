@@ -24,7 +24,7 @@ namespace HomeExpenses.WebApi
         {
             var builder = new ConfigurationBuilder()
                           .SetBasePath(env.ContentRootPath)
-                          .AddJsonFile("appsettings.json", true, true)
+                          .AddJsonFile("appsettings.json", false, true)
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                           .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -56,8 +56,9 @@ namespace HomeExpenses.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
-
+ 
             var supportedCultures = new[]
             {
                 new CultureInfo("pl-PL"),
