@@ -32,8 +32,9 @@ namespace HomeExpenses.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Post([FromBody] CreateBillCommand command)
+        public async Task<IActionResult> Post([FromBody] string name)
         {
+            var command = new CreateBillCommand(Guid.NewGuid(), name);
             return await SendCommand("BillCommandActor", command);
         }
 
