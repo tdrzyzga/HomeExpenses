@@ -19,6 +19,8 @@
 
 <script>
 import axios from 'axios'
+import { uuid } from 'vue-uuid'
+
 export default {
   name: 'About',
   data: () => ({
@@ -34,6 +36,7 @@ export default {
       if (this.$refs.form.validate()) {
         // Native form submission is not yet supported
         axios.post('http://localhost:60440/api/values', {
+          Id: uuid.v1(),
           Name: this.name
         })
       }
