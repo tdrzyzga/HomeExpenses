@@ -31,7 +31,7 @@ namespace HomeExpenses.WebApi.Controllers
             return "value";
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] string name)
         {
             var command = new CreateBillCommand(Guid.NewGuid(), name);
