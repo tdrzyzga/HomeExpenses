@@ -35,8 +35,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 
             if (response == null)
                 return NotFound();
-            if (response is ErrorResponse)
-                return BadRequest(((ErrorResponse)response));
+            if (response is ErrorResponse errorResponse)
+                return BadRequest(errorResponse);
             if (response is CommandSuccessResponse)
                 return Ok();
 
