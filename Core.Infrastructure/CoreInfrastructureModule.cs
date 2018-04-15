@@ -7,8 +7,8 @@ namespace Core.Infrastructure
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterGeneric(typeof(ReadRepository<>)).AsImplementedInterfaces().InstancePerDependency();
-            builder.RegisterGeneric(typeof(WriteRepository<>)).AsImplementedInterfaces().InstancePerDependency();
+            builder.RegisterGeneric(typeof(TenantRepository<>)).AsImplementedInterfaces().InstancePerDependency();
+            builder.RegisterGeneric(typeof(NoTenantRepository<>)).AsImplementedInterfaces().InstancePerDependency();
 
             builder.RegisterAssemblyTypes(ThisAssembly)
                    .AsImplementedInterfaces()

@@ -5,7 +5,6 @@ namespace Core.Domain.Entities
 {
     public abstract class AggregateRoot : Entity
     {
-        public Guid CreatorId { get; protected set; }
         public DateTime CreatedOn { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public bool IsDeleted { get; protected set; }
@@ -17,7 +16,6 @@ namespace Core.Domain.Entities
 
         protected AggregateRoot(Guid id, Guid creatorId) : base(id)
         {
-            CreatorId = creatorId;
             CreatedOn = DateTime.UtcNow;
             IsDeleted = false;
         }

@@ -13,11 +13,11 @@ namespace HomeExpenses.Application.Bill
     [AutostartActor("CreateBillCommandActor")]
     public class CreateBillCommandActor : ReceiveActor
     {
-        private readonly IWriteRepository<Domain.Bill.Model.Bill> _billWriteRepository;
+        private readonly IRepository<Domain.Bill.Model.Bill> _billRepository;
 
-        public CreateBillCommandActor(IWriteRepository<Domain.Bill.Model.Bill> billWriteRepository)
+        public CreateBillCommandActor(IRepository<Domain.Bill.Model.Bill> billRepository)
         {
-            _billWriteRepository = billWriteRepository;
+            _billRepository = billRepository;
 
             ReceiveAsync<CreateBillCommand>(Handle);
         }
@@ -26,7 +26,7 @@ namespace HomeExpenses.Application.Bill
         {
             var bill = new Domain.Bill.Model.Bill(command.Id, command.Metadata.UserId.Value, command.Name, null, new List<Payment>());
 
-            await _billWriteRepository.SaveAsync(bill);
+            await _billRepository.SaveAsync(bill);
 
             Console.Write("Zrobione");
 
