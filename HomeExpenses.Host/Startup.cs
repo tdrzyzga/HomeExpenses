@@ -24,7 +24,7 @@ namespace HomeExpenses.Host
         {
             var builder = new ConfigurationBuilder()
                           .SetBasePath(env.ContentRootPath)
-                          .AddJsonFile("appsettings.json", true, true)
+                          .AddJsonFile("appsettings.json", false, true)
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                           .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -54,10 +54,10 @@ namespace HomeExpenses.Host
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env, IAutostartActorInitializer autostartActorInitializer)
         {
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
             {
