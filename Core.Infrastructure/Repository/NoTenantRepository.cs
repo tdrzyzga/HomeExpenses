@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 using Core.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
+using Core.Presentation.Repository;
 
 namespace Core.Infrastructure.Repository
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 
 namespace HomeExpenses.Domain.Bill.Model
 {

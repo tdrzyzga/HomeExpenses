@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
 
 namespace HomeExpenses.Domain.Bill.Model
 {
-    public class Bill : AggregateRoot
+    public class Bill : AggregateRoot, IHaveTenant
     {
+        public Guid? TenantId { get; }
         public string Name { get; private set; }
         public Recipient Recipient { get; private set; }
         public ICollection<Payment> Payments { get; private set; }
@@ -16,8 +17,9 @@ namespace HomeExpenses.Domain.Bill.Model
         {
         }
 
-        public Bill(Guid id, Guid creatorId, string name, Recipient recipient, ICollection<Payment> payments) : base(id, creatorId)
+        public Bill(Guid id, Guid? tenantId, string name, Recipient recipient, ICollection<Payment> payments) : base(id)
         {
+            TenantId = tenantId;
             Name = name;
             Recipient = recipient;
             Payments = payments;

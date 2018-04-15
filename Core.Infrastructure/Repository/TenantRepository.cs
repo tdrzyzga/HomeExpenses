@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 using Core.Domain.Repository;
-using Core.Infrastructure.Database;
+using Core.Presentation.Repository;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 

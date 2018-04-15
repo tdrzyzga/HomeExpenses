@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Core.Domain.Entities
+namespace Core.Domain.Entity
 {
     public abstract class AggregateRoot : Entity
     {
@@ -14,7 +14,7 @@ namespace Core.Domain.Entities
             IsDeleted = false;
         }
 
-        protected AggregateRoot(Guid id, Guid creatorId) : base(id)
+        protected AggregateRoot(Guid id) : base(id)
         {
             CreatedOn = DateTime.UtcNow;
             IsDeleted = false;

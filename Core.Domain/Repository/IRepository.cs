@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 
 namespace Core.Domain.Repository
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Infrastructure.Database

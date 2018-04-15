@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
 
 namespace HomeExpenses.Domain.Bill.Model
