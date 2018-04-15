@@ -11,9 +11,10 @@ using System;
 namespace HomeExpenses.Infrastructure.Migrations
 {
     [DbContext(typeof(HomeExpensesDbContext))]
-    partial class HomeExpensesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180415181414_TenantId")]
+    partial class TenantId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
