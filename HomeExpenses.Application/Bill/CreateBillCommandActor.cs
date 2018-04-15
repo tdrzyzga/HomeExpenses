@@ -10,12 +10,12 @@ using HomeExpenses.Message.Bill.Command;
 
 namespace HomeExpenses.Application.Bill
 {
-    [AutostartActor("BillCommandActor")]
-    public class BillCommandActor : ReceiveActor
+    [AutostartActor("CreateBillCommandActor")]
+    public class CreateBillCommandActor : ReceiveActor
     {
         private readonly IWriteRepository<Domain.Bill.Model.Bill> _billWriteRepository;
 
-        public BillCommandActor(IWriteRepository<Domain.Bill.Model.Bill> billWriteRepository)
+        public CreateBillCommandActor(IWriteRepository<Domain.Bill.Model.Bill> billWriteRepository)
         {
             _billWriteRepository = billWriteRepository;
 

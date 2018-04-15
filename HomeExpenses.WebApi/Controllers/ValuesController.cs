@@ -34,7 +34,7 @@ namespace HomeExpenses.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateBillCommand command)
         {
-            return await SendCommand("BillCommandActor", command);
+            return await SendCommand(command);
         }
 
         // PUT api/values/5
