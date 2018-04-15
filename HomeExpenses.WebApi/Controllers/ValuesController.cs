@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Akka.ActorSystem;
-using HomeExpenses.Message.Bill.Command;
+using HomeExpenses.Message.Bills.Commands;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +34,7 @@ namespace HomeExpenses.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateBillCommand command)
         {
-            return await SendCommand("BillCommandActor", command);
+            return await SendCommand(command);
         }
 
         // PUT api/values/5

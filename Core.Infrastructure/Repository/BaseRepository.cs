@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entities;
+using Core.Domain.Entity;
 using Core.Infrastructure.Database;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +21,7 @@ namespace Core.Infrastructure.Repository
             _dbSet = _context.Set<TAggregateRoot>();
         }
 
-        public virtual async Task<ICollection<TAggregateRoot>> Filter(Expression<Func<TAggregateRoot, bool>> filter)
+        public virtual async Task<TAggregateRoot[]> Filter(Expression<Func<TAggregateRoot, bool>> filter)
         {
             filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
 
@@ -30,9 +30,11 @@ namespace Core.Infrastructure.Repository
             return await query.ToArrayAsync();
         }
 
-        public virtual async Task<TAggregateRoot> Get(Guid aggregateId)
+        public virtual async Task<TAggregateRoot> Get(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            var query = _dbSet.IncludeAll().Where(x => x.Id == aggregateId);
+            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+
+            var query = _dbSet.IncludeAll().Where(filter);
 
             return await query.SingleOrDefaultAsync();
         }

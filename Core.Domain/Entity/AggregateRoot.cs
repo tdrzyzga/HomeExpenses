@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Core.Domain.Entities
+namespace Core.Domain.Entity
 {
     public abstract class AggregateRoot : Entity
     {
-        public Guid CreatorId { get; protected set; }
         public DateTime CreatedOn { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public bool IsDeleted { get; protected set; }
@@ -15,9 +14,8 @@ namespace Core.Domain.Entities
             IsDeleted = false;
         }
 
-        protected AggregateRoot(Guid id, Guid creatorId) : base(id)
+        protected AggregateRoot(Guid id) : base(id)
         {
-            CreatorId = creatorId;
             CreatedOn = DateTime.UtcNow;
             IsDeleted = false;
         }

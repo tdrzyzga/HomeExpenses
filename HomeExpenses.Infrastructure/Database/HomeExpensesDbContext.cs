@@ -1,4 +1,4 @@
-﻿using HomeExpenses.Domain.Bill.Model;
+﻿using HomeExpenses.Domain.Bills.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

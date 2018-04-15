@@ -24,19 +24,19 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             _actorSystemConfiguration = actorSystemConfiguration;
         }
 
-        protected async Task<IActionResult> SendCommand<TCommand>(string dispatcherActorName, TCommand command) where TCommand : ICommand
+        protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
             var culture = GetCulture();
-            command.SetMetadata(new Metadata(culture, FakeSeedData.UserId));
-            string path = $"{_actorSystemConfiguration.Path}{dispatcherActorName}";
+            command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
+            string path = $"{_actorSystemConfiguration.Path}{typeof(TCommand).Name}Actor";
 
             var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
             var response = await actor.Ask(command);
 
             if (response == null)
                 return NotFound();
-            if (response is ErrorResponse)
-                return BadRequest(((ErrorResponse)response));
+            if (response is ErrorResponse errorResponse)
+                return BadRequest(errorResponse);
             if (response is CommandSuccessResponse)
                 return Ok();
 
