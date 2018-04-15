@@ -8,7 +8,7 @@ namespace HomeExpenses.Domain.Bills.Model
 {
     public class Bill : AggregateRoot, IHaveTenant
     {
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; private set; }
         public string Name { get; private set; }
         public Recipient Recipient { get; private set; }
         public ICollection<Payment> Payments { get; private set; }

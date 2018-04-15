@@ -27,7 +27,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
             var culture = GetCulture();
-            command.SetMetadata(new Metadata(culture, FakeSeedData.UserId));
+            command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
             string path = $"{_actorSystemConfiguration.Path}{typeof(TCommand).Name}Actor";
 
             var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));

@@ -24,7 +24,7 @@ namespace HomeExpenses.Application.Bills
 
         private async Task Handle(CreateBillCommand command)
         {
-            var bill = new Bill(command.Id, command.Metadata.UserId.Value, command.Name, null, new List<Payment>());
+            var bill = new Bill(command.Id, command.Metadata.TenantId.Value, command.Name, null, new List<Payment>());
 
             await _billRepository.SaveAsync(bill);
 
