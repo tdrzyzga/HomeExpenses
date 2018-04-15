@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Akka.ActorAutostart;
+using Core.Application.Actor;
 using Core.Domain.Repository;
 using Core.Message.Response;
 using HomeExpenses.Domain.Bills.Model;
 using HomeExpenses.Message.Bills.Commands;
+using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Application.Bills
 {
     [AutostartActor("CreateBillCommandActor")]
-    public class CreateBillCommandActor : ReceiveActor
+    public class CreateBillCommandActor : BaseActor
     {
         private readonly IRepository<Bill> _billRepository;
 
-        public CreateBillCommandActor(IRepository<Bill> billRepository)
+        public CreateBillCommandActor(ILogger<CreateBillCommandActor> logger, IRepository<Bill> billRepository) : base(logger)
         {
             _billRepository = billRepository;
 
@@ -24,15 +26,18 @@ namespace HomeExpenses.Application.Bills
 
         private async Task Handle(CreateBillCommand command)
         {
-            var bill = new Bill(command.Id, command.Metadata.TenantId.Value, command.Name, null, new List<Payment>());
+            await HandleCommand(command, async x =>
+            {
+                var bill = new Bill(x.Id, x.Metadata.TenantId.Value, x.Name, null, new List<Payment>());
 
-            await _billRepository.SaveAsync(bill);
+                await _billRepository.SaveAsync(bill);
 
-            Console.Write("Zrobione");
+                Console.Write("Zrobione");
 
-            Sender.Tell(new CommandSuccessResponse());
+                Sender.Tell(new CommandSuccessResponse());
 
-            await Task.CompletedTask;
+                await Task.CompletedTask;
+            });
         }
     }
 }
