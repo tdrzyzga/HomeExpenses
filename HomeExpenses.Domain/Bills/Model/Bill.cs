@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
 
-namespace HomeExpenses.Domain.Bill.Model
+namespace HomeExpenses.Domain.Bills.Model
 {
     public class Bill : AggregateRoot, IHaveTenant
     {

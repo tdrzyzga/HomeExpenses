@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Akka.ActorSystem;
-using HomeExpenses.Message.Bill.Command;
+using HomeExpenses.Message.Bills.Commands;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Mvc;
 

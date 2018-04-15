@@ -1,7 +1,7 @@
 ﻿using System;
 using Core.Message.Command;
 
-namespace HomeExpenses.Message.Bill.Command
+namespace HomeExpenses.Message.Bills.Commands
 {
     public class CreateBillCommand : BaseCommand
     {

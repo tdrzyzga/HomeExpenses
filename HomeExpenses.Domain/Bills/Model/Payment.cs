@@ -1,7 +1,7 @@
 ﻿using System;
 using Core.Domain.Entity;
 
-namespace HomeExpenses.Domain.Bill.Model
+namespace HomeExpenses.Domain.Bills.Model
 {
     public class Payment : Entity
     {
