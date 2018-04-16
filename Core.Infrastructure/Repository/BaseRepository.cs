@@ -1,64 +1,74 @@
-﻿using Core.Domain.Entities;
-using Core.Domain.Repository;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Core.Domain.Entity;
+using Core.Infrastructure.Database;
+using LinqKit;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Infrastructure.Repository
 {
     public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : AggregateRoot
     {
-        private DbContext _context;
-        private DbSet<TAggregateRoot> _dbSet;
+        private readonly DbContext _context;
+        private readonly DbSet<TAggregateRoot> _dbSet;
 
-        public BaseRepository(DbContext context)
+        protected BaseRepository(DbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TAggregateRoot>();
         }
 
-        public virtual async Task AddAsync(TAggregateRoot aggregate)
+        public virtual async Task<TAggregateRoot[]> Filter(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            await _dbSet.AddAsync(aggregate);
+            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+
+            var query = _dbSet.IncludeAll().Where(filter);
+
+            return await query.ToArrayAsync();
         }
 
-
-        public virtual void Update(TAggregateRoot aggregate)
+        public virtual async Task<TAggregateRoot> Get(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            _dbSet.Update(aggregate);
+            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+
+            var query = _dbSet.IncludeAll().Where(filter);
+
+            return await query.SingleOrDefaultAsync();
         }
 
-        public virtual async Task RemoveAsync(Guid id)
+        public virtual async Task SaveAsync(TAggregateRoot aggregate)
         {
-            var entity = await _dbSet.FindAsync(id);
-            _dbSet.Remove(entity);
+            var state = _context.Entry(aggregate).State;
+            if (state == EntityState.Detached)
+            {
+                await _dbSet.AddAsync(aggregate);
+            }
+            else
+            {
+                aggregate.ModifyOn(DateTime.UtcNow);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
-        public virtual void Remove(TAggregateRoot aggregate)
+        public async Task SaveAllAsync(ICollection<TAggregateRoot> aggregates)
         {
-            _dbSet.Remove(aggregate);
-        }
+            foreach (var aggregateRoot in aggregates)
+            {
+                var state = _context.Entry(aggregateRoot).State;
+                if (state == EntityState.Detached)
+                {
+                    await _dbSet.AddAsync(aggregateRoot);
+                }
+                else
+                {
+                    aggregateRoot.ModifyOn(DateTime.UtcNow);
+                }
+            }
 
-        public virtual IQueryable<TAggregateRoot> Query()
-        {
-            return _dbSet.AsQueryable();
-        }
-
-        public virtual IQueryable<TAggregateRoot> ReadOnlyQuery()
-        {
-            return _dbSet.AsNoTracking();
-        }
-
-        public virtual async Task<TAggregateRoot> FindByIdAsync(Guid id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
-
-        public virtual async Task SaveChangesAsync()
-        {
             await _context.SaveChangesAsync();
         }
     }

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System;
-using System.IO;
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HomeExpenses.Host
 {
@@ -11,12 +10,12 @@ namespace HomeExpenses.Host
             var environmentName = "ASPNETCORE_ENVIRONMENT";
 
             var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseEnvironment(environmentName)
-                .Build();
+                       .UseKestrel()
+                       .UseContentRoot(Directory.GetCurrentDirectory())
+                       .UseIISIntegration()
+                       .UseStartup<Startup>()
+                       .UseEnvironment(environmentName)
+                       .Build();
 
             host.Run();
         }

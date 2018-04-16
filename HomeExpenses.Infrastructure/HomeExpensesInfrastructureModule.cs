@@ -1,8 +1,4 @@
 ﻿using Autofac;
-using HomeExpenses.Infrastructure.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
 
 namespace HomeExpenses.Infrastructure
 {
