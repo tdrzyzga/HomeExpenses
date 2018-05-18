@@ -1,17 +1,19 @@
 ﻿using System;
 
-namespace Core.Message.Response
+namespace Core.Application.Exceptions
 {
-    public class ErrorResponse
+    public class ApplicationException : Exception
     {
-        public Guid ErrorId { get; }
-        public string Message { get; }
+        public string PublicMessage { get; }
         public ErrorItem[] Errors { get; }
 
-        public ErrorResponse(Guid errorId, string message, ErrorItem[] errors = null)
+        public ApplicationException(string message) : base(message)
         {
-            ErrorId = errorId;
-            Message = message;
+        }
+
+        public ApplicationException(string message, string publicMessage, ErrorItem[] errors = null) : base(message)
+        {
+            PublicMessage = publicMessage;
             Errors = errors ?? new ErrorItem[0];
         }
 
