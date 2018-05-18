@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
+using HomeExpenses.Domain.Bills.Exceptions;
 
 namespace HomeExpenses.Domain.Bills.Model
 {
     public class Bill : AggregateRoot, IHaveTenant
     {
         public Guid? TenantId { get; private set; }
+        public BillType Type { get; private set; }
         public string Name { get; private set; }
+        public DateTime? DateOfPayment { get; private set; }
+        public int? MonthInterval { get; private set; }
         public Recipient Recipient { get; private set; }
         public ICollection<Payment> Payments { get; private set; }
 
@@ -17,10 +21,14 @@ namespace HomeExpenses.Domain.Bills.Model
         {
         }
 
-        public Bill(Guid id, Guid? tenantId, string name, Recipient recipient, ICollection<Payment> payments) : base(id)
+        public Bill(Guid id, Guid? tenantId, string name, BillType type, DateTime? dateOfPayment, int? monthInterval, Recipient recipient, ICollection<Payment> payments)
+            : base(id)
         {
             TenantId = tenantId;
             Name = name;
+            Type = type;
+            DateOfPayment = dateOfPayment;
+            MonthInterval = monthInterval;
             Recipient = recipient;
             Payments = payments;
         }
@@ -28,6 +36,19 @@ namespace HomeExpenses.Domain.Bills.Model
         public Task ChangeName(string name)
         {
             Name = name;
+
+            return Task.CompletedTask;
+        }
+
+        public Task ChangePaymentPeriod(DateTime dateOfTime, int monthInterval)
+        {
+            if (Type == BillType.Disposable)
+            {
+                throw new InvalidOperationInThisBillTypeException();
+            }
+
+            DateOfPayment = dateOfTime;
+            MonthInterval = monthInterval;
 
             return Task.CompletedTask;
         }

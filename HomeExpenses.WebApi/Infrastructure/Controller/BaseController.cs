@@ -33,12 +33,15 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
             var response = await actor.Ask(command);
 
-            if (response == null)
-                return NotFound();
-            if (response is ErrorResponse errorResponse)
-                return BadRequest(errorResponse);
-            if (response is CommandSuccessResponse)
-                return Ok();
+            switch (response)
+            {
+                case null:
+                    return NotFound();
+                case ErrorResponse errorResponse:
+                    return BadRequest(errorResponse);
+                case CommandSuccessResponse _:
+                    return Ok();
+            }
 
             return BadRequest();
         }
