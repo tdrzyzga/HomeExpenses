@@ -5,7 +5,10 @@ using Akka.Actor;
 using Core.Akka.ActorAutostart;
 using Core.Application.Actor;
 using Core.Domain.Repository;
+using Core.Domain.ValueObjects;
 using Core.Message.Response;
+using HomeExpenses.Domain;
+using HomeExpenses.Domain.Bills.Factory;
 using HomeExpenses.Domain.Bills.Model;
 using HomeExpenses.Message.Bills.Commands;
 using Microsoft.Extensions.Logging;
@@ -16,10 +19,12 @@ namespace HomeExpenses.Application.Bills
     public class CreateBillCommandActor : BaseActor
     {
         private readonly IRepository<Bill> _billRepository;
+        private readonly IBillFactory _billFactory;
 
-        public CreateBillCommandActor(ILogger<CreateBillCommandActor> logger, IRepository<Bill> billRepository) : base(logger)
+        public CreateBillCommandActor(ILogger<CreateBillCommandActor> logger, IRepository<Bill> billRepository, IBillFactory billFactory) : base(logger)
         {
             _billRepository = billRepository;
+            _billFactory = billFactory;
 
             ReceiveAsync<CreateBillCommand>(Handle);
         }
@@ -28,15 +33,11 @@ namespace HomeExpenses.Application.Bills
         {
             await HandleCommand(command, async x =>
             {
-                var bill = new Bill(x.Id, x.Metadata.TenantId.Value, x.Name, null, new List<Payment>());
+                var recipientAddress = new AddressValueObject(command.City, command.Street, command.Number);
+
+                var bill = await _billFactory.Create(command.Id, command.Metadata.TenantId, command.Name, (BillType) command.Type, command.RecipientName, recipientAddress);
 
                 await _billRepository.SaveAsync(bill);
-
-                Console.Write("Zrobione");
-
-                Sender.Tell(new CommandSuccessResponse());
-
-                await Task.CompletedTask;
             });
         }
     }
