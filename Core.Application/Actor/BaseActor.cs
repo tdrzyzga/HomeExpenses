@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
+using Core.Domain.Exceptions;
 using Core.Message.Response;
 using Microsoft.Extensions.Logging;
-using Remotion.Linq.Clauses;
+using ApplicationException = Core.Application.Exceptions.ApplicationException;
 
 namespace Core.Application.Actor
 {
@@ -23,26 +23,39 @@ namespace Core.Application.Actor
             try
             {
                 await action(command);
+
                 _logger.LogDebug("Command {Command} successfuly handled.", command);
 
+                Sender.Tell(new CommandSuccessResponse());
             }
-            //catch (DomainException domainException)
-            //{
-            //    Logger.ForContext<BaseActor>().Error(domainException, "Error occured during handling command {Command}", command);
-            //    Sender.Tell(new ErrorResponse(domainException.PublicMessage));
-            //}
-            //catch (ApplicationException applicationException)
-            //{
-            //    Logger.ForContext<BaseActor>().Error(applicationException, "Error occured during handling command {Command}", command);
-            //    Sender.Tell(new ErrorResponse(applicationException.PublicMessage));
-            //}
+            catch (DomainException domainException)
+            {
+                var errorId = Guid.NewGuid();
+
+                _logger.LogError(domainException, "Error occured during handling command {Command}", command);
+
+                Sender.Tell(new ErrorResponse(errorId,
+                                              domainException.PublicMessage,
+                                              domainException.Errors.Select(x => new ErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+            }
+            catch (ApplicationException applicationException)
+            {
+                var errorId = Guid.NewGuid();
+
+                _logger.LogError(applicationException, "Error occured during handling command {Command}", command);
+
+                Sender.Tell(new ErrorResponse(errorId,
+                                              applicationException.PublicMessage,
+                                              applicationException.Errors.Select(x => new ErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+            }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Error occured during handling command {Command}", command);
-                Sender.Tell(new ErrorResponse("GENERAL ERROR"));
-            }
+                var errorId = Guid.NewGuid();
 
-            Sender.Tell(new CommandSuccessResponse());
+                _logger.LogError(exception, "Error occured during handling command {Command}", command);
+
+                Sender.Tell(new ErrorResponse(errorId, "GENERAL ERROR"));
+            }
         }
     }
 }
