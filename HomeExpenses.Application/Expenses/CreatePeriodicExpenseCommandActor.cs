@@ -14,12 +14,12 @@ namespace HomeExpenses.Application.Expenses
     [AutostartActor("CreatePeriodicExpenseCommandActor")]
     public class CreatePeriodicExpenseCommandActor : BaseActor
     {
-        private readonly IRepository<Expense> _billRepository;
+        private readonly IRepository<Expense> _expenseRepository;
         private readonly IExpenseFactory _expenseFactory;
 
-        public CreatePeriodicExpenseCommandActor(ILogger<CreatePeriodicExpenseCommandActor> logger, IRepository<Expense> billRepository, IExpenseFactory expenseFactory) : base(logger)
+        public CreatePeriodicExpenseCommandActor(ILogger<CreatePeriodicExpenseCommandActor> logger, IRepository<Expense> expenseRepository, IExpenseFactory expenseFactory) : base(logger)
         {
-            _billRepository = billRepository;
+            _expenseRepository = expenseRepository;
             _expenseFactory = expenseFactory;
 
             ReceiveAsync<CreatePeriodicExpenseCommand>(Handle);
@@ -31,9 +31,9 @@ namespace HomeExpenses.Application.Expenses
             {
                 var recipientAddress = new AddressValueObject(command.City, command.Street, command.Number);
 
-                var bill = await _expenseFactory.Create(command.Id, command.Metadata.TenantId, command.Name);
+                var expense = await _expenseFactory.Create(command.Id, command.Metadata.TenantId, command.Name);
 
-                await _billRepository.SaveAsync(bill);
+                await _expenseRepository.SaveAsync(expense);
             });
         }
     }
