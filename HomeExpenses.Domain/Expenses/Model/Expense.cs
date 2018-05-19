@@ -7,7 +7,7 @@ using HomeExpenses.Domain.Bills.Exceptions;
 
 namespace HomeExpenses.Domain.Bills.Model
 {
-    public class Bill : AggregateRoot, IHaveTenant
+    public class Expense : AggregateRoot, IHaveTenant
     {
         public Guid? TenantId { get; private set; }
         public BillType Type { get; private set; }
@@ -17,11 +17,11 @@ namespace HomeExpenses.Domain.Bills.Model
         public Recipient Recipient { get; private set; }
         public ICollection<Payment> Payments { get; private set; }
 
-        protected Bill()
+        protected Expense()
         {
         }
 
-        public Bill(Guid id, Guid? tenantId, string name, BillType type, DateTime? dateOfPayment, int? monthInterval, Recipient recipient, ICollection<Payment> payments)
+        public Expense(Guid id, Guid? tenantId, string name, BillType type, DateTime? dateOfPayment, int? monthInterval, Recipient recipient, ICollection<Payment> payments)
             : base(id)
         {
             TenantId = tenantId;

@@ -22,9 +22,9 @@ namespace HomeExpenses.Infrastructure.Database
         }
     }
 
-    public class BillConfiguration : IEntityTypeConfiguration<Bill>
+    public class BillConfiguration : IEntityTypeConfiguration<Expense>
     {
-        public void Configure(EntityTypeBuilder<Bill> builder)
+        public void Configure(EntityTypeBuilder<Expense> builder)
         {
             builder.HasKey(x => x.Id);
 
@@ -37,7 +37,7 @@ namespace HomeExpenses.Infrastructure.Database
                    .HasForeignKey("BillId")
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable(nameof(Bill), HomeExpensesDbContext.Schema);
+            builder.ToTable(nameof(Expense), HomeExpensesDbContext.Schema);
         }
     }
 

@@ -6,16 +6,16 @@ using HomeExpenses.Domain.Bills.Model;
 
 namespace HomeExpenses.Domain.Bills.Factory
 {
-    public interface IBillFactory
+    public interface IExpenseFactory
     {
-        Task<Bill> Create(Guid id, Guid? tenantId, string name, BillType type, string recipientName, AddressValueObject recipientAddress);
+        Task<Expense> Create(Guid id, Guid? tenantId, string name, BillType type, string recipientName, AddressValueObject recipientAddress);
     }
 
-    public class BillFactory : IBillFactory
+    public class ExpenseFactory : IExpenseFactory
     {
-        public Task<Bill> Create(Guid id, Guid? tenantId, string name, BillType type, string recipientName, AddressValueObject recipientAddress)
+        public Task<Expense> Create(Guid id, Guid? tenantId, string name, BillType type, string recipientName, AddressValueObject recipientAddress)
         {
-            var bill = new Bill(id,
+            var bill = new Expense(id,
                                 tenantId, 
                                 name, 
                                 type, 

@@ -18,13 +18,13 @@ namespace HomeExpenses.Application.Bills
     [AutostartActor("CreateBillCommandActor")]
     public class CreateBillCommandActor : BaseActor
     {
-        private readonly IRepository<Bill> _billRepository;
-        private readonly IBillFactory _billFactory;
+        private readonly IRepository<Expense> _billRepository;
+        private readonly IExpenseFactory _expenseFactory;
 
-        public CreateBillCommandActor(ILogger<CreateBillCommandActor> logger, IRepository<Bill> billRepository, IBillFactory billFactory) : base(logger)
+        public CreateBillCommandActor(ILogger<CreateBillCommandActor> logger, IRepository<Expense> billRepository, IExpenseFactory expenseFactory) : base(logger)
         {
             _billRepository = billRepository;
-            _billFactory = billFactory;
+            _expenseFactory = expenseFactory;
 
             ReceiveAsync<CreateBillCommand>(Handle);
         }
@@ -35,7 +35,7 @@ namespace HomeExpenses.Application.Bills
             {
                 var recipientAddress = new AddressValueObject(command.City, command.Street, command.Number);
 
-                var bill = await _billFactory.Create(command.Id, command.Metadata.TenantId, command.Name, (BillType) command.Type, command.RecipientName, recipientAddress);
+                var bill = await _expenseFactory.Create(command.Id, command.Metadata.TenantId, command.Name, (BillType) command.Type, command.RecipientName, recipientAddress);
 
                 await _billRepository.SaveAsync(bill);
             });
