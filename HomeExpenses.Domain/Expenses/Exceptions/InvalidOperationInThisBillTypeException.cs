@@ -1,6 +1,6 @@
 ﻿using Core.Domain.Exceptions;
 
-namespace HomeExpenses.Domain.Bills.Exceptions
+namespace HomeExpenses.Domain.Expenses.Exceptions
 {
     public class InvalidOperationInThisBillTypeException : DomainException
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Akka.ActorSystem;
-using HomeExpenses.Message.Bills.Commands;
+using HomeExpenses.Message.Expenses.Commands;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +32,7 @@ namespace HomeExpenses.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateBillCommand command)
+        public async Task<IActionResult> Post([FromBody] CreatePeriodicExpenseCommand command)
         {
             return await SendCommand(command);
         }

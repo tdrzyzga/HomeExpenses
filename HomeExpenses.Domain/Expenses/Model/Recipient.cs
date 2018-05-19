@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
 
-namespace HomeExpenses.Domain.Bills.Model
+namespace HomeExpenses.Domain.Expenses.Model
 {
     public class Recipient : Entity
     {

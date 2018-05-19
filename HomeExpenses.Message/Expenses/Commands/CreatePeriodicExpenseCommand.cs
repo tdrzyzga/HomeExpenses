@@ -1,23 +1,25 @@
 ﻿using System;
 using Core.Message.Command;
 
-namespace HomeExpenses.Message.Bills.Commands
+namespace HomeExpenses.Message.Expenses.Commands
 {
-    public class CreateBillCommand : BaseCommand
+    public class CreatePeriodicExpenseCommand : BaseCommand
     {
         public Guid Id { get; }
         public string Name { get; }
-        public BillType Type { get; }
+        public int DayOfMonth { get; }
+        public int MonthInterval { get; }
         public string RecipientName { get; }
         public string City { get; }
         public string Street { get; }
         public string Number { get; }
 
-        public CreateBillCommand(Guid id, string name, BillType type, string recipientName, string city, string street, string number)
+        public CreatePeriodicExpenseCommand(Guid id, string name, int dayOfMonth, int monthInterval, string recipientName, string city, string street, string number)
         {
             Id = id;
             Name = name;
-            Type = type;
+            DayOfMonth = dayOfMonth;
+            MonthInterval = monthInterval;
             RecipientName = recipientName;
             City = city;
             Street = street;

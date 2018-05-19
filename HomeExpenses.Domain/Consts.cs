@@ -3,7 +3,7 @@
     public enum BillType
     {
         None = 0,
-        Disposable = 1,
+        Aperiodic = 1,
         Periodic = 2
     }
 }

@@ -1,4 +1,5 @@
-﻿using HomeExpenses.Domain.Bills.Model;
+﻿using HomeExpenses.Domain.Expenses.Model;
+using HomeExpenses.Domain.Expenses.Model.ExpenseType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,6 +20,10 @@ namespace HomeExpenses.Infrastructure.Database
             modelBuilder.ApplyConfiguration(new BillConfiguration());
             modelBuilder.ApplyConfiguration(new RecipientConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ExpenseTypeBaseConfiguration());
+            modelBuilder.ApplyConfiguration(new PeriodicExpenseTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AperiodicExpenseTypeConfiguration());
         }
     }
 
@@ -28,7 +33,7 @@ namespace HomeExpenses.Infrastructure.Database
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Recipient)
+            builder.HasOne(x => x.ExpenseType)
                    .WithOne()
                    .OnDelete(DeleteBehavior.Cascade);
 
@@ -59,6 +64,40 @@ namespace HomeExpenses.Infrastructure.Database
             builder.HasKey(x => x.Id);
 
             builder.ToTable(nameof(Payment), HomeExpensesDbContext.Schema);
+        }
+    }
+
+    public class ExpenseTypeBaseConfiguration : IEntityTypeConfiguration<ExpenseTypeBase>
+    {
+        public void Configure(EntityTypeBuilder<ExpenseTypeBase> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.ToTable(nameof(ExpenseTypeBase), HomeExpensesDbContext.Schema);
+        }
+    }
+
+    public class PeriodicExpenseTypeConfiguration : IEntityTypeConfiguration<PeriodicExpenseType>
+    {
+        public void Configure(EntityTypeBuilder<PeriodicExpenseType> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.HasOne(x => x.Recipient)
+                   .WithOne()
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.ToTable(nameof(PeriodicExpenseType), HomeExpensesDbContext.Schema);
+        }
+    }
+
+    public class AperiodicExpenseTypeConfiguration : IEntityTypeConfiguration<AperiodicExpenseType>
+    {
+        public void Configure(EntityTypeBuilder<AperiodicExpenseType> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.ToTable(nameof(AperiodicExpenseType), HomeExpensesDbContext.Schema);
         }
     }
 }

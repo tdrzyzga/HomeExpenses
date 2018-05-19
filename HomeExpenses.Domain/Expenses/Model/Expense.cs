@@ -3,33 +3,27 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
-using HomeExpenses.Domain.Bills.Exceptions;
+using HomeExpenses.Domain.Expenses.Exceptions;
+using HomeExpenses.Domain.Expenses.Model.ExpenseType;
 
-namespace HomeExpenses.Domain.Bills.Model
+namespace HomeExpenses.Domain.Expenses.Model
 {
     public class Expense : AggregateRoot, IHaveTenant
     {
         public Guid? TenantId { get; private set; }
-        public BillType Type { get; private set; }
         public string Name { get; private set; }
-        public DateTime? DateOfPayment { get; private set; }
-        public int? MonthInterval { get; private set; }
-        public Recipient Recipient { get; private set; }
+        public ExpenseTypeBase ExpenseType { get; private set; }
         public ICollection<Payment> Payments { get; private set; }
 
         protected Expense()
         {
         }
 
-        public Expense(Guid id, Guid? tenantId, string name, BillType type, DateTime? dateOfPayment, int? monthInterval, Recipient recipient, ICollection<Payment> payments)
-            : base(id)
+        public Expense(Guid id, Guid? tenantId, string name, ExpenseTypeBase expenseType, ICollection<Payment> payments) : base(id)
         {
             TenantId = tenantId;
             Name = name;
-            Type = type;
-            DateOfPayment = dateOfPayment;
-            MonthInterval = monthInterval;
-            Recipient = recipient;
+            ExpenseType = expenseType;
             Payments = payments;
         }
 
@@ -40,23 +34,14 @@ namespace HomeExpenses.Domain.Bills.Model
             return Task.CompletedTask;
         }
 
-        public Task ChangePaymentPeriod(DateTime dateOfTime, int monthInterval)
+        public Task SetExpenseType(ExpenseTypeBase expenseType)
         {
-            if (Type == BillType.Disposable)
+            if (ExpenseType != null)
             {
-                throw new InvalidOperationInThisBillTypeException();
+                throw new ExpenseTypeAlreadyExistException();
             }
 
-            DateOfPayment = dateOfTime;
-            MonthInterval = monthInterval;
-
-            return Task.CompletedTask;
-        }
-
-        public Task ChangeRecipient(string name, AddressValueObject address)
-        {
-            Recipient.ChangeName(name);
-            Recipient.ChangeAddress(address);
+            ExpenseType = expenseType;
 
             return Task.CompletedTask;
         }
