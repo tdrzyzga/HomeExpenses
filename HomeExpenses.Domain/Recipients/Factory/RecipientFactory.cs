@@ -16,7 +16,7 @@ namespace HomeExpenses.Domain.Recipients.Factory
         {
             var recipient = new Recipient(id, tenantId, name, address);
 
-            return Task.FromResult(recipient)
+            return Task.FromResult(recipient);
         }
     }
 }
