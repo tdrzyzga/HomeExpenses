@@ -30,6 +30,8 @@ namespace HomeExpenses.Application.Expenses
             {
                 var expense = await _expenseFactory.Create(command.Id, command.Metadata.TenantId, command.Name);
 
+                await expense.SetPeriodicExpenseType(command.DayOfMonth, command.MonthInterval);
+
                 await _expenseRepository.Save(expense);
             });
         }

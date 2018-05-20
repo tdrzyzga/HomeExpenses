@@ -34,14 +34,14 @@ namespace HomeExpenses.Domain.Expenses.Model
             return Task.CompletedTask;
         }
 
-        public Task SetExpenseType(ExpenseTypeBase expenseType)
+        public Task SetPeriodicExpenseType(int dayOfMonth, int monthInterval)
         {
             if (ExpenseType != null)
             {
                 throw new ExpenseTypeAlreadyExistException();
             }
 
-            ExpenseType = expenseType;
+            ExpenseType = new PeriodicExpenseType(Guid.NewGuid(), dayOfMonth, monthInterval);
 
             return Task.CompletedTask;
         }
