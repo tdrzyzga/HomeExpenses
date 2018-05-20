@@ -46,6 +46,18 @@ namespace HomeExpenses.Domain.Expenses.Model
             return Task.CompletedTask;
         }
 
+        public Task EditPeriodicExpenseType(int dayOfMonth, int monthInterval)
+        {
+            if (!(ExpenseType is PeriodicExpenseType type))
+            {
+                throw new InvalidOperationInThisExpenseTypeException();
+            }
+
+            type.ChangePaymentPeriod(dayOfMonth, monthInterval);
+
+            return Task.CompletedTask;
+        }
+
         public Task AddPayment(Guid? recipientId, decimal amount, DateTime dateTime)
         {
             Payments.Add(new Payment(Guid.NewGuid(), recipientId, amount, dateTime));
