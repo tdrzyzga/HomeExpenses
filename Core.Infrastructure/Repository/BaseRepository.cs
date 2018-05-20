@@ -39,7 +39,7 @@ namespace Core.Infrastructure.Repository
             return await query.SingleOrDefaultAsync();
         }
 
-        public virtual async Task SaveAsync(TAggregateRoot aggregate)
+        public virtual async Task Save(TAggregateRoot aggregate)
         {
             var state = _context.Entry(aggregate).State;
             if (state == EntityState.Detached)
@@ -54,7 +54,7 @@ namespace Core.Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task SaveAllAsync(ICollection<TAggregateRoot> aggregates)
+        public async Task SaveAll(ICollection<TAggregateRoot> aggregates)
         {
             foreach (var aggregateRoot in aggregates)
             {

@@ -80,9 +80,9 @@ namespace HomeExpenses.Domain.Expenses.Model
             return Task.CompletedTask;
         }
 
-        public override async Task DeleteAsync()
+        public override async Task Delete()
         {
-            await base.DeleteAsync();
+            await base.Delete();
         }
     }
 }
