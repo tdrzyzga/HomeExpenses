@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Domain.Entity;
-using Core.Domain.ValueObjects;
 using HomeExpenses.Domain.Expenses.Exceptions;
 using HomeExpenses.Domain.Expenses.Model.ExpenseType;
 
@@ -46,11 +46,43 @@ namespace HomeExpenses.Domain.Expenses.Model
             return Task.CompletedTask;
         }
 
-        public Task AddPayment(decimal amount, DateTime dateTime)
+        public Task AddPayment(Guid? recipientId, decimal amount, DateTime dateTime)
         {
-            Payments.Add(new Payment(Guid.NewGuid(), amount, dateTime));
+            Payments.Add(new Payment(Guid.NewGuid(), recipientId, amount, dateTime));
 
             return Task.CompletedTask;
+        }
+
+        public Task EditPayment(Guid paymentId, Guid? recipientId, decimal amount, DateTime dateTime)
+        {
+            var payment = Payments.SingleOrDefault(x => x.Id == paymentId);
+
+            if (payment == null)
+            {
+                //todo throw exception
+            }
+
+            payment.ChangeRecipient(recipientId);
+            payment.ChangePaymentData(amount, dateTime);
+
+            return Task.CompletedTask;
+        }
+
+        public Task DeletePayment(Guid paymentId)
+        {
+            var payment = Payments.SingleOrDefault(x => x.Id == paymentId);
+
+            if (payment != null)
+            {
+                Payments.Remove(payment);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public override async Task DeleteAsync()
+        {
+            await base.DeleteAsync();
         }
     }
 }

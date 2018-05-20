@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using Core.Domain.Entity;
 using Core.Domain.ValueObjects;
 
-namespace HomeExpenses.Domain.Expenses.Model
+namespace HomeExpenses.Domain.Recipients.Model
 {
-    public class Recipient : Entity
+    public class Recipient : AggregateRoot, IHaveTenant
     {
+        public Guid? TenantId { get; }
         public string Name { get; private set; }
         public AddressValueObject Address { get; private set; }
 
@@ -14,8 +15,9 @@ namespace HomeExpenses.Domain.Expenses.Model
         {
         }
 
-        public Recipient(Guid id, string name, AddressValueObject address) : base(id)
+        public Recipient(Guid id, Guid? tenantId, string name, AddressValueObject address) : base(id)
         {
+            TenantId = tenantId;
             Name = name;
             Address = new AddressValueObject(address);
         }

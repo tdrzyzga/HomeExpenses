@@ -1,5 +1,6 @@
 ﻿using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Domain.Expenses.Model.ExpenseType;
+using HomeExpenses.Domain.Recipients.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -61,10 +62,6 @@ namespace HomeExpenses.Infrastructure.Database
     {
         public void Configure(EntityTypeBuilder<PeriodicExpenseType> builder)
         {
-            builder.HasOne(x => x.Recipient)
-                   .WithOne()
-                   .OnDelete(DeleteBehavior.Cascade);
-
             builder.ToTable(nameof(PeriodicExpenseType), HomeExpensesDbContext.Schema);
         }
     }
