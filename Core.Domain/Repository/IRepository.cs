@@ -10,7 +10,7 @@ namespace Core.Domain.Repository
     {
         Task<TAggregateRoot[]> Filter(Expression<Func<TAggregateRoot, bool>> filter, Guid? tenantId = null);
         Task<TAggregateRoot> Get(Guid aggregateId, Guid? tenantId = null);
-        Task SaveAsync(TAggregateRoot aggregate);
-        Task SaveAllAsync(ICollection<TAggregateRoot> aggregates);
+        Task Save(TAggregateRoot aggregate);
+        Task SaveAll(ICollection<TAggregateRoot> aggregates);
     }
 }

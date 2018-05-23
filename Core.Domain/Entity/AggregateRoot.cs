@@ -25,7 +25,7 @@ namespace Core.Domain.Entity
             ModifiedOn = dateTime;
         }
 
-        public virtual Task DeleteAsync()
+        public virtual Task Delete()
         {
             IsDeleted = true;
             return Task.CompletedTask;
