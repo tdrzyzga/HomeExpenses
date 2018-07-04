@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace HomeExpenses.WebApi
@@ -9,15 +10,14 @@ namespace HomeExpenses.WebApi
         {
             var environmentName = "ASPNETCORE_ENVIRONMENT";
 
-            var host = new WebHostBuilder()
-                       .UseKestrel()
-                       .UseContentRoot(Directory.GetCurrentDirectory())
-                       .UseIISIntegration()
-                       .UseStartup<Startup>()
-                       .UseEnvironment(environmentName)
-                       .Build();
-
-            host.Run();
+            WebHost.CreateDefaultBuilder()
+                   .UseKestrel()
+                   .UseContentRoot(Directory.GetCurrentDirectory())
+                   .UseIISIntegration()
+                   .UseStartup<Startup>()
+                   .UseEnvironment(environmentName)
+                   .Build()
+                   .Run();
         }
     }
 }
