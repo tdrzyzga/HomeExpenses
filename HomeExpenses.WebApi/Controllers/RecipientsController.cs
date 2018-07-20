@@ -20,5 +20,11 @@ namespace HomeExpenses.WebApi.Controllers
         {
             return await SendCommand(command);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRecipient([FromBody] UpdateRecipientCommand command)
+        {
+            return await SendCommand(command);
+        }
     }
 }

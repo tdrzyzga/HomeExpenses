@@ -7,7 +7,7 @@ namespace HomeExpenses.Domain.Recipients.Model
 {
     public class Recipient : AggregateRoot, IHaveTenant
     {
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; private set; }
         public string Name { get; private set; }
         public AddressValueObject Address { get; private set; }
 
