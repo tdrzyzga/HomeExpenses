@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeExpenses.Infrastructure.Migrations
 {
     [DbContext(typeof(HomeExpensesDbContext))]
-    [Migration("20180721142149_ExpenseTypev3")]
-    partial class ExpenseTypev3
+    [Migration("20180721203945_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,8 +28,6 @@ namespace HomeExpenses.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<Guid?>("ExpenseTypeId");
-
                     b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
@@ -39,8 +37,6 @@ namespace HomeExpenses.Infrastructure.Migrations
                     b.Property<Guid?>("TenantId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExpenseTypeId");
 
                     b.ToTable("Expense","Expenses");
                 });
@@ -53,7 +49,13 @@ namespace HomeExpenses.Infrastructure.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
+                    b.Property<Guid?>("ExpenseId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId")
+                        .IsUnique()
+                        .HasFilter("[ExpenseId] IS NOT NULL");
 
                     b.ToTable("ExpenseTypeBase","Expenses");
 
@@ -124,11 +126,11 @@ namespace HomeExpenses.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("PeriodicExpenseType");
                 });
 
-            modelBuilder.Entity("HomeExpenses.Domain.Expenses.Model.Expense", b =>
+            modelBuilder.Entity("HomeExpenses.Domain.Expenses.Model.ExpenseType.ExpenseTypeBase", b =>
                 {
-                    b.HasOne("HomeExpenses.Domain.Expenses.Model.ExpenseType.ExpenseTypeBase", "ExpenseType")
-                        .WithMany()
-                        .HasForeignKey("ExpenseTypeId")
+                    b.HasOne("HomeExpenses.Domain.Expenses.Model.Expense", "Expense")
+                        .WithOne("ExpenseType")
+                        .HasForeignKey("HomeExpenses.Domain.Expenses.Model.ExpenseType.ExpenseTypeBase", "ExpenseId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
