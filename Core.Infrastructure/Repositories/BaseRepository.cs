@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entity;
-using Core.Infrastructure.Database;
+using Core.Domain.Entities;
+using Core.Infrastructure.Databases;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Infrastructure.Repository
+namespace Core.Infrastructure.Repositories
 {
     public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : AggregateRoot
     {

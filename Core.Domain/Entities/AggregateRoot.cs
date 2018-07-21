@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Core.Domain.Entity
+namespace Core.Domain.Entities
 {
     public abstract class AggregateRoot : Entity
     {

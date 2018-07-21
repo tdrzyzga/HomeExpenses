@@ -4,7 +4,7 @@ using HomeExpenses.Domain.Recipients.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace HomeExpenses.Infrastructure.Database
+namespace HomeExpenses.Infrastructure.Databases
 {
     public class HomeExpensesDbContext : DbContext
     {

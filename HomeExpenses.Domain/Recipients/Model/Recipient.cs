@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Domain.Entity;
+using Core.Domain.Entities;
 using Core.Domain.ValueObjects;
 
 namespace HomeExpenses.Domain.Recipients.Model
@@ -34,7 +34,6 @@ namespace HomeExpenses.Domain.Recipients.Model
             Address = new AddressValueObject(address);
 
             return Task.CompletedTask;
-            ;
         }
     }
 }

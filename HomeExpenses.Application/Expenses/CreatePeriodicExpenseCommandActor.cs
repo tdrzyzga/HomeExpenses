@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Core.Akka.ActorAutostart;
-using Core.Application.Actor;
-using Core.Domain.Repository;
+using Core.Application.Actors;
+using Core.Domain.Repositories;
 using HomeExpenses.Domain.Expenses.Factory;
 using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Message.Expenses.Commands;

@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Message.Command;
+using Core.Message.Commands;
 
 namespace HomeExpenses.Message.Recipients.Commands
 {

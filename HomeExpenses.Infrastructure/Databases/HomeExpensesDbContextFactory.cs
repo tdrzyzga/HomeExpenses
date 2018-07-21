@@ -1,6 +1,6 @@
-﻿using Core.Infrastructure.Database;
+﻿using Core.Infrastructure.Databases;
 
-namespace HomeExpenses.Infrastructure.Database
+namespace HomeExpenses.Infrastructure.Databases
 {
     public class HomeExpensesDbContextFactory : GenericContextFactory<HomeExpensesDbContext>
     {

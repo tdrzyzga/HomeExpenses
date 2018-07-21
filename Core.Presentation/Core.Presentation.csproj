@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Akka" Version="1.1.2" />
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.2" />
@@ -12,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
+    <ProjectReference Include="..\Core.Message\Core.Message.csproj" />
   </ItemGroup>
 
 </Project>

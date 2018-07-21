@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Domain.Entity
+namespace Core.Domain.Entities
 {
     public interface IHaveTenant
     {

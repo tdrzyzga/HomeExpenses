@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entity;
-using Core.Domain.Repository;
+using Core.Domain.Entities;
+using Core.Domain.Repositories;
+using Core.Presentation.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Core.Presentation.Repository;
 
-namespace Core.Infrastructure.Repository
+namespace Core.Infrastructure.Repositories
 {
     public class NoTenantRepository<TAggregateRoot>
         : BaseRepository<TAggregateRoot>, IRepository<TAggregateRoot>, IReadOnlyRepository<TAggregateRoot>

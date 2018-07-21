@@ -1,4 +1,4 @@
-﻿namespace Core.Message.Command
+﻿namespace Core.Message.Commands
 {
     public abstract class BaseCommand : ICommand
     {

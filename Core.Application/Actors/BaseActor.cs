@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Domain.Exceptions;
-using Core.Message.Response;
+using Core.Message.Responses;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Core.Application.Exceptions.ApplicationException;
 
-namespace Core.Application.Actor
+namespace Core.Application.Actors
 {
     public class BaseActor : ReceiveActor
     {

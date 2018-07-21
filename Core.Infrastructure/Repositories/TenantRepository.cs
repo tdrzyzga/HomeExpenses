@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Domain.Entity;
-using Core.Domain.Repository;
-using Core.Presentation.Repository;
+using Core.Domain.Entities;
+using Core.Domain.Repositories;
+using Core.Presentation.Repositories;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Infrastructure.Repository
+namespace Core.Infrastructure.Repositories
 {
     public class TenantRepository<TAggregateRoot>
         : BaseRepository<TAggregateRoot>, IRepository<TAggregateRoot>, IReadOnlyRepository<TAggregateRoot>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Message.Response
+namespace Core.Message.Responses
 {
     public class ErrorResponse
     {
