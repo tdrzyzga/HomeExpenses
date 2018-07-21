@@ -1,4 +1,4 @@
-﻿namespace Core.Message.Responses
+﻿namespace Core.Message.Commands
 {
     public class CommandSuccessResponse
     {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Akka.Actor;
-using Core.Message.Responses;
+using Core.Message.Commands;
+using Core.Message.Queries;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Presentation.Actors
@@ -15,15 +16,17 @@ namespace Core.Presentation.Actors
             _logger = logger;
         }
 
-        protected async Task HandleQuery<TQuery>(TQuery query, Func<TQuery, Task> action) where TQuery : class
+        protected async Task HandleQuery<TQuery, TResult>(TQuery query, Func<TQuery, Task<TResult>> action) 
+            where TQuery : IQuery
+            where TResult: IQueryResult
         {
             try
             {
-                await action(query);
+                var result = await action(query);
 
                 _logger.LogDebug("Query {Query} successfuly handled.", query);
 
-                Sender.Tell(new CommandSuccessResponse());
+                Sender.Tell(result);
             }
 
             catch (Exception exception)
@@ -32,7 +35,7 @@ namespace Core.Presentation.Actors
 
                 _logger.LogError(exception, "Error occured during handling command {Query}", query);
 
-                Sender.Tell(new ErrorResponse(errorId, "GENERAL ERROR"));
+                Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }
         }
     }

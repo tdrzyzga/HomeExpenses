@@ -4,7 +4,7 @@ using Akka.Actor;
 using Core.Akka.ActorSystem;
 using Core.Message;
 using Core.Message.Commands;
-using Core.Message.Responses;
+using Core.Message.Queries;
 using HomeExpenses.WebApi.Infrastructure.Seed;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +13,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly ILocalActorSystemManager _localActorSystemManager;
         private readonly ActorSystemConfiguration _actorSystemConfiguration;
+        private readonly ILocalActorSystemManager _localActorSystemManager;
         private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration)
@@ -35,15 +35,33 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 
             switch (response)
             {
-                case null:
-                    return NotFound();
-                case ErrorResponse errorResponse:
+                case CommandErrorResponse errorResponse:
                     return BadRequest(errorResponse);
                 case CommandSuccessResponse _:
                     return Ok();
+                default:
+                    return BadRequest();
             }
+        }
 
-            return BadRequest();
+        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : IQuery
+        {
+            var culture = GetCulture();
+            query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
+            string path = $"{_actorSystemConfiguration.Path}{typeof(TQuery).Name}Actor";
+
+            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
+            var result = await actor.Ask(query);
+
+            switch (result)
+            {
+                case null:
+                    return NotFound();
+                case QueryErrorResult errorResponse:
+                    return BadRequest(errorResponse);
+                default:
+                    return Ok(result);
+            }
         }
 
 

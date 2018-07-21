@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Domain.Exceptions;
-using Core.Message.Responses;
+using Core.Message.Commands;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Core.Application.Exceptions.ApplicationException;
 
@@ -18,7 +18,7 @@ namespace Core.Application.Actors
             _logger = logger;
         }
 
-        protected async Task HandleCommand<TCommand>(TCommand command, Func<TCommand, Task> action) where TCommand : class
+        protected async Task HandleCommand<TCommand>(TCommand command, Func<TCommand, Task> action) where TCommand : ICommand
         {
             try
             {
@@ -34,9 +34,9 @@ namespace Core.Application.Actors
 
                 _logger.LogError(domainException, "Error occured during handling command {Command}", command);
 
-                Sender.Tell(new ErrorResponse(errorId,
+                Sender.Tell(new CommandErrorResponse(errorId,
                                               domainException.PublicMessage,
-                                              domainException.Errors.Select(x => new ErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+                                              domainException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
             }
             catch (ApplicationException applicationException)
             {
@@ -44,9 +44,9 @@ namespace Core.Application.Actors
 
                 _logger.LogError(applicationException, "Error occured during handling command {Command}", command);
 
-                Sender.Tell(new ErrorResponse(errorId,
+                Sender.Tell(new CommandErrorResponse(errorId,
                                               applicationException.PublicMessage,
-                                              applicationException.Errors.Select(x => new ErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+                                              applicationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
             }
             catch (Exception exception)
             {
@@ -54,7 +54,7 @@ namespace Core.Application.Actors
 
                 _logger.LogError(exception, "Error occured during handling command {Command}", command);
 
-                Sender.Tell(new ErrorResponse(errorId, "GENERAL ERROR"));
+                Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }
         }
     }
