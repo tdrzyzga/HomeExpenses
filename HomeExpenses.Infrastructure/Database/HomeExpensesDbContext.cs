@@ -37,7 +37,7 @@ namespace HomeExpenses.Infrastructure.Database
 
             builder.HasOne(x => x.ExpenseType)
                    .WithOne(x => x.Expense)
-                   .HasForeignKey<ExpenseTypeBase>(x => x.ExpenseId)
+                   .HasForeignKey<ExpenseTypeBase>("ExpenseId")
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Payments)
