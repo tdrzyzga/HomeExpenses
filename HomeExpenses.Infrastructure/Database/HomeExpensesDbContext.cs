@@ -37,11 +37,12 @@ namespace HomeExpenses.Infrastructure.Database
 
             builder.HasOne(x => x.ExpenseType)
                    .WithOne()
+                   .HasForeignKey<ExpenseTypeBase>(x => x.Id)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Payments)
                    .WithOne()
-                   .HasForeignKey("BillId")
+                   .HasForeignKey("ExpenseId")
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable(nameof(Expense), HomeExpensesDbContext.Schema);
