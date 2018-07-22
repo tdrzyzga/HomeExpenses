@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Akka.ActorSystem;
 using HomeExpenses.Message.Recipients.Commands;
 using HomeExpenses.Message.Recipients.Queries;
 using HomeExpenses.WebApi.Infrastructure.Controller;
@@ -11,8 +10,8 @@ namespace HomeExpenses.WebApi.Controllers
     [Route("api/Recipients")]
     public class RecipientsController : BaseController
     {
-        public RecipientsController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration)
-            : base(serviceProvider, localActorSystemManager, actorSystemConfiguration)
+        public RecipientsController(BaseControllerPayload payload) 
+            : base(payload)
         {
         }
 

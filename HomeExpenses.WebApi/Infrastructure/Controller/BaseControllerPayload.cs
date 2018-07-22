@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Core.Akka.ActorSystem;
 
 namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public class BaseControllerPayload
     {
-        public IServiceProvider ServiceProvider { get; }
+        public ActorSystemConfiguration ActorSystemConfiguration { get; }
+        public ILocalActorSystemManager LocalActorSystemManager { get; }
 
-        public BaseControllerPayload(IServiceProvider serviceProvider)
+        public BaseControllerPayload(ActorSystemConfiguration actorSystemConfiguration, ILocalActorSystemManager localActorSystemManager)
         {
-            ServiceProvider = serviceProvider;
+            ActorSystemConfiguration = actorSystemConfiguration;
+            LocalActorSystemManager = localActorSystemManager;
         }
     }
 }

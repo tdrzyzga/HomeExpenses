@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Akka.ActorSystem;
 using HomeExpenses.Message.Expenses.Commands;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +9,10 @@ namespace HomeExpenses.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration) : base(
-            serviceProvider, localActorSystemManager, actorSystemConfiguration)
+        public ValuesController(BaseControllerPayload payload)
+            : base(payload)
         {
         }
-
 
         // GET api/values
         [HttpGet]

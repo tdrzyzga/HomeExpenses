@@ -15,13 +15,11 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     {
         private readonly ActorSystemConfiguration _actorSystemConfiguration;
         private readonly ILocalActorSystemManager _localActorSystemManager;
-        private readonly IServiceProvider _serviceProvider;
 
-        protected BaseController(IServiceProvider serviceProvider, ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration)
+        protected BaseController(BaseControllerPayload payload)
         {
-            _serviceProvider = serviceProvider;
-            _localActorSystemManager = localActorSystemManager;
-            _actorSystemConfiguration = actorSystemConfiguration;
+            _localActorSystemManager = payload.LocalActorSystemManager;
+            _actorSystemConfiguration = payload.ActorSystemConfiguration;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
