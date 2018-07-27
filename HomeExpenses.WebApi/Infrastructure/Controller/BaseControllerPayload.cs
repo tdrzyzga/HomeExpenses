@@ -1,4 +1,5 @@
-﻿using Core.Akka.ActorSystem;
+﻿using System;
+using Core.Akka.ActorSystem;
 
 namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
@@ -6,11 +7,13 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     {
         public ActorSystemConfiguration ActorSystemConfiguration { get; }
         public ILocalActorSystemManager LocalActorSystemManager { get; }
+        public IServiceProvider ServiceProvider { get; }
 
-        public BaseControllerPayload(ActorSystemConfiguration actorSystemConfiguration, ILocalActorSystemManager localActorSystemManager)
+        public BaseControllerPayload(ActorSystemConfiguration actorSystemConfiguration, ILocalActorSystemManager localActorSystemManager, IServiceProvider serviceProvider)
         {
             ActorSystemConfiguration = actorSystemConfiguration;
             LocalActorSystemManager = localActorSystemManager;
+            ServiceProvider = serviceProvider;
         }
     }
 }

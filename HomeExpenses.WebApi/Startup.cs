@@ -39,6 +39,8 @@ namespace HomeExpenses.WebApi
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
                                          options => options.ResourcesPath = "Resources");
 
+            services.AddSingleton<BaseControllerPayload>();
+
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesWebApiModule>();
             builder.Register(ctx => Configuration.GetSection("ActorSystemConfiguration").Get<ActorSystemConfiguration>()).AsSelf().SingleInstance();

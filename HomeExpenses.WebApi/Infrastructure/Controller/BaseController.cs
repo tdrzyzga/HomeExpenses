@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Akka.ActorSystem;
 using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
+using FluentValidation;
+using FluentValidation.Results;
 using HomeExpenses.WebApi.Infrastructure.Seed;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
@@ -15,15 +20,28 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     {
         private readonly ActorSystemConfiguration _actorSystemConfiguration;
         private readonly ILocalActorSystemManager _localActorSystemManager;
+        private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(BaseControllerPayload payload)
         {
             _localActorSystemManager = payload.LocalActorSystemManager;
             _actorSystemConfiguration = payload.ActorSystemConfiguration;
+            _serviceProvider = payload.ServiceProvider;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
+            var validationErrors = await Validate(command);
+
+            if (validationErrors != null && validationErrors.Any())
+            {
+                foreach (var validationError in validationErrors)
+                {
+                    ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
+                }
+                return BadRequest(ModelState);
+            }
+
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
             string path = $"{_actorSystemConfiguration.Path}{typeof(TCommand).Name}Actor";
@@ -62,12 +80,21 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             }
         }
 
-
         private string GetCulture()
         {
             // using ASP.NET Core Localization and Request Culture Providers to retrieve requested culture
             var requestCultureFeature = Request.HttpContext.Features.Get<IRequestCultureFeature>();
             return requestCultureFeature.RequestCulture.Culture.Name;
+        }
+
+        private async Task<ICollection<ValidationFailure>> Validate<TCommand>(TCommand command) where TCommand : ICommand
+        {
+            var validator = _serviceProvider.GetService<IValidator<TCommand>>();
+            if (validator == null)
+                return null;
+
+            var result = await validator.ValidateAsync(command);
+            return result.Errors;
         }
     }
 }
