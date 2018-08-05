@@ -13,7 +13,7 @@ namespace HomeExpenses.Application.Expenses
     {
         private readonly IRepository<Expense> _expenseRepository;
 
-        public AddPaymentCommandActor(BaseActorPayload payload, IRepository<Expense> expenseRepository)
+        public AddPaymentCommandActor(IBaseActorPayload payload, IRepository<Expense> expenseRepository)
             : base(payload)
         {
             _expenseRepository = expenseRepository;

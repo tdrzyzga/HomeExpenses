@@ -15,7 +15,7 @@ namespace HomeExpenses.Application.Recipients
         private readonly IRecipientFactory _recipientFactory;
         private readonly IRepository<Recipient> _recipientRepository;
 
-        public CreateRecipientCommandActor(BaseActorPayload payload, IRecipientFactory recipientFactory, IRepository<Recipient> recipientRepository)
+        public CreateRecipientCommandActor(IBaseActorPayload payload, IRecipientFactory recipientFactory, IRepository<Recipient> recipientRepository)
             : base(payload)
         {
             _recipientFactory = recipientFactory;

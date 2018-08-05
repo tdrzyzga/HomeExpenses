@@ -16,7 +16,7 @@ namespace Core.Application.Actors
         private readonly ILogger _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public BaseActor(BaseActorPayload payload)
+        protected BaseActor(IBaseActorPayload payload)
         {
             _logger = payload.Logger;
             _serviceProvider = payload.ServiceProvider;

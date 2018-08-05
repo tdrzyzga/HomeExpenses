@@ -13,7 +13,7 @@ namespace HomeExpenses.Application.Recipients
     {
         private readonly IRepository<Recipient> _recipientRepository;
 
-        public UpdateRecipientCommandActor(BaseActorPayload payload, IRepository<Recipient> recipientRepository)
+        public UpdateRecipientCommandActor(IBaseActorPayload payload, IRepository<Recipient> recipientRepository)
             : base(payload)
         {
             _recipientRepository = recipientRepository;

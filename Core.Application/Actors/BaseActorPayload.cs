@@ -3,7 +3,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Actors
 {
-    public class BaseActorPayload
+    public interface IBaseActorPayload
+    {
+        ILogger Logger { get; }
+        IServiceProvider ServiceProvider { get; }
+    }
+
+    public class BaseActorPayload : IBaseActorPayload
     {
         public ILogger Logger { get; }
         public IServiceProvider ServiceProvider { get; }

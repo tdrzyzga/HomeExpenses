@@ -14,7 +14,7 @@ namespace HomeExpenses.Application.Expenses
         private readonly IExpenseFactory _expenseFactory;
         private readonly IRepository<Expense> _expenseRepository;
 
-        public CreatePeriodicExpenseCommandActor(BaseActorPayload payload, IRepository<Expense> expenseRepository, IExpenseFactory expenseFactory) :
+        public CreatePeriodicExpenseCommandActor(IBaseActorPayload payload, IRepository<Expense> expenseRepository, IExpenseFactory expenseFactory) :
             base(payload)
         {
             _expenseRepository = expenseRepository;
