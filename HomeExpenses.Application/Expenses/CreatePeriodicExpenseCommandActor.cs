@@ -5,7 +5,6 @@ using Core.Domain.Repositories;
 using HomeExpenses.Domain.Expenses.Factory;
 using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Message.Expenses.Commands;
-using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Application.Expenses
 {
@@ -15,8 +14,8 @@ namespace HomeExpenses.Application.Expenses
         private readonly IExpenseFactory _expenseFactory;
         private readonly IRepository<Expense> _expenseRepository;
 
-        public CreatePeriodicExpenseCommandActor(ILogger<CreatePeriodicExpenseCommandActor> logger, IRepository<Expense> expenseRepository, IExpenseFactory expenseFactory) :
-            base(logger)
+        public CreatePeriodicExpenseCommandActor(BaseActorPayload payload, IRepository<Expense> expenseRepository, IExpenseFactory expenseFactory) :
+            base(payload)
         {
             _expenseRepository = expenseRepository;
             _expenseFactory = expenseFactory;

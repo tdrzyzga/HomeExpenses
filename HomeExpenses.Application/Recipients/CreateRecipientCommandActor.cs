@@ -6,7 +6,6 @@ using Core.Domain.ValueObjects;
 using HomeExpenses.Domain.Recipients.Factory;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Commands;
-using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Application.Recipients
 {
@@ -16,8 +15,8 @@ namespace HomeExpenses.Application.Recipients
         private readonly IRecipientFactory _recipientFactory;
         private readonly IRepository<Recipient> _recipientRepository;
 
-        public CreateRecipientCommandActor(ILogger<CreateRecipientCommandActor> logger, IRecipientFactory recipientFactory, IRepository<Recipient> recipientRepository)
-            : base(logger)
+        public CreateRecipientCommandActor(BaseActorPayload payload, IRecipientFactory recipientFactory, IRepository<Recipient> recipientRepository)
+            : base(payload)
         {
             _recipientFactory = recipientFactory;
             _recipientRepository = recipientRepository;

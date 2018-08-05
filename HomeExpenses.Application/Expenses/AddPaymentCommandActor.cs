@@ -5,7 +5,6 @@ using Core.Application.Actors;
 using Core.Domain.Repositories;
 using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Message.Expenses.Commands;
-using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Application.Expenses
 {
@@ -14,8 +13,8 @@ namespace HomeExpenses.Application.Expenses
     {
         private readonly IRepository<Expense> _expenseRepository;
 
-        public AddPaymentCommandActor(ILogger<AddPaymentCommandActor> logger, IRepository<Expense> expenseRepository)
-            : base(logger)
+        public AddPaymentCommandActor(BaseActorPayload payload, IRepository<Expense> expenseRepository)
+            : base(payload)
         {
             _expenseRepository = expenseRepository;
             ReceiveAsync<AddPaymentCommand>(Handle);

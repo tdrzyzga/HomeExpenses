@@ -39,6 +39,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
                 {
                     ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
                 }
+
                 return BadRequest(ModelState);
             }
 
@@ -51,6 +52,15 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 
             switch (response)
             {
+                case ValidationErrorResponse validationErrorResponse:
+                {
+                    foreach (var validationError in validationErrorResponse.Errors)
+                    {
+                        ModelState.AddModelError(validationError.Key, validationError.Value);
+                    }
+
+                    return BadRequest(ModelState);
+                }
                 case CommandErrorResponse errorResponse:
                     return BadRequest(errorResponse);
                 case CommandSuccessResponse _:
