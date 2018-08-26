@@ -14,11 +14,16 @@ namespace HomeExpenses.UI
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+            var environmentName = "Development";
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                   .UseStartup<Startup>();
+            WebHost.CreateDefaultBuilder()
+                   .UseKestrel()
+                   .UseContentRoot(Directory.GetCurrentDirectory())
+                   .UseIISIntegration()
+                   .UseStartup<Startup>()
+                   .UseEnvironment(environmentName)
+                   .Build()
+                   .Run();
+        }
     }
 }

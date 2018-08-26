@@ -8,7 +8,7 @@ namespace HomeExpenses.Host
     {
         public static void Main(string[] args)
         {
-            var environmentName = "ASPNETCORE_ENVIRONMENT";
+            var environmentName = "Development";
 
             WebHost.CreateDefaultBuilder()
                    .UseKestrel()
