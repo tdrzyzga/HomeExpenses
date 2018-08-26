@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Domain.Entity;
+using Core.Domain.Entities;
 using HomeExpenses.Domain.Expenses.Exceptions;
 using HomeExpenses.Domain.Expenses.Model.ExpenseType;
 

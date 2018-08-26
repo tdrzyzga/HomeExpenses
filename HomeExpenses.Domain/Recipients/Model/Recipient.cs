@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Domain.Entity;
+using Core.Domain.Entities;
 using Core.Domain.ValueObjects;
 
 namespace HomeExpenses.Domain.Recipients.Model
 {
     public class Recipient : AggregateRoot, IHaveTenant
     {
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; private set; }
         public string Name { get; private set; }
         public AddressValueObject Address { get; private set; }
 
@@ -34,7 +34,6 @@ namespace HomeExpenses.Domain.Recipients.Model
             Address = new AddressValueObject(address);
 
             return Task.CompletedTask;
-            ;
         }
     }
 }

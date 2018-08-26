@@ -4,7 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
-using HomeExpenses.Infrastructure.Database;
+using HomeExpenses.Infrastructure.Databases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
