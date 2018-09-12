@@ -15,6 +15,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="FluentValidation" Version="7.6.104" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0-preview1-35029" />
   </ItemGroup>
 
   <ItemGroup>
