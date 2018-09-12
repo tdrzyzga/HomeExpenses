@@ -34,6 +34,8 @@ namespace HomeExpenses.WebApi
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
+            
+            services.AddCors();
 
             services.AddMvc()
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
@@ -60,7 +62,11 @@ namespace HomeExpenses.WebApi
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
- 
+
+            app.UseCors(builder =>
+                            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
+            
             var supportedCultures = new[]
             {
                 new CultureInfo("pl-PL"),
