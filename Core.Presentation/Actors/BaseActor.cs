@@ -11,9 +11,9 @@ namespace Core.Presentation.Actors
     {
         private readonly ILogger _logger;
 
-        public BaseActor(ILogger logger)
+        public BaseActor(IBaseActorPayload payload)
         {
-            _logger = logger;
+            _logger = payload.Logger;
         }
 
         protected async Task HandleQuery<TQuery, TResult>(TQuery query, Func<TQuery, Task<TResult>> action) 

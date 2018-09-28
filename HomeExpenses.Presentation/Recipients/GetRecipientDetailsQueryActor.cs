@@ -13,8 +13,8 @@ namespace HomeExpenses.Presentation.Recipients
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 
-        public GetRecipientDetailsQueryActor(ILogger<GetRecipientDetailsQueryActor> logger, IReadOnlyRepository<Recipient> recipientRepository)
-            : base(logger)
+        public GetRecipientDetailsQueryActor(IBaseActorPayload payload, IReadOnlyRepository<Recipient> recipientRepository)
+            : base(payload)
         {
             _recipientRepository = recipientRepository;
             ReceiveAsync<GetRecipientDetailsQuery>(Handle);
@@ -25,6 +25,11 @@ namespace HomeExpenses.Presentation.Recipients
             await HandleQuery(query, async x =>
             {
                 var recipient = await _recipientRepository.Get(query.Id, query.Metadata.TenantId);
+
+                if (recipient == null)
+                {
+                    return null;
+                }
 
                 return new GetRecipientDetailsResult(recipient.Id, recipient.Name, recipient.Address.City, recipient.Address.Street, recipient.Address.Number);
             });
