@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Akka.ActorSystem;
+using Core.Application.Actors;
 using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
@@ -21,12 +22,17 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
         private readonly ActorSystemConfiguration _actorSystemConfiguration;
         private readonly ILocalActorSystemManager _localActorSystemManager;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IActorRef _commandForwarderActor;
 
         protected BaseController(BaseControllerPayload payload)
         {
             _localActorSystemManager = payload.LocalActorSystemManager;
             _actorSystemConfiguration = payload.ActorSystemConfiguration;
             _serviceProvider = payload.ServiceProvider;
+            
+            
+            string path = $"{_actorSystemConfiguration.Path}CommandForwarderActor";
+            _commandForwarderActor = _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30)).Result;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
@@ -45,10 +51,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
-            string path = $"{_actorSystemConfiguration.Path}{typeof(TCommand).Name}Actor";
 
-            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
-            var response = await actor.Ask(command);
+            var response = await _commandForwarderActor.Ask(command);
 
             switch (response)
             {

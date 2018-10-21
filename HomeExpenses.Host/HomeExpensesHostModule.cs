@@ -1,10 +1,13 @@
-﻿using Akka.Configuration;
+﻿using Akka.Actor;
+using Akka.Configuration;
 using Autofac;
 using Core.Akka;
 using Core.Akka.ActorSystem;
 using Core.Application;
+using Core.Application.Actors;
 using Core.Domain;
 using Core.Infrastructure;
+using Core.Message.Commands;
 using Core.Presentation;
 using HomeExpenses.Application;
 using HomeExpenses.Domain;

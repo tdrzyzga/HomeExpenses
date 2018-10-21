@@ -10,7 +10,7 @@ using HomeExpenses.Message.Recipients.Commands;
 namespace HomeExpenses.Application.Recipients
 {
     [AutostartActor("CreateRecipientCommandActor")]
-    public class CreateRecipientCommandActor : BaseActor
+    public class CreateRecipientCommandActor : BaseActor, ICommandActor<CreateRecipientCommand>
     {
         private readonly IRecipientFactory _recipientFactory;
         private readonly IRepository<Recipient> _recipientRepository;

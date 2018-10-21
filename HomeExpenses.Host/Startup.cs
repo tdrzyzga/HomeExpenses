@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
+using Core.Application.Actors;
 using HomeExpenses.Infrastructure.Databases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,7 +54,12 @@ namespace HomeExpenses.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env, IAutostartActorInitializer autostartActorInitializer, ILoggerFactory loggerFactory)
+        public void Configure(IServiceProvider serviceProvider,
+                              IApplicationBuilder app,
+                              IHostingEnvironment env,
+                              IAutostartActorInitializer autostartActorInitializer,
+                              ILoggerFactory loggerFactory,
+                              ICommandForwarderActorInitializer commandForwarderActorInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -71,8 +77,9 @@ namespace HomeExpenses.Host
             }
 
             autostartActorInitializer.FindAndStartActors();
+            commandForwarderActorInitializer.StartCommandForwarderActor(serviceProvider, autostartActorInitializer.AutostartedActors);
 
-            app.Run(async context => { await context.Response.WriteAsync($"Hello World!"); });
+            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }
     }
 }

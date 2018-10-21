@@ -72,7 +72,7 @@ namespace Core.Application.Actors
             }
         }
 
-        private async Task Validate<TCommand>(TCommand command)
+        private async Task Validate<TCommand>(TCommand command) where TCommand : ICommand
         {
             var validator = _serviceProvider.GetService<IValidator<TCommand>>();
             if (validator != null)

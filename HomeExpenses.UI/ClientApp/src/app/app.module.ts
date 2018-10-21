@@ -1,26 +1,23 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import {MatListModule} from '@angular/material/list';
-import { HttpClientModule } from '@angular/common/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { AppComponent } from './app.component';
-import { ExpensesComponent } from './expenses/expenses.component';
-import { RecipientsComponent } from './recipients/recipients.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {RecipientsModule} from './recipients/recipients.module';
+import {AppComponent} from './app.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ExpensesComponent,
-    RecipientsComponent
-  ],
   imports: [
     BrowserModule,
-    MatListModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    RecipientsModule
+  ],
+  declarations: [
+    AppComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
