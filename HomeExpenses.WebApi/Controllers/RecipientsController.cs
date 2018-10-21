@@ -27,12 +27,12 @@ namespace HomeExpenses.WebApi.Controllers
             return await SendCommand(command);
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetRecipient(Guid id)
-        {
-            var query = new GetRecipientDetailsQuery(id);
-            return await SendQuery(query);
-        }
+//        [HttpGet]
+//        [Route("{id}")]
+//        public async Task<IActionResult> GetRecipient(Guid id)
+//        {
+//            var query = new GetRecipientDetailsQuery(id);
+//            return await SendQuery(query);
+//        }
     }
 }

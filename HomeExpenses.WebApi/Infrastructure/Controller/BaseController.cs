@@ -19,20 +19,13 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly ActorSystemConfiguration _actorSystemConfiguration;
-        private readonly ILocalActorSystemManager _localActorSystemManager;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IActorRef _commandForwarderActor;
+        private readonly CommandForwarderActorProvider _commandForwarderActorProvider;
 
         protected BaseController(BaseControllerPayload payload)
         {
-            _localActorSystemManager = payload.LocalActorSystemManager;
-            _actorSystemConfiguration = payload.ActorSystemConfiguration;
+            _commandForwarderActorProvider = payload.CommandForwarderActorProvider;
             _serviceProvider = payload.ServiceProvider;
-            
-            
-            string path = $"{_actorSystemConfiguration.Path}CommandForwarderActor";
-            _commandForwarderActor = _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30)).Result;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
@@ -52,7 +45,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var response = await _commandForwarderActor.Ask(command);
+            var response = await _commandForwarderActorProvider.CommandForwarderActor.Ask(command);
 
             switch (response)
             {
@@ -74,24 +67,24 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             }
         }
 
-        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : IQuery
+        protected async Task SendQuery<TQuery>(TQuery query) where TQuery : IQuery
         {
-            var culture = GetCulture();
-            query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
-            string path = $"{_actorSystemConfiguration.Path}{typeof(TQuery).Name}Actor";
-
-            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
-            var result = await actor.Ask(query);
-
-            switch (result)
-            {
-                case null:
-                    return NotFound();
-                case QueryErrorResult errorResponse:
-                    return BadRequest(errorResponse);
-                default:
-                    return Ok(result);
-            }
+//            var culture = GetCulture();
+//            query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
+//            string path = $"{_actorSystemConfiguration.Path}{typeof(TQuery).Name}Actor";
+//
+//            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
+//            var result = await actor.Ask(query);
+//
+//            switch (result)
+//            {
+//                case null:
+//                    return NotFound();
+//                case QueryErrorResult errorResponse:
+//                    return BadRequest(errorResponse);
+//                default:
+//                    return Ok(result);
+//            }
         }
 
         private string GetCulture()

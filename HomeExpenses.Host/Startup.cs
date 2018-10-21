@@ -77,7 +77,7 @@ namespace HomeExpenses.Host
             }
 
             autostartActorInitializer.FindAndStartActors();
-            commandForwarderActorInitializer.StartCommandForwarderActor(serviceProvider, autostartActorInitializer.AutostartedActors);
+            commandForwarderActorInitializer.StartCommandForwarderActor(autostartActorInitializer.AutostartedActors);
 
             app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }

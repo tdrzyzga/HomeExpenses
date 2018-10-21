@@ -1,35 +1,28 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Akka.Actor;
-using Akka.DI.Core;
-using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
-using Core.Message.Commands;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Actors
 {
-    public class CommandForwarderActorInitializer: ICommandForwarderActorInitializer
+    public class CommandForwarderActorInitializer : ICommandForwarderActorInitializer
     {
         private readonly ILocalActorSystemManager _localActorSystemManager;
+        private readonly ILogger _logger;
+        private readonly IServiceProvider _serviceProvider;
 
-        public CommandForwarderActorInitializer(ILocalActorSystemManager localActorSystemManager)
+        public CommandForwarderActorInitializer(ILocalActorSystemManager localActorSystemManager, ILogger<CommandForwarderActor> logger, IServiceProvider serviceProvider)
         {
             _localActorSystemManager = localActorSystemManager;
+            _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
-        public void StartCommandForwarderActor(IServiceProvider serviceProvider, List<IActorRef> autostartedActors)
+        public void StartCommandForwarderActor(List<IActorRef> autostartedActors)
         {
-            var props = Props.Create(() => new CommandForwarderActor(autostartedActors));
+            var props = Props.Create(() => new CommandForwarderActor(autostartedActors, _logger, _serviceProvider));
             _localActorSystemManager.ActorSystem.ActorOf(props, "CommandForwarderActor");
         }
-    }
-
-    public interface ICommandForwarderActorInitializer
-    {
-        void StartCommandForwarderActor(IServiceProvider serviceProvider, List<IActorRef> autostartedActors);
     }
 }

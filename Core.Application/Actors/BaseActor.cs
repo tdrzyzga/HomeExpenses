@@ -26,21 +26,11 @@ namespace Core.Application.Actors
         {
             try
             {
-                await Validate(command);
                 await action(command);
 
-                _logger.LogDebug("Command {Command} successfuly handled.", command);
+                _logger.LogDebug("Command {Command} successfuly handled", command);
 
                 Sender.Tell(new CommandSuccessResponse());
-            }
-            catch (ValidationException validationException)
-            {
-                var errorId = Guid.NewGuid();
-
-                _logger.LogError(validationException, "Validation errors during handling command {Command}", command);
-
-                Sender.Tell(new ValidationErrorResponse(errorId,
-                                                     validationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.PropertyName, x.ErrorMessage)).ToArray()));
             }
             catch (DomainException domainException)
             {
@@ -69,15 +59,6 @@ namespace Core.Application.Actors
                 _logger.LogError(exception, "Error occured during handling command {Command}", command);
 
                 Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
-            }
-        }
-
-        private async Task Validate<TCommand>(TCommand command) where TCommand : ICommand
-        {
-            var validator = _serviceProvider.GetService<IValidator<TCommand>>();
-            if (validator != null)
-            {
-                await validator.ValidateAndThrowAsync(command);
             }
         }
     }
