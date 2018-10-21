@@ -21,10 +21,12 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly CommandForwarderActorProvider _commandForwarderActorProvider;
+        private readonly QueryForwarderActorProvider _queryForwarderActorProvider;
 
         protected BaseController(BaseControllerPayload payload)
         {
             _commandForwarderActorProvider = payload.CommandForwarderActorProvider;
+            _queryForwarderActorProvider = payload.QueryForwarderActorProvider;
             _serviceProvider = payload.ServiceProvider;
         }
 
@@ -67,24 +69,22 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             }
         }
 
-        protected async Task SendQuery<TQuery>(TQuery query) where TQuery : IQuery
+        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : IQuery
         {
-//            var culture = GetCulture();
-//            query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
-//            string path = $"{_actorSystemConfiguration.Path}{typeof(TQuery).Name}Actor";
-//
-//            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
-//            var result = await actor.Ask(query);
-//
-//            switch (result)
-//            {
-//                case null:
-//                    return NotFound();
-//                case QueryErrorResult errorResponse:
-//                    return BadRequest(errorResponse);
-//                default:
-//                    return Ok(result);
-//            }
+            var culture = GetCulture();
+            query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
+
+            var result = await _queryForwarderActorProvider.QueryForwarderActor.Ask(query);
+
+            switch (result)
+            {
+                case null:
+                    return NotFound();
+                case QueryErrorResult errorResponse:
+                    return BadRequest(errorResponse);
+                default:
+                    return Ok(result);
+            }
         }
 
         private string GetCulture()

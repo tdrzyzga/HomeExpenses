@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace HomeExpenses.Presentation.Recipients
 {
     [AutostartActor("GetRecipientDetailsQueryActor")]
-    public class GetRecipientDetailsQueryActor : BaseActor
+    public class GetRecipientDetailsQueryActor : BaseActor, IQueryActor<GetRecipientDetailsQuery>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 

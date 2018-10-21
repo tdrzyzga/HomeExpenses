@@ -5,6 +5,7 @@ using Autofac.Extensions.DependencyInjection;
 using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
 using Core.Application.Actors;
+using Core.Presentation.Actors;
 using HomeExpenses.Infrastructure.Databases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,7 +60,8 @@ namespace HomeExpenses.Host
                               IHostingEnvironment env,
                               IAutostartActorInitializer autostartActorInitializer,
                               ILoggerFactory loggerFactory,
-                              ICommandForwarderActorInitializer commandForwarderActorInitializer)
+                              ICommandForwarderActorInitializer commandForwarderActorInitializer,
+                              IQueryForwarderActorInitializer queryForwarderActorInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -78,6 +80,7 @@ namespace HomeExpenses.Host
 
             autostartActorInitializer.FindAndStartActors();
             commandForwarderActorInitializer.StartCommandForwarderActor(autostartActorInitializer.AutostartedActors);
+            queryForwarderActorInitializer.StartQueryForwarderActor(autostartActorInitializer.AutostartedActors);
 
             app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }

@@ -33,7 +33,7 @@ namespace Core.Presentation.Actors
             {
                 var errorId = Guid.NewGuid();
 
-                _logger.LogError(exception, "Error occured during handling command {Query}", query);
+                _logger.LogError(exception, "Error occured during handling query {Query}", query);
 
                 Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }

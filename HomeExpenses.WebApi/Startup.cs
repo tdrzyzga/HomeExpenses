@@ -49,6 +49,7 @@ namespace HomeExpenses.WebApi
             var actorSystemConfiguration = Configuration.GetSection("ActorSystemConfiguration").Get<ActorSystemConfiguration>();
             builder.Register(ctx => actorSystemConfiguration).AsSelf().SingleInstance();
             builder.Register(ctx => new CommandForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), actorSystemConfiguration)).AsSelf().SingleInstance();
+            builder.Register(ctx => new QueryForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), actorSystemConfiguration)).AsSelf().SingleInstance();
                 
             builder.Populate(services);
             DiContainer = builder.Build();

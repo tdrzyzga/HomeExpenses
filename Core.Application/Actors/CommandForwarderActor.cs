@@ -59,7 +59,7 @@ namespace Core.Application.Actors
             }
         }
 
-        private IActorRef GetActor(object command)
+        private IActorRef GetActor<TCommand>(TCommand command) where TCommand : ICommand
         {
             var commandType = command.GetType();
 
