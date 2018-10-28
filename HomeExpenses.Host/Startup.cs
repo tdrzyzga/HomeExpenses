@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Host
@@ -43,6 +44,9 @@ namespace HomeExpenses.Host
             services.AddDbContext<HomeExpensesDbContext>(options =>
                                                              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+            services.AddTransient<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
+
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
             builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
@@ -69,7 +73,6 @@ namespace HomeExpenses.Host
             }
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddConsole();
             loggerFactory.AddDebug();
 
             using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())

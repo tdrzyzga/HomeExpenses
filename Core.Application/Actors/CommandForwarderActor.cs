@@ -17,37 +17,24 @@ namespace Core.Application.Actors
     {
         private readonly List<IActorRef> _autostartedActors;
         private readonly ILogger _logger;
-        private readonly IServiceProvider _serviceProvider;
 
-        public CommandForwarderActor(List<IActorRef> autostartedActors, ILogger logger, IServiceProvider serviceProvider)
+        public CommandForwarderActor(List<IActorRef> autostartedActors, ILogger logger)
         {
             _autostartedActors = autostartedActors;
             _logger = logger;
-            _serviceProvider = serviceProvider;
 
             ReceiveAsync<ICommand>(Handle);
         }
 
-        private async Task Handle<TCommand>(TCommand command) where TCommand : ICommand
+        private Task Handle<TCommand>(TCommand command) where TCommand : ICommand
         {
             try
             {
-                await Validate(command);
-                
                 var actor = GetActor(command);
                 
                 _logger.LogDebug("Command {Command} forwarding by CommandForwarderActor", command);
 
                 actor.Forward(command);
-            }
-            catch (ValidationException validationException)
-            {
-                var errorId = Guid.NewGuid();
-
-                _logger.LogError(validationException, "Validation errors during forwarding command {Command}", command);
-
-                Sender.Tell(new ValidationErrorResponse(errorId,
-                                                        validationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.PropertyName, x.ErrorMessage)).ToArray()));
             }
             catch (Exception exception)
             {
@@ -57,6 +44,8 @@ namespace Core.Application.Actors
 
                 Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }
+            
+            return Task.CompletedTask;
         }
 
         private IActorRef GetActor<TCommand>(TCommand command) where TCommand : ICommand
@@ -83,15 +72,6 @@ namespace Core.Application.Actors
             }
 
             return actor;
-        }
-        
-        private async Task Validate<TCommand>(TCommand command) where TCommand : ICommand
-        {
-            var validator = _serviceProvider.GetService<IValidator<TCommand>>();
-            if (validator != null)
-            {
-                await validator.ValidateAndThrowAsync(command);
-            }
         }
     }
 }

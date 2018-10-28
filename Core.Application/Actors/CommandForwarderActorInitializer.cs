@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Akka.Actor;
 using Core.Akka.ActorSystem;
@@ -10,18 +9,16 @@ namespace Core.Application.Actors
     {
         private readonly ILocalActorSystemManager _localActorSystemManager;
         private readonly ILogger _logger;
-        private readonly IServiceProvider _serviceProvider;
 
-        public CommandForwarderActorInitializer(ILocalActorSystemManager localActorSystemManager, ILogger<CommandForwarderActor> logger, IServiceProvider serviceProvider)
+        public CommandForwarderActorInitializer(ILocalActorSystemManager localActorSystemManager, ILogger<CommandForwarderActor> logger)
         {
             _localActorSystemManager = localActorSystemManager;
             _logger = logger;
-            _serviceProvider = serviceProvider;
         }
 
         public void StartCommandForwarderActor(List<IActorRef> autostartedActors)
         {
-            var props = Props.Create(() => new CommandForwarderActor(autostartedActors, _logger, _serviceProvider));
+            var props = Props.Create(() => new CommandForwarderActor(autostartedActors, _logger));
             _localActorSystemManager.ActorSystem.ActorOf(props, "CommandForwarderActor");
         }
     }
