@@ -45,7 +45,7 @@ namespace HomeExpenses.Host
                                                              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddLocalization(opt => opt.ResourcesPath = "Resources");
-            services.AddTransient<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
+            services.AddSingleton<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
@@ -71,9 +71,6 @@ namespace HomeExpenses.Host
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
             using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
             {
