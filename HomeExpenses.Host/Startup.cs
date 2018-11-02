@@ -2,7 +2,6 @@
 using Akka.DI.AutoFac;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
 using Core.Application.Actors;
 using Core.Presentation.Actors;
@@ -62,7 +61,8 @@ namespace HomeExpenses.Host
         public void Configure(IServiceProvider serviceProvider,
                               IApplicationBuilder app,
                               IHostingEnvironment env,
-                              IAutostartActorInitializer autostartActorInitializer,
+                              IAutostartCommandActorsInitializer autostartCommandActorsInitializer,
+                              IAutostartQueryActorsInitializer autostartQueryActorsInitializer,
                               ILoggerFactory loggerFactory,
                               ICommandForwarderActorInitializer commandForwarderActorInitializer,
                               IQueryForwarderActorInitializer queryForwarderActorInitializer)
@@ -78,9 +78,11 @@ namespace HomeExpenses.Host
                 context.Database.Migrate();
             }
 
-            autostartActorInitializer.FindAndStartActors();
-            commandForwarderActorInitializer.StartCommandForwarderActor(autostartActorInitializer.AutostartedActors);
-            queryForwarderActorInitializer.StartQueryForwarderActor(autostartActorInitializer.AutostartedActors);
+            autostartCommandActorsInitializer.FindAndStartCommandActors();
+            commandForwarderActorInitializer.StartCommandForwarderActor(autostartCommandActorsInitializer.AutostartedCommandActors);
+
+            autostartQueryActorsInitializer.FindAndStartQueryActors();
+            queryForwarderActorInitializer.StartQueryForwarderActor(autostartQueryActorsInitializer.AutostartedQueryActors);
 
             app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }

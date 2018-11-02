@@ -27,7 +27,7 @@ namespace Core.Application.Actors
             try
             {
                 await Validate(command);
-                
+
                 await action(command);
 
                 _logger.LogDebug("Command {Command} successfuly handled", command);
@@ -50,8 +50,8 @@ namespace Core.Application.Actors
                 _logger.LogError(domainException, "Error occured during handling command {Command}", command);
 
                 Sender.Tell(new CommandErrorResponse(errorId,
-                                              domainException.PublicMessage,
-                                              domainException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+                                                     domainException.PublicMessage,
+                                                     domainException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
             }
             catch (ApplicationException applicationException)
             {
@@ -60,8 +60,8 @@ namespace Core.Application.Actors
                 _logger.LogError(applicationException, "Error occured during handling command {Command}", command);
 
                 Sender.Tell(new CommandErrorResponse(errorId,
-                                              applicationException.PublicMessage,
-                                              applicationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+                                                     applicationException.PublicMessage,
+                                                     applicationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
             }
             catch (Exception exception)
             {
@@ -72,7 +72,7 @@ namespace Core.Application.Actors
                 Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }
         }
-        
+
         private async Task Validate<TCommand>(TCommand command) where TCommand : ICommand
         {
             var validator = _serviceProvider.GetService<IValidator<TCommand>>();

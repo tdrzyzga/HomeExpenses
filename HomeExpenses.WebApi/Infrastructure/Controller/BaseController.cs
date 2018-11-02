@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
-using Core.Akka.ActorSystem;
-using Core.Application.Actors;
 using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
@@ -19,9 +17,9 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly CommandForwarderActorProvider _commandForwarderActorProvider;
         private readonly QueryForwarderActorProvider _queryForwarderActorProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(BaseControllerPayload payload)
         {

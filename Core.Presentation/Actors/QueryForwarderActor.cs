@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Akka.Actor;
-using Akka.Util;
 using Core.Message.Commands;
 using Core.Message.Queries;
 using Microsoft.Extensions.Logging;
@@ -13,12 +10,12 @@ namespace Core.Presentation.Actors
 {
     public class QueryForwarderActor : ReceiveActor
     {
-        private readonly List<IActorRef> _autostartedActors;
+        private readonly Dictionary<Type, IActorRef> _autostartedQueryActors;
         private readonly ILogger _logger;
 
-        public QueryForwarderActor(List<IActorRef> autostartedActors, ILogger logger)
+        public QueryForwarderActor(Dictionary<Type, IActorRef> autostartedQueryActors, ILogger logger)
         {
-            _autostartedActors = autostartedActors;
+            _autostartedQueryActors = autostartedQueryActors;
             _logger = logger;
 
             ReceiveAsync<IQuery>(Handle);
@@ -50,19 +47,9 @@ namespace Core.Presentation.Actors
         {
             var queryType = query.GetType();
 
-            var interfaceType = typeof(IQueryActor<>).MakeGenericType(queryType);
+            var actorInterfaceImplementedType = typeof(IQueryActor<>).MakeGenericType(queryType);
 
-            var actorInfo = Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
-                                    .SelectMany(x => x.GetExportedTypes().Where(y => y.Implements(interfaceType)))
-                                    .Select(x => new {x.Name})
-                                    .SingleOrDefault();
-
-            if (actorInfo == null)
-            {
-                throw new ActorNotFoundException();
-            }
-
-            var actor = _autostartedActors.Find(x => x.Path.Name == actorInfo.Name);
+            var actor = _autostartedQueryActors.GetValueOrDefault(actorInterfaceImplementedType);
 
             if (actor == null)
             {

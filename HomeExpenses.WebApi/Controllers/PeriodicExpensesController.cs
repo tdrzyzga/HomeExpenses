@@ -8,7 +8,7 @@ namespace HomeExpenses.WebApi.Controllers
     [Route("api/PeriodcExpenses")]
     public class PeriodicExpensesController : BaseController
     {
-        public PeriodicExpensesController(BaseControllerPayload payload) 
+        public PeriodicExpensesController(BaseControllerPayload payload)
             : base(payload)
         {
         }

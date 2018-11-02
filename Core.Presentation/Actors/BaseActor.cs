@@ -16,9 +16,9 @@ namespace Core.Presentation.Actors
             _logger = payload.Logger;
         }
 
-        protected async Task HandleQuery<TQuery, TResult>(TQuery query, Func<TQuery, Task<TResult>> action) 
+        protected async Task HandleQuery<TQuery, TResult>(TQuery query, Func<TQuery, Task<TResult>> action)
             where TQuery : IQuery
-            where TResult: IQueryResult
+            where TResult : IQueryResult
         {
             try
             {

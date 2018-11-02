@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Akka.Actor;
 using Core.Akka.ActorSystem;
 
@@ -6,12 +7,23 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public class CommandForwarderActorProvider
     {
-        public IActorRef CommandForwarderActor { get; }
+        private readonly string _commandForwarderActorPath;
+        private readonly ILocalActorSystemManager _localActorSystemManager;
 
-        public CommandForwarderActorProvider(ILocalActorSystemManager localActorSystemManager, ActorSystemConfiguration actorSystemConfiguration)
+        public IActorRef DeadLetters => _localActorSystemManager.ActorSystem.DeadLetters;
+        public IActorRef CommandForwarderActor { get; private set; }
+
+        public CommandForwarderActorProvider(ILocalActorSystemManager localActorSystemManager, string commandForwarderActorPath)
         {
-            var path = $"{actorSystemConfiguration.Path}CommandForwarderActor";
-            CommandForwarderActor = localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30)).Result;
+            _localActorSystemManager = localActorSystemManager;
+            _commandForwarderActorPath = commandForwarderActorPath;
+
+            Task.Run(SetCommandForwarderActor).Wait();
+        }
+
+        private async Task SetCommandForwarderActor()
+        {
+            CommandForwarderActor = await _localActorSystemManager.ActorSystem.ActorSelection(_commandForwarderActorPath).ResolveOne(TimeSpan.FromSeconds(30));
         }
     }
 }

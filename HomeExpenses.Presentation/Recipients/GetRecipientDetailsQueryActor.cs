@@ -4,7 +4,6 @@ using Core.Presentation.Actors;
 using Core.Presentation.Repositories;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Queries;
-using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Presentation.Recipients
 {

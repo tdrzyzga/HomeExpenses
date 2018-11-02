@@ -8,10 +8,10 @@ namespace HomeExpenses.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Expenses");
+                "Expenses");
 
             migrationBuilder.CreateTable(
-                name: "Expense",
+                "Expense",
                 schema: "Expenses",
                 columns: table => new
                 {
@@ -22,13 +22,10 @@ namespace HomeExpenses.Infrastructure.Migrations
                     TenantId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Expense", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Expense", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Recipient",
+                "Recipient",
                 schema: "Expenses",
                 columns: table => new
                 {
@@ -47,13 +44,10 @@ namespace HomeExpenses.Infrastructure.Migrations
                     Address_Street = table.Column<string>(nullable: true),
                     Address_Number = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Recipient", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Recipient", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "ExpenseTypeBase",
+                "ExpenseTypeBase",
                 schema: "Expenses",
                 columns: table => new
                 {
@@ -68,8 +62,8 @@ namespace HomeExpenses.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ExpenseTypeBase", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExpenseTypeBase_Expense_ExpenseId",
-                        column: x => x.ExpenseId,
+                        "FK_ExpenseTypeBase_Expense_ExpenseId",
+                        x => x.ExpenseId,
                         principalSchema: "Expenses",
                         principalTable: "Expense",
                         principalColumn: "Id",
@@ -77,7 +71,7 @@ namespace HomeExpenses.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payment",
+                "Payment",
                 schema: "Expenses",
                 columns: table => new
                 {
@@ -91,8 +85,8 @@ namespace HomeExpenses.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Payment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payment_Expense_ExpenseId",
-                        column: x => x.ExpenseId,
+                        "FK_Payment_Expense_ExpenseId",
+                        x => x.ExpenseId,
                         principalSchema: "Expenses",
                         principalTable: "Expense",
                         principalColumn: "Id",
@@ -100,7 +94,7 @@ namespace HomeExpenses.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseTypeBase_ExpenseId",
+                "IX_ExpenseTypeBase_ExpenseId",
                 schema: "Expenses",
                 table: "ExpenseTypeBase",
                 column: "ExpenseId",
@@ -108,7 +102,7 @@ namespace HomeExpenses.Infrastructure.Migrations
                 filter: "[ExpenseId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_ExpenseId",
+                "IX_Payment_ExpenseId",
                 schema: "Expenses",
                 table: "Payment",
                 column: "ExpenseId");
@@ -117,20 +111,20 @@ namespace HomeExpenses.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ExpenseTypeBase",
-                schema: "Expenses");
+                "ExpenseTypeBase",
+                "Expenses");
 
             migrationBuilder.DropTable(
-                name: "Payment",
-                schema: "Expenses");
+                "Payment",
+                "Expenses");
 
             migrationBuilder.DropTable(
-                name: "Recipient",
-                schema: "Expenses");
+                "Recipient",
+                "Expenses");
 
             migrationBuilder.DropTable(
-                name: "Expense",
-                schema: "Expenses");
+                "Expense",
+                "Expenses");
         }
     }
 }

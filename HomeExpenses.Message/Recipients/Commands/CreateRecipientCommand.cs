@@ -49,7 +49,6 @@ namespace HomeExpenses.Message.Recipients.Commands
             RuleFor(x => x.Number)
                 .NotEmpty()
                 .WithName(x => localizer["Number"]);
-
         }
     }
 }

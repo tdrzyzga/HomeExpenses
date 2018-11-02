@@ -1,26 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Akka.Actor;
-using Akka.Util;
 using Core.Message.Commands;
-using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Actors
 {
     public class CommandForwarderActor : ReceiveActor
     {
-        private readonly List<IActorRef> _autostartedActors;
+        private readonly Dictionary<Type, IActorRef> _autostartedCommandActors;
         private readonly ILogger _logger;
 
-        public CommandForwarderActor(List<IActorRef> autostartedActors, ILogger logger)
+        public CommandForwarderActor(Dictionary<Type, IActorRef> autostartedCommandActors, ILogger logger)
         {
-            _autostartedActors = autostartedActors;
+            _autostartedCommandActors = autostartedCommandActors;
             _logger = logger;
 
             ReceiveAsync<ICommand>(Handle);
@@ -31,7 +25,7 @@ namespace Core.Application.Actors
             try
             {
                 var actor = GetActor(command);
-                
+
                 _logger.LogDebug("Command {Command} forwarding by CommandForwarderActor", command);
 
                 actor.Forward(command);
@@ -44,7 +38,7 @@ namespace Core.Application.Actors
 
                 Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -52,19 +46,9 @@ namespace Core.Application.Actors
         {
             var commandType = command.GetType();
 
-            var interfaceType = typeof(ICommandActor<>).MakeGenericType(commandType);
+            var actorInterfaceImplementedType = typeof(ICommandActor<>).MakeGenericType(commandType);
 
-            var actorInfo = Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
-                                    .SelectMany(x => x.GetExportedTypes().Where(y => y.Implements(interfaceType)))
-                                    .Select(x => new {x.Name})
-                                    .SingleOrDefault();
-
-            if (actorInfo == null)
-            {
-                throw new ActorNotFoundException();
-            }
-
-            var actor = _autostartedActors.Find(x => x.Path.Name == actorInfo.Name);
+            var actor = _autostartedCommandActors.GetValueOrDefault(actorInterfaceImplementedType);
 
             if (actor == null)
             {

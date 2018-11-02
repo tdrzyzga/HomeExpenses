@@ -6,6 +6,6 @@ namespace Core.Application.Actors
 {
     public interface ICommandForwarderActorInitializer
     {
-        void StartCommandForwarderActor(List<IActorRef> autostartedActors);
+        void StartCommandForwarderActor(Dictionary<Type, IActorRef> autostartedActors);
     }
 }

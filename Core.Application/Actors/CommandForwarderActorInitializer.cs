@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Akka.Actor;
 using Core.Akka.ActorSystem;
@@ -16,9 +17,9 @@ namespace Core.Application.Actors
             _logger = logger;
         }
 
-        public void StartCommandForwarderActor(List<IActorRef> autostartedActors)
+        public void StartCommandForwarderActor(Dictionary<Type, IActorRef> autostartedCommandActors)
         {
-            var props = Props.Create(() => new CommandForwarderActor(autostartedActors, _logger));
+            var props = Props.Create(() => new CommandForwarderActor(autostartedCommandActors, _logger));
             _localActorSystemManager.ActorSystem.ActorOf(props, "CommandForwarderActor");
         }
     }

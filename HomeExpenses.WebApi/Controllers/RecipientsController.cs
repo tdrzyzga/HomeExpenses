@@ -10,7 +10,7 @@ namespace HomeExpenses.WebApi.Controllers
     [Route("api/Recipients")]
     public class RecipientsController : BaseController
     {
-        public RecipientsController(BaseControllerPayload payload) 
+        public RecipientsController(BaseControllerPayload payload)
             : base(payload)
         {
         }

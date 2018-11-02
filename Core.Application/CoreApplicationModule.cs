@@ -1,6 +1,4 @@
-﻿using Akka.Actor;
-using Autofac;
-using Core.Application.Actors;
+﻿using Autofac;
 
 namespace Core.Application
 {

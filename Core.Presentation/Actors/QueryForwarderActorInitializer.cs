@@ -17,9 +17,9 @@ namespace Core.Presentation.Actors
             _logger = logger;
         }
 
-        public void StartQueryForwarderActor(List<IActorRef> autostartedActors)
+        public void StartQueryForwarderActor(Dictionary<Type, IActorRef> autostartedQueryActors)
         {
-            var props = Props.Create(() => new QueryForwarderActor(autostartedActors, _logger));
+            var props = Props.Create(() => new QueryForwarderActor(autostartedQueryActors, _logger));
             _localActorSystemManager.ActorSystem.ActorOf(props, "QueryForwarderActor");
         }
     }
