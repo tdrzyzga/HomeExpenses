@@ -9,8 +9,7 @@ namespace HomeExpenses.Message
         {
             builder.RegisterAssemblyTypes(ThisAssembly)
                    .Where(t => t.IsAssignableTo<IValidator>())
-                   .AsImplementedInterfaces()
-                   .SingleInstance();
+                   .AsImplementedInterfaces();
         }
     }
 }

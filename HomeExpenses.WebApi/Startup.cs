@@ -34,7 +34,7 @@ namespace HomeExpenses.WebApi
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
-            
+
             services.AddCors();
 
             services.AddMvc()
@@ -45,7 +45,12 @@ namespace HomeExpenses.WebApi
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesWebApiModule>();
-            builder.Register(ctx => Configuration.GetSection("ActorSystemConfiguration").Get<ActorSystemConfiguration>()).AsSelf().SingleInstance();
+
+            var commandForwarderActorPath = Configuration.GetSection("CommandForwarderActorProvider").GetValue<string>("Path");
+            builder.Register(ctx => new CommandForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), commandForwarderActorPath)).AsImplementedInterfaces();
+            var queryForwarderActorPath = Configuration.GetSection("QueryForwarderActorProvider").GetValue<string>("Path");
+            builder.Register(ctx => new QueryForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), queryForwarderActorPath)).AsImplementedInterfaces();
+
             builder.Populate(services);
             DiContainer = builder.Build();
 
@@ -55,7 +60,7 @@ namespace HomeExpenses.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILocalActorSystemManager localActorSystemManager)
         {
             if (env.IsDevelopment())
             {
@@ -66,7 +71,7 @@ namespace HomeExpenses.WebApi
             app.UseCors(builder =>
                             builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );
-            
+
             var supportedCultures = new[]
             {
                 new CultureInfo("pl-PL"),

@@ -181,7 +181,7 @@ function listToStyles (list, options) {
 }
 
 function insertStyleElement (options, style) {
-	var target = getElement(options.insertInto)
+	var target = getElement(options.insertInto);
 
 	if (!target) {
 		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
@@ -519,9 +519,9 @@ var insertInto;
 
 
 
-var options = {"hmr":true}
+var options = {"hmr":true};
 
-options.transform = transform
+options.transform = transform;
 options.insertInto = undefined;
 
 var update = __webpack_require__(/*! ../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);

@@ -27,9 +27,10 @@ namespace Core.Application.Actors
             try
             {
                 await Validate(command);
+
                 await action(command);
 
-                _logger.LogDebug("Command {Command} successfuly handled.", command);
+                _logger.LogDebug("Command {Command} successfuly handled", command);
 
                 Sender.Tell(new CommandSuccessResponse());
             }
@@ -40,7 +41,7 @@ namespace Core.Application.Actors
                 _logger.LogError(validationException, "Validation errors during handling command {Command}", command);
 
                 Sender.Tell(new ValidationErrorResponse(errorId,
-                                                     validationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.PropertyName, x.ErrorMessage)).ToArray()));
+                                                        validationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.PropertyName, x.ErrorMessage)).ToArray()));
             }
             catch (DomainException domainException)
             {
@@ -49,8 +50,8 @@ namespace Core.Application.Actors
                 _logger.LogError(domainException, "Error occured during handling command {Command}", command);
 
                 Sender.Tell(new CommandErrorResponse(errorId,
-                                              domainException.PublicMessage,
-                                              domainException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+                                                     domainException.PublicMessage,
+                                                     domainException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
             }
             catch (ApplicationException applicationException)
             {
@@ -59,8 +60,8 @@ namespace Core.Application.Actors
                 _logger.LogError(applicationException, "Error occured during handling command {Command}", command);
 
                 Sender.Tell(new CommandErrorResponse(errorId,
-                                              applicationException.PublicMessage,
-                                              applicationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
+                                                     applicationException.PublicMessage,
+                                                     applicationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray()));
             }
             catch (Exception exception)
             {
@@ -72,7 +73,7 @@ namespace Core.Application.Actors
             }
         }
 
-        private async Task Validate<TCommand>(TCommand command)
+        private async Task Validate<TCommand>(TCommand command) where TCommand : ICommand
         {
             var validator = _serviceProvider.GetService<IValidator<TCommand>>();
             if (validator != null)

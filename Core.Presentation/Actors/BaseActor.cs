@@ -16,9 +16,9 @@ namespace Core.Presentation.Actors
             _logger = payload.Logger;
         }
 
-        protected async Task HandleQuery<TQuery, TResult>(TQuery query, Func<TQuery, Task<TResult>> action) 
+        protected async Task HandleQuery<TQuery, TResult>(TQuery query, Func<TQuery, Task<TResult>> action)
             where TQuery : IQuery
-            where TResult: IQueryResult
+            where TResult : IQueryResult
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Core.Presentation.Actors
             {
                 var errorId = Guid.NewGuid();
 
-                _logger.LogError(exception, "Error occured during handling command {Query}", query);
+                _logger.LogError(exception, "Error occured during handling query {Query}", query);
 
                 Sender.Tell(new CommandErrorResponse(errorId, "GENERAL ERROR"));
             }

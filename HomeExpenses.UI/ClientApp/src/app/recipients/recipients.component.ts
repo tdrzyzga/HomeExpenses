@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {RecipientsService} from "./recipients.service";
-import { Recipient} from "./dto/Recipient";
 import {HttpErrorResponse} from "@angular/common/http";
 import {throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
+
+
+import { Recipient} from "./shared/dto/Recipient";
+import {RecipientsService} from "./shared/recipients.service";
 
 @Component({
   selector: 'app-recipients',

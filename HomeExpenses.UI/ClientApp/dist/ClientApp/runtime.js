@@ -29,8 +29,9 @@
 /******/
 /******/ 		// run deferred modules when all chunks ready
 /******/ 		return checkDeferredModules();
-/******/ 	};
-/******/ 	function checkDeferredModules() {
+    /******/
+  }
+  /******/ 	function checkDeferredModules() {
 /******/ 		var result;
 /******/ 		for(var i = 0; i < deferredModules.length; i++) {
 /******/ 			var deferredModule = deferredModules[i];

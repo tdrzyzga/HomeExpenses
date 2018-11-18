@@ -2,6 +2,7 @@
 using Autofac;
 using Core.Akka;
 using Core.Akka.ActorSystem;
+using Core.Application;
 using HomeExpenses.Message;
 
 namespace HomeExpenses.WebApi
@@ -26,6 +27,7 @@ namespace HomeExpenses.WebApi
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule<CoreAkkaModule>();
+            builder.RegisterModule<CoreApplicationModule>();
             builder.RegisterModule<HomeExpensesMessageModule>();
 
             builder.Register(ctx => new LocalActorSystemManager("WebApiActorSystem", AkkaConfig)).AsImplementedInterfaces().SingleInstance();

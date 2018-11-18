@@ -2,8 +2,9 @@
 using Akka.DI.AutoFac;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Core.Akka.ActorAutostart;
 using Core.Akka.ActorSystem;
+using Core.Application.Actors;
+using Core.Presentation.Actors;
 using HomeExpenses.Infrastructure.Databases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Host
@@ -41,6 +43,9 @@ namespace HomeExpenses.Host
             services.AddDbContext<HomeExpensesDbContext>(options =>
                                                              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+            services.AddSingleton<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
+
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
             builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
@@ -53,16 +58,19 @@ namespace HomeExpenses.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env, IAutostartActorInitializer autostartActorInitializer, ILoggerFactory loggerFactory)
+        public void Configure(IServiceProvider serviceProvider,
+                              IApplicationBuilder app,
+                              IHostingEnvironment env,
+                              IAutostartCommandActorsInitializer autostartCommandActorsInitializer,
+                              IAutostartQueryActorsInitializer autostartQueryActorsInitializer,
+                              ILoggerFactory loggerFactory,
+                              ICommandForwarderActorInitializer commandForwarderActorInitializer,
+                              IQueryForwarderActorInitializer queryForwarderActorInitializer)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddConsole();
-            loggerFactory.AddDebug();
 
             using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -70,9 +78,13 @@ namespace HomeExpenses.Host
                 context.Database.Migrate();
             }
 
-            autostartActorInitializer.FindAndStartActors();
+            autostartCommandActorsInitializer.FindAndStartCommandActors();
+            commandForwarderActorInitializer.StartCommandForwarderActor(autostartCommandActorsInitializer.AutostartedCommandActors);
 
-            app.Run(async context => { await context.Response.WriteAsync($"Hello World!"); });
+            autostartQueryActorsInitializer.FindAndStartQueryActors();
+            queryForwarderActorInitializer.StartQueryForwarderActor(autostartQueryActorsInitializer.AutostartedQueryActors);
+
+            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }
     }
 }

@@ -9,6 +9,7 @@ using Core.Presentation;
 using HomeExpenses.Application;
 using HomeExpenses.Domain;
 using HomeExpenses.Infrastructure;
+using HomeExpenses.Message;
 using HomeExpenses.Presentation;
 
 namespace HomeExpenses.Host
@@ -41,6 +42,7 @@ namespace HomeExpenses.Host
             builder.RegisterModule<HomeExpensesInfrastructureModule>();
             builder.RegisterModule<HomeExpensesDomainModule>();
             builder.RegisterModule<HomeExpensesApplicationModule>();
+            builder.RegisterModule<HomeExpensesMessageModule>();
             builder.RegisterModule<HomeExpensesPresentationModule>();
 
             builder.Register(ctx => new LocalActorSystemManager("HostActorSystem", AkkaConfig)).AsImplementedInterfaces().SingleInstance();

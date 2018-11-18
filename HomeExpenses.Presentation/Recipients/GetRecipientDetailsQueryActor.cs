@@ -4,12 +4,11 @@ using Core.Presentation.Actors;
 using Core.Presentation.Repositories;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Queries;
-using Microsoft.Extensions.Logging;
 
 namespace HomeExpenses.Presentation.Recipients
 {
     [AutostartActor("GetRecipientDetailsQueryActor")]
-    public class GetRecipientDetailsQueryActor : BaseActor
+    public class GetRecipientDetailsQueryActor : BaseActor, IQueryActor<GetRecipientDetailsQuery>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 

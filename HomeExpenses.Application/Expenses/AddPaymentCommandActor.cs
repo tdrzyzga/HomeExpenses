@@ -9,7 +9,7 @@ using HomeExpenses.Message.Expenses.Commands;
 namespace HomeExpenses.Application.Expenses
 {
     [AutostartActor("AddPaymentCommandActor")]
-    public class AddPaymentCommandActor : BaseActor
+    public class AddPaymentCommandActor : BaseActor, ICommandActor<AddPaymentCommand>
     {
         private readonly IRepository<Expense> _expenseRepository;
 

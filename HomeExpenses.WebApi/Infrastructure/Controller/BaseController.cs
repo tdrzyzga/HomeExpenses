@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
-using Core.Akka.ActorSystem;
 using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
@@ -18,14 +17,14 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly ActorSystemConfiguration _actorSystemConfiguration;
-        private readonly ILocalActorSystemManager _localActorSystemManager;
+        private readonly ICommandForwarderActorProvider _commandForwarderActorProvider;
+        private readonly IQueryForwarderActorProvider _queryForwarderActorProvider;
         private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(BaseControllerPayload payload)
         {
-            _localActorSystemManager = payload.LocalActorSystemManager;
-            _actorSystemConfiguration = payload.ActorSystemConfiguration;
+            _commandForwarderActorProvider = payload.CommandForwarderActorProvider;
+            _queryForwarderActorProvider = payload.QueryForwarderActorProvider;
             _serviceProvider = payload.ServiceProvider;
         }
 
@@ -45,10 +44,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
-            string path = $"{_actorSystemConfiguration.Path}{typeof(TCommand).Name}Actor";
 
-            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
-            var response = await actor.Ask(command);
+            var response = await _commandForwarderActorProvider.Ask(command);
 
             switch (response)
             {
@@ -74,10 +71,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
         {
             var culture = GetCulture();
             query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
-            string path = $"{_actorSystemConfiguration.Path}{typeof(TQuery).Name}Actor";
 
-            var actor = await _localActorSystemManager.ActorSystem.ActorSelection(path).ResolveOne(TimeSpan.FromSeconds(30));
-            var result = await actor.Ask(query);
+            var result = await _queryForwarderActorProvider.Ask(query);
 
             switch (result)
             {
