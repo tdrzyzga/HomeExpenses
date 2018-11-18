@@ -47,9 +47,9 @@ namespace HomeExpenses.WebApi
             builder.RegisterModule<HomeExpensesWebApiModule>();
 
             var commandForwarderActorPath = Configuration.GetSection("CommandForwarderActorProvider").GetValue<string>("Path");
-            builder.Register(ctx => new CommandForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), commandForwarderActorPath)).AsSelf();
+            builder.Register(ctx => new CommandForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), commandForwarderActorPath)).AsImplementedInterfaces();
             var queryForwarderActorPath = Configuration.GetSection("QueryForwarderActorProvider").GetValue<string>("Path");
-            builder.Register(ctx => new QueryForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), queryForwarderActorPath)).AsSelf();
+            builder.Register(ctx => new QueryForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), queryForwarderActorPath)).AsImplementedInterfaces();
 
             builder.Populate(services);
             DiContainer = builder.Build();

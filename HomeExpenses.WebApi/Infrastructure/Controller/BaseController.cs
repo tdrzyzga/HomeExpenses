@@ -17,8 +17,8 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly CommandForwarderActorProvider _commandForwarderActorProvider;
-        private readonly QueryForwarderActorProvider _queryForwarderActorProvider;
+        private readonly ICommandForwarderActorProvider _commandForwarderActorProvider;
+        private readonly IQueryForwarderActorProvider _queryForwarderActorProvider;
         private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(BaseControllerPayload payload)
@@ -45,7 +45,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var response = await _commandForwarderActorProvider.CommandForwarderActor.Ask(command);
+            var response = await _commandForwarderActorProvider.Ask(command);
 
             switch (response)
             {
@@ -72,7 +72,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var result = await _queryForwarderActorProvider.QueryForwarderActor.Ask(query);
+            var result = await _queryForwarderActorProvider.Ask(query);
 
             switch (result)
             {
