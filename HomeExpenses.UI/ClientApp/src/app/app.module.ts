@@ -4,10 +4,11 @@ import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from "@angular/router";
 
-import {RecipientsModule} from './modules/recipients/recipients.module';
 import {AppComponent} from './app.component';
 import {MainModule} from "./modules/main/main.module";
 import {AppRoutesModule} from "./app.routing";
+import {MaterialModule} from "./shared/modules/material/material.module";
+import {RecipientsModule} from "./modules/recipients/recipients.module";
 
 @NgModule({
   imports: [
@@ -16,8 +17,12 @@ import {AppRoutesModule} from "./app.routing";
     HttpClientModule,
     MainModule,
     RecipientsModule,
+    MaterialModule,
     RouterModule,
     AppRoutesModule
+  ],
+  exports: [
+    BrowserModule
   ],
   declarations: [
     AppComponent
