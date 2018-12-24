@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {SideMenuService} from "./shared/side-menu.service";
+import {MatSidenav} from "@angular/material";
 
 @Component({
   selector: 'app-main',
@@ -6,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
+  @ViewChild('sidenav') public sidenav: MatSidenav;
 
-  constructor() { }
+  constructor(private sideMenuService: SideMenuService) { }
 
   ngOnInit() {
+    this.sideMenuService.setSidenav(this.sidenav);
   }
-
 }

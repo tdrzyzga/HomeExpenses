@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {SideMenuService} from "../shared/side-menu.service";
 
 @Component({
   selector: 'app-toolbar',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private sideMenuService: SideMenuService) { }
 
   ngOnInit() {
   }
 
+  toggleSideMenu(){
+    this.sideMenuService.toggle();
+  }
 }

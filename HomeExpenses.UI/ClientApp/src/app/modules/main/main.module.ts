@@ -16,6 +16,7 @@ import {RouterModule} from "@angular/router";
   declarations: [
     MainComponent,
     ToolbarComponent,
-    SideMenuComponent]
+    SideMenuComponent
+  ]
 })
 export class MainModule { }
