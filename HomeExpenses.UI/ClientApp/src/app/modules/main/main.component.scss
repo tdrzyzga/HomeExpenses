@@ -1,7 +1,7 @@
-@import "../../../scss/utilities/_utilities.scss";
+@import "utilities";
 
 .app {
-  display: flex;
+  @include flex;
   min-height: 100vh;
 
   &__main {
@@ -11,7 +11,6 @@
     flex: auto;
     width: calc(100vw - #{rem-calc($sidemenu__size--full + $layout-buffer)});
     @include padding(20px 25px 30px);
-    @include margin(0 0 0 $sidemenu__size--full);
   }
 
   &__menu {

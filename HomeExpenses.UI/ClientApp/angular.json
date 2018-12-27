@@ -28,7 +28,7 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/scss/utilities"
+                "src/scss"
               ]
             },
             "styles": [
@@ -91,7 +91,7 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/scss/utilities"
+                "src/scss"
               ]
             },
             "scripts": [],
@@ -193,5 +193,5 @@
     "@schematics/angular:component": {
       "styleext": "scss"
     }
-  },
+  }
 }
