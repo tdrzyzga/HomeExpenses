@@ -9,7 +9,7 @@ import {Recipient} from "./dto/Recipient";
 
 export class RecipientsService {
 
-  private path = 'http://localhost:60440/api/Recipients/05B25BE9-FA01-409C-A8EF-82806C3000A0';
+  private path = 'http://localhost:60440/api/Recipients/F16CE11C-CA45-4449-A942-54F4B22106EA';
 
   constructor(private http: HttpClient) { }
 

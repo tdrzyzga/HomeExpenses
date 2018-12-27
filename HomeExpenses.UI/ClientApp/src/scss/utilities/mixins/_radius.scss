@@ -1,0 +1,10 @@
+﻿/* BORDER RADIUS MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin radius($radius: 5px, $bgClip: true) {
+    border-radius: rem-calc($radius);
+    @if($bgClip) {
+        background-clip: padding-box;
+        /* stops bg color from leaking outside the border: */
+    }
+}

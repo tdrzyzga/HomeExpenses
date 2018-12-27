@@ -1,0 +1,29 @@
+﻿/* PADDING MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin padding($values) {
+  $length: length($values);
+  $top: nth($values, 1);
+
+    @if $length == 1 {
+        padding: rem-calc($top);
+    }
+ 
+    @else if $length == 2 {
+        $right: nth($values, 2);
+        padding: rem-calc($top) rem-calc($right);
+    }
+
+    @else if $length == 3 {
+        $right: nth($values, 2);
+        $bottom: nth($values, 3);
+        padding: rem-calc($top) rem-calc($right) rem-calc($bottom);
+    }
+
+    @else if $length >= 4 {
+        $right: nth($values, 2);
+        $bottom: nth($values, 3);
+        $left: nth($values, 4);
+        padding: rem-calc($top) rem-calc($right) rem-calc($bottom) rem-calc($left);
+    }
+}

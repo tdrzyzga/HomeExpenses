@@ -8,7 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -22,11 +26,16 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss/utilities"
+              ]
+            },
             "styles": [
               {
-                "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
               },
-              "src/styles.css"
+              "src/scss/styles.scss"
             ],
             "scripts": []
           },
@@ -78,8 +87,13 @@
               {
                 "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
               },
-              "src/styles.css"
+              "src/scss/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss/utilities"
+              ]
+            },
             "scripts": [],
             "assets": [
               "src/favicon.ico",
@@ -104,6 +118,11 @@
     "ClientApp-e2e": {
       "root": "e2e/",
       "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
@@ -169,5 +188,10 @@
       }
     }
   },
-  "defaultProject": "ClientApp"
+  "defaultProject": "ClientApp",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  },
 }

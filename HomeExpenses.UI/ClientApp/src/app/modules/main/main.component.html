@@ -1,11 +1,12 @@
-<div>
+<div class="app">
   <app-toolbar></app-toolbar>
 
   <mat-sidenav-container>
-    <mat-sidenav mode="side" #sidenav [opened]="true">
+    <mat-sidenav class="app_menu" mode="side" #sidenav [opened]="true">
       <app-side-menu></app-side-menu>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content class="app__main">
+      sdfsdfdsf
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

@@ -1,0 +1,9 @@
+﻿/* PIXELATE FUNCTION
+-------------------------------------------------------------------------------*/
+
+// It turns any value's unit in 'px'.
+// Doesn't change the value itself.
+
+@function pixelate($value) {
+    @return strip-unit($value) * 1px;
+}

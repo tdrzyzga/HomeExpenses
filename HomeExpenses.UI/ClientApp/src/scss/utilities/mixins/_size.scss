@@ -1,0 +1,45 @@
+/* ELEMENT SIZE MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin size($w: null, $h: null, $wNoRem: false, $hNoRem: false) {
+    @if ($w !=auto and $w !=null and $w !=inherit and $wNoRem !=true) {
+        $w: rem-calc($w)
+    }
+    @if ($h !=auto and $h !=null and $h !=inherit and $hNoRem !=true) {
+        $h: rem-calc($h)
+    }
+    width: $w;
+    height: $h;
+}
+
+@mixin size-query($mobileList: null, $desktopList: null) {
+    @if ($mobileList) {
+        $sizesList: getSizeFromList($mobileList);
+        @include media('<=tablet') {
+            @include size(nth($sizesList, 1), nth($sizesList, 2));
+        }
+    }
+    @if ($desktopList) {
+        $sizesList: getSizeFromList($desktopList);
+        @include media('>laptop', '<=desktop') {
+            @include size(nth($sizesList, 1), nth($sizesList, 2));
+        }
+    }
+}
+
+@mixin height($value) {
+    @include size($h: $value);
+}
+
+@mixin width($value) {
+    @include size($w: $value);
+}
+
+@function getSizeFromList($list) {
+    @if (type-of($list)==list) {
+        @return $list;
+    }
+    $width: $list;
+    $height: $list;
+    @return ($width, $height);
+}

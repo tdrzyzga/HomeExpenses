@@ -1,0 +1,38 @@
+﻿/* MARGIN MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin margin($values) {
+  $length: length($values);
+  $top: nth($values, 1);
+
+    @if $length == 1 {
+        margin: checkMargin($top);
+    }
+
+    @else if $length == 2 {
+        $right: nth($values, 2);
+        margin: checkMargin($top) checkMargin($right);
+    }
+
+    @else if $length == 3 {
+        $right: nth($values, 2);
+        $bottom: nth($values, 3);
+        margin: checkMargin($top) checkMargin($right) checkMargin($bottom);
+    }
+
+    @else if $length >= 4 {
+        $right: nth($values, 2);
+        $bottom: nth($values, 3);
+        $left: nth($values, 4);
+        margin: checkMargin($top) checkMargin($right) checkMargin($bottom) checkMargin($left);
+    }
+}
+
+@function checkMargin($value){
+    @if($value == auto){
+        @return $value;
+    }
+    @else{
+        @return rem-calc($value);
+    }
+}

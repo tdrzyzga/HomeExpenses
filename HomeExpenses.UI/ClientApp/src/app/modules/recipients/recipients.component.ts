@@ -10,7 +10,7 @@ import {RecipientsService} from "./shared/recipients.service";
 @Component({
   selector: 'app-recipients',
   templateUrl: './recipients.component.html',
-  styleUrls: ['./recipients.component.css']
+  styleUrls: ['./recipients.component.scss']
 })
 export class RecipientsComponent implements OnInit {
   recipient: Recipient ;

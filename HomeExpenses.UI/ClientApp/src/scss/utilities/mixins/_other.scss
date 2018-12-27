@@ -1,0 +1,94 @@
+﻿/* OVERLAY MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+
+/* TRUNCATE MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin truncate($truncation-boundary) {
+    max-width: rem-calc($truncation-boundary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin truncate-multiple-lines($font-size, $line-height, $lines, $truncation-boundary, $font-color, $font-family: Regular) {
+    display: block;
+    display: -webkit-box;
+
+    @include font($color: $font-color, $size: $font-size, $lh: $line-height*$font-size, $family: $font-family);
+    @include truncate($truncation-boundary);
+    white-space: normal;
+
+    height: $font-size*$line-height*$lines;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+}
+
+
+/* INPUT PLACEHOLDER MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin input-placeholder {
+    &.placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &:-ms-input-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; }
+}
+
+
+/* RESPONSIVE RATIO MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin responsive-ratio($x,$y, $pseudo: false) {
+    $padding: unquote( ( $y / $x ) * 100 + '%' );
+    @if $pseudo {
+        &:before {
+            @include pseudo($pos: relative);
+            width: 100%;
+            padding-top: $padding;
+        }
+    } @else {
+        padding-top: $padding;
+    }
+}
+
+
+/* HARDWARE ACCELERATE MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin hardware($backface: true, $perspective: 1000) {
+    @if $backface {
+        backface-visibility: hidden;
+    }
+    perspective: $perspective;
+}
+
+
+/* UNORDERED LIST WITH NO BULLETS
+-------------------------------------------------------------------------------*/
+
+@mixin unordered-no-bullets {
+    display: block;
+    list-style: none;
+    @include margin(0);
+    @include padding(0);
+}
+
+/* CENTRALIZE CONTENT INSIDE DIV
+-------------------------------------------------------------------------------*/
+
+@mixin centralize {
+    @include flexbox;
+    @include flex-align(center);
+    @include flex-just(center);
+}
