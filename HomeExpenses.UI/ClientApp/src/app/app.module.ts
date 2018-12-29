@@ -8,7 +8,6 @@ import {AppComponent} from './app.component';
 import {MainModule} from "./modules/main/main.module";
 import {AppRoutesModule} from "./app.routing";
 import {MaterialModule} from "./shared/modules/material/material.module";
-import {RecipientsModule} from "./modules/recipients/recipients.module";
 
 @NgModule({
   imports: [
@@ -16,7 +15,6 @@ import {RecipientsModule} from "./modules/recipients/recipients.module";
     BrowserAnimationsModule,
     HttpClientModule,
     MainModule,
-    RecipientsModule,
     MaterialModule,
     RouterModule,
     AppRoutesModule

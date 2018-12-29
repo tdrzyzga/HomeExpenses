@@ -4,15 +4,15 @@ import {throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 
 
-import { Recipient} from "./shared/dto/Recipient";
-import {RecipientsService} from "./shared/recipients.service";
+import { Recipient} from "../shared/dto/Recipient";
+import {RecipientsService} from "../shared/recipients.service";
 
 @Component({
-  selector: 'app-recipients',
-  templateUrl: './recipients.component.html',
-  styleUrls: ['./recipients.component.scss']
+  selector: 'recipient-list',
+  templateUrl: './recipient-list.component.html',
+  styleUrls: ['./recipient-list.component.scss']
 })
-export class RecipientsComponent implements OnInit {
+export class RecipientListComponent implements OnInit {
   recipient: Recipient ;
 
   constructor(private recipientsService: RecipientsService) { }

@@ -1,6 +1,5 @@
 import {MainComponent} from "./modules/main/main.component";
 import {RouterModule, Routes} from "@angular/router";
-import {RecipientsComponent} from "./modules/recipients/recipients.component";
 
 const appRoutes: Routes = [
   {
@@ -8,8 +7,17 @@ const appRoutes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: '',
+        redirectTo: '/dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
+      },
+      {
         path: 'recipients',
-        component: RecipientsComponent
+        loadChildren: './modules/recipient/recipient.module#RecipientModule'
       }]
   }];
 

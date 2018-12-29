@@ -11,21 +11,21 @@
     width: $w;
     height: $h;
 }
-
-@mixin size-query($mobileList: null, $desktopList: null) {
-    @if ($mobileList) {
-        $sizesList: getSizeFromList($mobileList);
-        @include media('<=tablet') {
-            @include size(nth($sizesList, 1), nth($sizesList, 2));
-        }
-    }
-    @if ($desktopList) {
-        $sizesList: getSizeFromList($desktopList);
-        @include media('>laptop', '<=desktop') {
-            @include size(nth($sizesList, 1), nth($sizesList, 2));
-        }
-    }
-}
+//
+//@mixin size-query($mobileList: null, $desktopList: null) {
+//    @if ($mobileList) {
+//        $sizesList: getSizeFromList($mobileList);
+//        @include media('<=tablet') {
+//            @include size(nth($sizesList, 1), nth($sizesList, 2));
+//        }
+//    }
+//    @if ($desktopList) {
+//        $sizesList: getSizeFromList($desktopList);
+//        @include media('>laptop', '<=desktop') {
+//            @include size(nth($sizesList, 1), nth($sizesList, 2));
+//        }
+//    }
+//}
 
 @mixin height($value) {
     @include size($h: $value);
