@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatButtonModule,
-  MatButtonToggleModule,
+  MatButtonToggleModule, MatDialogModule,
   MatIconModule,
   MatListModule,
   MatMenuModule,
@@ -19,7 +19,8 @@ import {
     MatMenuModule,
     MatListModule,
     MatButtonModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDialogModule,
   ],
   exports: [
     CommonModule,
@@ -29,7 +30,8 @@ import {
     MatMenuModule,
     MatListModule,
     MatButtonModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDialogModule
   ],
   declarations: []
 })

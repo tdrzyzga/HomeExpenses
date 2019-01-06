@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-side-menu',
@@ -7,8 +6,7 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent implements OnInit {
-  constructor(private translate: TranslateService) {
-    translate.setDefaultLang('pl');
+  constructor() {
   }
 
   ngOnInit() {

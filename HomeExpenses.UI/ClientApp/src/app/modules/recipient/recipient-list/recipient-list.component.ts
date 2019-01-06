@@ -6,6 +6,8 @@ import {catchError} from "rxjs/operators";
 
 import { Recipient} from "../shared/dto/Recipient";
 import {RecipientsService} from "../shared/recipients.service";
+import {MatDialog, MatDialogConfig} from "@angular/material";
+import {RecipientCreateDialogComponent} from "../recipient-create-dialog/recipient-create-dialog.component";
 
 @Component({
   selector: 'recipient-list',
@@ -15,7 +17,8 @@ import {RecipientsService} from "../shared/recipients.service";
 export class RecipientListComponent implements OnInit {
   recipient: Recipient ;
 
-  constructor(private recipientsService: RecipientsService) { }
+  constructor(private recipientsService: RecipientsService,
+              private createRecipientDialog: MatDialog) { }
 
   ngOnInit() {
     this.recipientsService.getRecipients()
@@ -23,6 +26,16 @@ export class RecipientListComponent implements OnInit {
         catchError(this.handleError)
       )
       .subscribe(recipient => this.recipient = recipient);
+  }
+
+  createRecipient() {
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    this.createRecipientDialog.open(RecipientCreateDialogComponent, dialogConfig);
   }
 
   private handleError(error: HttpErrorResponse) {
