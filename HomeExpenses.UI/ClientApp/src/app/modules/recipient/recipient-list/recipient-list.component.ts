@@ -32,7 +32,7 @@ export class RecipientListComponent implements OnInit {
 
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
 
     this.createRecipientDialog.open(RecipientCreateDialogComponent, dialogConfig);

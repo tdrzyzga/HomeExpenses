@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 import {Recipient} from "./dto/Recipient";
+import {CreateRecipient} from "./dto/CreateRecipient";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +11,15 @@ import {Recipient} from "./dto/Recipient";
 
 export class RecipientsService {
 
-  private path = 'http://localhost:60440/api/Recipients/F16CE11C-CA45-4449-A942-54F4B22106EA';
+  private path = 'http://localhost:60440/api/recipients';
 
   constructor(private http: HttpClient) { }
 
-  getRecipients () {
-    return this.http.get<Recipient>(this.path);
+  getRecipients (): Observable<Recipient> {
+    return this.http.get<Recipient>(`${this.path}/44F328C8-40CC-4735-A3FA-84E9092223D3`);
+  }
+
+  createRecipient(recipientData: CreateRecipient) {
+    return this.http.post(this.path, recipientData);
   }
 }

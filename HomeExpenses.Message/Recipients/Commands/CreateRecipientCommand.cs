@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Message.Commands;
+﻿using Core.Message.Commands;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
@@ -7,15 +6,13 @@ namespace HomeExpenses.Message.Recipients.Commands
 {
     public class CreateRecipientCommand : BaseCommand
     {
-        public Guid Id { get; }
         public string Name { get; }
         public string City { get; }
         public string Street { get; }
         public string Number { get; }
 
-        public CreateRecipientCommand(Guid id, string name, string city, string street, string number)
+        public CreateRecipientCommand(string name, string city, string street, string number)
         {
-            Id = id;
             Name = name;
             City = city;
             Street = street;
@@ -27,9 +24,6 @@ namespace HomeExpenses.Message.Recipients.Commands
     {
         public CreateRecipientCommandValidator(IStringLocalizer<CreateRecipientCommand> localizer)
         {
-            RuleFor(x => x.Id)
-                .NotEmpty();
-
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .WithName(x => localizer["Name"]);

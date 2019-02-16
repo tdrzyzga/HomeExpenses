@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {TranslateModule} from "@ngx-translate/core";
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -11,10 +12,14 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   imports: [
     CommonModule,
-    TranslateModule.forChild({})
+    TranslateModule.forChild({}),
+    ReactiveFormsModule,
+    FormsModule
   ],
   exports: [
-    TranslateModule
+    TranslateModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: []
 })
