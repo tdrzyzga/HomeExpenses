@@ -1,0 +1,11 @@
+@import "utilities";
+
+.app {
+
+  &__main {
+    @include padding(20px 25px 30px);
+  }
+
+  &__menu {
+  }
+}

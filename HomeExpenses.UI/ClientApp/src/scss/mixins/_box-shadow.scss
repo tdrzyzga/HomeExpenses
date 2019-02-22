@@ -1,0 +1,43 @@
+/* BOX-SHADOW MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+    @if $inset {
+        -webkit-box-shadow:inset $top $left $blur $color;
+        -moz-box-shadow:inset $top $left $blur $color;
+        box-shadow:inset $top $left $blur $color;
+    } @else {
+        -webkit-box-shadow: $top $left $blur $color;
+        -moz-box-shadow: $top $left $blur $color;
+        box-shadow: $top $left $blur $color;
+    }
+}
+
+@mixin shadow-flat($color, $size: 4px, $opacity: 1, $rotated: false){
+
+    @if ($rotated) {
+        @include box-shadow($size*(-1), $size, 0, rgba($color, $opacity));
+    }
+    @else {
+        @include box-shadow(0, $size, 0, rgba($color, $opacity));
+    }
+}
+
+
+/* CLASS CREATION MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin shadow-generator($amount, $color, $shadow-opacity: 1, $interval: 2px) {
+
+    @for $i from 1 through $amount {
+
+        $shadow-size: $i * $interval;
+
+        %shadow--flat__#{$i} {
+            @include shadow-flat($color, $size: $shadow-size, $opacity: $shadow-opacity, $rotated: false);
+        }
+        %shadow--flat-rotated__#{$i} {
+            @include shadow-flat($color, $size: $shadow-size, $opacity: $shadow-opacity, $rotated: true);
+        }
+    }
+}

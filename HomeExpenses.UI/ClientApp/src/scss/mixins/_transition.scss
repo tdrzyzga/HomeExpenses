@@ -1,0 +1,7 @@
+/* TRANSITION MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin transition($property: all, $duration: 0.2s, $delay: false, $easing: ease) {
+    transition: $property $duration $easing;
+    @if $delay { transition-delay: $delay; }
+}

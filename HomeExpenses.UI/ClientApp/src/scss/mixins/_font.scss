@@ -1,0 +1,38 @@
+﻿/* FONT MIXIN
+-------------------------------------------------------------------------------*/
+
+@mixin font($size: false, $color: false, $family: inherit, $transform: false,  $lh: false, $spacing: false, $style: false) {
+    @if $family { 
+        font-family: $font-definition;
+        font-weight: choose-font($fonts, $family);
+    }
+    @if $size { font-size: rem-calc($size); }
+    @if $color { color: $color; }
+    @if $transform { text-transform: $transform; }
+    @if $style {font-style: $style; }
+    @if $lh { line-height: rem-calc($lh); }
+    @if $spacing { letter-spacing: rem-calc($spacing); }
+}
+
+
+/* CHOOSE FONT
+    Function takes fonts, that are in variable and than
+    it gives name of proper font
+-------------------------------------------------------------------------------*/
+
+
+@function choose-font($fonts-variable, $font) {
+
+    @if $font == 'inherit' {
+        @return $font;
+    }
+
+    @if map-has-key($fonts-variable, $font) {
+        @return map-get($fonts-variable, $font);
+    }
+
+    @else  {
+        @warn "Frajerze, nie ma takiego fonta, jak '#{$font}'! Gupis?";
+        @return $font;
+    }
+}

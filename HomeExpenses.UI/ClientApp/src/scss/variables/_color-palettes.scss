@@ -1,0 +1,118 @@
+// Definition of main colors used in app
+$green:         #8bde51;
+$blue:          #00b4b4;
+$blue--intense: #49AAF3;
+$white:         #fff;
+$gray:          #d6dae0;
+$gray--light:   #F7F7F7;
+$gray--dark:    #707070;
+$navy:          #34657f;
+$navy--light:   #688CA0;
+$navy--dark:    #183F53;
+$red:           #ff0202;
+$orange:        #E92;
+
+// Definition of colors, depending on its priority
+$color--primary: $blue--intense;
+$color--secondary: $gray;
+$color--accent: $blue;
+
+// Definition of colors, depending on its role
+$color--font: $navy;
+$color--app: $gray--light;
+$color--warning: $orange;
+
+// Helpers
+$dark-text: $color--font;
+$light-text: white;
+$saturation-amount: 10%;
+
+// SideMenu
+$sidemenu--dark: $navy--dark;
+$sidemenu--light: #204B60;
+$sidemenu--shadow: #152D39;
+
+// Calendar
+$calendar__openedEvents: #9ED8D8;
+
+// Palettes
+$green__palette : (
+
+    50: #ecf0e2,
+    100: #d8f4c5,
+    200: #c5efa8,
+    300: #b2e98b,
+    400: #9ee46e,
+    500: #8bde51,
+    600: #6fb241,
+    700: #538531,
+    800: #385920,
+    900: #1c2c10,
+
+    A100: saturate(#d8f4c5, $saturation-amount),
+    A200: saturate(#c5efa8, $saturation-amount),
+    A400: saturate(#9ee46e, $saturation-amount),
+    A700: saturate(#538531, $saturation-amount),
+
+    contrast: (
+        primary: $dark-text,
+        secondary: $dark-text,
+        accent: $light-text,
+        
+        50: $dark-text,
+        100: $dark-text,
+        200: $dark-text,
+        300: $dark-text,
+        400: $dark-text,
+        500: $dark-text,
+        600: $light-text,
+        700: $light-text,
+        800: $light-text,
+        900: $light-text,
+
+        A100: $dark-text,
+        A200: $dark-text,
+        A400: $dark-text,
+        A700: $dark-text
+    )
+);
+
+$blue__palette : (
+    50: #d4f2f2,
+    100: #aae6e6,
+    200: #80dada,
+    300: #55cdcc,
+    400: #2bc1c1,
+    500: #00b4b4,
+    600: #009090,
+    700: #006c6c,
+    800: #004848,
+    900: #002424,
+
+    A100: saturate(#aae6e6, $saturation-amount),
+    A200: saturate(#80dada, $saturation-amount),
+    A400: saturate(#2bc1c1, $saturation-amount),
+    A700: saturate(#006c6c, $saturation-amount),
+    
+    contrast : (
+        50: $dark-text,
+        100: $dark-text,
+        200: $dark-text,
+        300: $dark-text,
+        400: $dark-text,
+        500: $dark-text,
+        600: $light-text,
+        700: $light-text,
+        800: $light-text,
+        900: $light-text,
+
+        A100: $dark-text,
+        A200: $dark-text,
+        A400: $dark-text,
+        A700: $dark-text
+    )
+);
+
+// Seledin color (used as bg in various layout elements)
+// $pistachio: rgba(lighten(map-get($green__palette, 100), 10%), .6);
+$pistachio: rgba($color--primary, .1);

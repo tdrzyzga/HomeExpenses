@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeExpenses.WebApi.Controllers
 {
-    [Route("api/PeriodcExpenses")]
+    [Route("api/periodic-expenses")]
     public class PeriodicExpensesController : BaseController
     {
         public PeriodicExpensesController(BaseControllerPayload payload)

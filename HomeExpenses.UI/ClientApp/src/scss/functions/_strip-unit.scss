@@ -1,0 +1,13 @@
+﻿/* STRIP-UNIT FUNCTION
+-------------------------------------------------------------------------------*/
+
+// Removes unit from value, leaves only a number.
+// It is used by REM-CALC and other functions, like PIXELATE.
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}

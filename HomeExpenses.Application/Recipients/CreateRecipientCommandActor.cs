@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Core.Akka.ActorAutostart;
 using Core.Application.Actors;
 using Core.Domain.Repositories;
@@ -30,7 +31,7 @@ namespace HomeExpenses.Application.Recipients
             {
                 var address = new AddressValueObject(command.City, command.Street, command.Number);
 
-                var recipient = await _recipientFactory.Create(command.Id, command.Metadata.TenantId, command.Name, address);
+                var recipient = await _recipientFactory.Create(Guid.NewGuid(), command.Metadata.TenantId, command.Name, address);
 
                 await _recipientRepository.Save(recipient);
             });

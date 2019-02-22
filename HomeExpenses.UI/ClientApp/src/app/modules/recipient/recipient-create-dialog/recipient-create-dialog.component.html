@@ -1,0 +1,18 @@
+<div>
+  <form fxLayout="column" [formGroup]="recipientForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput formControlName="name" placeholder="Name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="city" placeholder="City">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="street" placeholder="Street">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="number" placeholder="Number">
+    </mat-form-field>
+    <button mat-stroked-button>Basic</button>
+  </form>
+</div>
+
