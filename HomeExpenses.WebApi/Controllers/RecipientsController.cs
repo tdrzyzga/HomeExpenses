@@ -34,5 +34,12 @@ namespace HomeExpenses.WebApi.Controllers
             var query = new GetRecipientDetailsQuery(id);
             return await SendQuery(query);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRecipients()
+        {
+            var query = new GetRecipientListQuery();
+            return await SendQuery(query);
+        }
     }
 }
