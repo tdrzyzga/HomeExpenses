@@ -6,7 +6,7 @@ using Core.Domain.Entities;
 
 namespace Core.Presentation.Pagination
 {
-    public class SortExpression<TAggregateRoot> where TAggregateRoot : AggregateRoot
+    public abstract class SortExpression<TAggregateRoot>: ISortExpression<TAggregateRoot> where TAggregateRoot : AggregateRoot
     {
         private readonly IDictionary<string, Expression<Func<TAggregateRoot, object>>> _sortExpressionDictionary =
             new Dictionary<string, Expression<Func<TAggregateRoot, object>>>();
@@ -40,7 +40,6 @@ namespace Core.Presentation.Pagination
             }
         }
 
-
         public void AddEntry(string sortBy, Expression<Func<TAggregateRoot, object>> sortExpression)
         {
             _sortExpressionDictionary[sortBy.ToLower()] = sortExpression;
@@ -51,5 +50,9 @@ namespace Core.Presentation.Pagination
             _defaultSortBy = sortBy;
             _defaultSortDir = sortDir;
         }
+    }
+    
+    public class DefaultSortExpression<TAggregateRoot> : SortExpression<TAggregateRoot> where TAggregateRoot : AggregateRoot
+    {
     }
 }

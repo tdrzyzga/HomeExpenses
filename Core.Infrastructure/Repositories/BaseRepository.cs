@@ -44,6 +44,7 @@ namespace Core.Infrastructure.Repositories
         protected async Task<TAggregateRoot[]> GetPagedData(Expression<Func<TAggregateRoot, bool>> filter, int page, int itemsPerPage, string sortBy, SortDirection sortDir)
         {
             page = page > 0 ? page : 1;
+            itemsPerPage = itemsPerPage > 0 ? itemsPerPage : 1; 
 
             filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
 

@@ -4,17 +4,22 @@ using Core.Message.Queries;
 
 namespace HomeExpenses.Message.Recipients.Queries
 {
-    public class GetRecipientListQuery : BaseQuery
+    public class GetRecipientListQuery : PaginableBaseQuery
     {
+        public GetRecipientListQuery(int page, int itemsPerPage, string sortBy, string sortDir) : base(page, itemsPerPage, sortBy, sortDir)
+        {
+        }
     }
 
     public class GetRecipientListResult : IQueryResult
     {
         public ImmutableArray<RecipientDto> Items { get; }
+        public int TotalItems { get; }
 
-        public GetRecipientListResult(ImmutableArray<RecipientDto> items)
+        public GetRecipientListResult(ImmutableArray<RecipientDto> items, int totalItems)
         {
             Items = items;
+            TotalItems = totalItems;
         }
 
         public class RecipientDto
