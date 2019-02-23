@@ -7,7 +7,7 @@ using Core.Presentation.Repositories;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Queries;
 
-namespace HomeExpenses.Presentation.Recipients
+namespace HomeExpenses.Presentation.Recipients.Actors
 {
     [AutostartActor("GetRecipientDetailsQueryActor")]
     public class GetRecipientListQueryActor : BaseActor, IQueryActor<GetRecipientListQuery>

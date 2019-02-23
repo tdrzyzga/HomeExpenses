@@ -6,7 +6,7 @@ using HomeExpenses.Domain.Expenses.Factory;
 using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Message.Expenses.Commands;
 
-namespace HomeExpenses.Application.Expenses
+namespace HomeExpenses.Application.Expenses.Actors
 {
     [AutostartActor("CreatePeriodicExpenseCommandActor")]
     public class CreatePeriodicExpenseCommandActor : BaseActor, ICommandActor<CreatePeriodicExpenseCommand>

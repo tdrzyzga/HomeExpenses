@@ -8,7 +8,7 @@ using HomeExpenses.Domain.Recipients.Factory;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Commands;
 
-namespace HomeExpenses.Application.Recipients
+namespace HomeExpenses.Application.Recipients.Actors
 {
     [AutostartActor("CreateRecipientCommandActor")]
     public class CreateRecipientCommandActor : BaseActor, ICommandActor<CreateRecipientCommand>

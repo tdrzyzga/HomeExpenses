@@ -6,7 +6,7 @@ using Core.Domain.Repositories;
 using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Message.Expenses.Commands;
 
-namespace HomeExpenses.Application.Expenses
+namespace HomeExpenses.Application.Expenses.Actors
 {
     [AutostartActor("AddPaymentCommandActor")]
     public class AddPaymentCommandActor : BaseActor, ICommandActor<AddPaymentCommand>

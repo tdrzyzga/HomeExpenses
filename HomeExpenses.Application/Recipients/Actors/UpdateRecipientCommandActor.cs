@@ -6,7 +6,7 @@ using Core.Domain.ValueObjects;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Commands;
 
-namespace HomeExpenses.Application.Recipients
+namespace HomeExpenses.Application.Recipients.Actors
 {
     [AutostartActor("UpdateRecipientCommandActor")]
     public class UpdateRecipientCommandActor : BaseActor, ICommandActor<UpdateRecipientCommand>
