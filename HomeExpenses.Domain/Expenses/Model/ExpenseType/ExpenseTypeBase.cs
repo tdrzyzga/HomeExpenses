@@ -5,7 +5,7 @@ namespace HomeExpenses.Domain.Expenses.Model.ExpenseType
 {
     public class ExpenseTypeBase : Entity
     {
-        public Expense Expense { get; private set; }
+        public virtual Expense Expense { get; private set; }
 
         protected ExpenseTypeBase()
         {

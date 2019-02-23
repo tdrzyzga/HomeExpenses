@@ -9,7 +9,7 @@ namespace HomeExpenses.Domain.Recipients.Model
     {
         public Guid? TenantId { get; private set; }
         public string Name { get; private set; }
-        public AddressValueObject Address { get; private set; }
+        public virtual AddressValueObject Address { get; private set; }
 
         protected Recipient()
         {

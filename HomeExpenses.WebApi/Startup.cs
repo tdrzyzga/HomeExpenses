@@ -65,7 +65,6 @@ namespace HomeExpenses.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
 
             app.UseCors(builder =>
