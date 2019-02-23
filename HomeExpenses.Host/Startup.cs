@@ -40,9 +40,8 @@ namespace HomeExpenses.Host
             // Configuration.
             services.AddSingleton<IConfiguration>(Configuration);
 
-            services.AddDbContext<HomeExpensesDbContext>(options =>
-                                                             options.UseLazyLoadingProxies()
-                                                                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<HomeExpensesDbContext>(options => options.UseLazyLoadingProxies()
+                                                                                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddLocalization(opt => opt.ResourcesPath = "Resources");
             services.AddSingleton<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());

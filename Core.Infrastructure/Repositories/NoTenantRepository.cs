@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Domain.Entities;
 using Core.Domain.Repositories;
+using Core.Presentation.Pagination;
 using Core.Presentation.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,7 @@ namespace Core.Infrastructure.Repositories
         : BaseRepository<TAggregateRoot>, IRepository<TAggregateRoot>, IReadOnlyRepository<TAggregateRoot>
         where TAggregateRoot : AggregateRoot
     {
-        public NoTenantRepository(DbContext context) : base(context)
+        public NoTenantRepository(DbContext context, ISortExpression<TAggregateRoot> sortExpression) : base(context, sortExpression)
         {
             if (typeof(IHaveTenant).IsAssignableFrom(typeof(TAggregateRoot)))
             {
@@ -25,6 +26,20 @@ namespace Core.Infrastructure.Repositories
             CheckTenantId(tenantId);
 
             return await base.Filter(filter);
+        }
+        
+        public Task<TAggregateRoot[]> GetPagedData(Expression<Func<TAggregateRoot, bool>> filter, int page, int itemsPerPage, string sortBy, SortDirection sortDir, Guid? tenantId = null)
+        {
+            CheckTenantId(tenantId);
+
+            return base.GetPagedData(filter, page, itemsPerPage, sortBy, sortDir);
+        }
+
+        public async Task<long> GetTotalItemsCount(Expression<Func<TAggregateRoot, bool>> filter, Guid? tenantId = null)
+        {
+            CheckTenantId(tenantId);
+
+            return await base.GetTotalItemsCount(filter);
         }
 
         public async Task<TAggregateRoot> Get(Guid aggregateId, Guid? tenantId)
