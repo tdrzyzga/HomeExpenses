@@ -10,11 +10,11 @@ namespace HomeExpenses.Message.Recipients.Queries
 
     public class GetRecipientListResult : IQueryResult
     {
-        public ImmutableArray<RecipientDto> Recipients { get; }
+        public ImmutableArray<RecipientDto> Items { get; }
 
-        public GetRecipientListResult(ImmutableArray<RecipientDto> recipients)
+        public GetRecipientListResult(ImmutableArray<RecipientDto> items)
         {
-            Recipients = recipients;
+            Items = items;
         }
 
         public class RecipientDto

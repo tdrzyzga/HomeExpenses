@@ -7,7 +7,7 @@ import {
   MatIconModule, MatInputModule,
   MatListModule,
   MatMenuModule,
-  MatSidenavModule,
+  MatSidenavModule, MatTableModule,
   MatToolbarModule
 } from "@angular/material";
 
@@ -26,6 +26,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     FlexLayoutModule,
+    MatTableModule
   ],
   exports: [
     CommonModule,
@@ -40,6 +41,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     FlexLayoutModule,
+    MatTableModule
   ],
   declarations: []
 })

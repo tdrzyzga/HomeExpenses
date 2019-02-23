@@ -1,12 +1,32 @@
-<p>
-  recipients works!
-</p>
-<mat-list>
-  <mat-list-item> List works! </mat-list-item>
-  <mat-list-item> {{recipient.id}} </mat-list-item>
-  <mat-list-item> {{recipient.name}} </mat-list-item>
-  <mat-list-item> {{recipient.city}} </mat-list-item>
-  <mat-list-item> {{recipient.street}} </mat-list-item>
-  <mat-list-item> {{recipient.number}} </mat-list-item>
-</mat-list>
+<table mat-table [dataSource]="recipientList" class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> Id </th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="city">
+    <th mat-header-cell *matHeaderCellDef> City </th>
+    <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="street">
+    <th mat-header-cell *matHeaderCellDef> Street </th>
+    <td mat-cell *matCellDef="let element"> {{element.street}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="number">
+    <th mat-header-cell *matHeaderCellDef> Number </th>
+    <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
 <button mat-button (click)="createRecipient()">Create recipient</button>

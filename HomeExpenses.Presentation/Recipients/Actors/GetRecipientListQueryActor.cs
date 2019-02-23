@@ -9,7 +9,7 @@ using HomeExpenses.Message.Recipients.Queries;
 
 namespace HomeExpenses.Presentation.Recipients.Actors
 {
-    [AutostartActor("GetRecipientDetailsQueryActor")]
+    [AutostartActor("GetRecipientListQueryActor")]
     public class GetRecipientListQueryActor : BaseActor, IQueryActor<GetRecipientListQuery>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;

@@ -6,7 +6,7 @@ import {catchError} from "rxjs/operators";
 
 import { Recipient} from "../shared/dto/Recipient";
 import {RecipientsService} from "../shared/recipients.service";
-import {MatDialog, MatDialogConfig} from "@angular/material";
+import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
 import {RecipientCreateDialogComponent} from "../recipient-create-dialog/recipient-create-dialog.component";
 
 @Component({
@@ -15,7 +15,8 @@ import {RecipientCreateDialogComponent} from "../recipient-create-dialog/recipie
   styleUrls: ['./recipient-list.component.scss']
 })
 export class RecipientListComponent implements OnInit {
-  recipient: Recipient ;
+  displayedColumns: string[] = ['id', 'name', 'city', 'street', 'number'];
+  recipientList: MatTableDataSource<Recipient>;
 
   constructor(private recipientsService: RecipientsService,
               private createRecipientDialog: MatDialog) { }
@@ -25,7 +26,7 @@ export class RecipientListComponent implements OnInit {
       .pipe(
         catchError(this.handleError)
       )
-      .subscribe(recipient => this.recipient = recipient);
+      .subscribe(recipientList => this.recipientList = new MatTableDataSource<Recipient>(recipientList.items));
   }
 
   createRecipient() {

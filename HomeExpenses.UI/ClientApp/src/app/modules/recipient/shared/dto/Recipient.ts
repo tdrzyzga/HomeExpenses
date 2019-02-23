@@ -5,3 +5,7 @@ export interface Recipient{
         street:string;
         number:string;
 }
+
+export interface RecipientList {
+  items: Recipient[];
+}
