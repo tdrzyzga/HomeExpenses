@@ -25,7 +25,7 @@ namespace Core.Infrastructure.Repositories
         {
             filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
 
-            var query = _dbSet.IncludeAll().Where(filter);
+            var query = _dbSet.Where(filter);
 
             return await query.ToArrayAsync();
         }
@@ -34,7 +34,7 @@ namespace Core.Infrastructure.Repositories
         {
             filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
 
-            var query = _dbSet.IncludeAll().Where(filter);
+            var query = _dbSet.Where(filter);
 
             return await query.SingleOrDefaultAsync();
         }

@@ -12,8 +12,8 @@ namespace HomeExpenses.Domain.Expenses.Model
     {
         public Guid? TenantId { get; private set; }
         public string Name { get; private set; }
-        public ExpenseTypeBase ExpenseType { get; private set; }
-        public ICollection<Payment> Payments { get; private set; }
+        public virtual ExpenseTypeBase ExpenseType { get; private set; }
+        public virtual ICollection<Payment> Payments { get; private set; }
 
         protected Expense()
         {
