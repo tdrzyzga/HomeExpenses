@@ -15,7 +15,7 @@ import {RecipientCreateDialogComponent} from "../recipient-create-dialog/recipie
   styleUrls: ['./recipient-list.component.scss']
 })
 export class RecipientListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'city', 'street', 'number'];
+  displayedColumns: string[] = ['name', 'city', 'street', 'number'];
   recipientList: MatTableDataSource<Recipient>;
 
   constructor(private recipientsService: RecipientsService,
