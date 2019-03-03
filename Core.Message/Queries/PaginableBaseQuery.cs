@@ -4,14 +4,14 @@ namespace Core.Message.Queries
 {
     public abstract class PaginableBaseQuery : BaseQuery
     {
-        public int Page { get; }
+        public int PageIndex { get; }
         public int ItemsPerPage { get; }
         public string SortBy { get; }
         public string SortDir { get; }
         
-        protected PaginableBaseQuery(int page, int itemsPerPage, string sortBy, string sortDir)
+        protected PaginableBaseQuery(int pageIndex, int itemsPerPage, string sortBy, string sortDir)
         {
-            Page = page;
+            PageIndex = pageIndex;
             ItemsPerPage = itemsPerPage;
             SortBy = sortBy;
             SortDir = sortDir;

@@ -41,9 +41,9 @@ namespace Core.Infrastructure.Repositories
             return await query.SingleOrDefaultAsync();
         }
 
-        protected async Task<TAggregateRoot[]> GetPagedData(Expression<Func<TAggregateRoot, bool>> filter, int page, int itemsPerPage, string sortBy, SortDirection sortDir)
+        protected async Task<TAggregateRoot[]> GetPagedData(Expression<Func<TAggregateRoot, bool>> filter, int pageIndex, int itemsPerPage, string sortBy, SortDirection sortDir)
         {
-            page = page > 0 ? page : 1;
+            pageIndex = pageIndex > 0 ? pageIndex : 1;
             itemsPerPage = itemsPerPage > 0 ? itemsPerPage : 1; 
 
             filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
@@ -52,7 +52,7 @@ namespace Core.Infrastructure.Repositories
 
             query = _sortExpression.SortBy(query, sortBy, sortDir);
 
-            query = query.Skip((page - 1) * itemsPerPage).Take(itemsPerPage);
+            query = query.Skip((pageIndex - 1) * itemsPerPage).Take(itemsPerPage);
 
             return await query.ToArrayAsync();
         }

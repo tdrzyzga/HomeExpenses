@@ -8,4 +8,5 @@ export interface Recipient{
 
 export interface RecipientList {
   items: Recipient[];
+  totalItems: number;
 }

@@ -6,7 +6,7 @@ namespace HomeExpenses.Message.Recipients.Queries
 {
     public class GetRecipientListQuery : PaginableBaseQuery
     {
-        public GetRecipientListQuery(int page, int itemsPerPage, string sortBy, string sortDir) : base(page, itemsPerPage, sortBy, sortDir)
+        public GetRecipientListQuery(int pageIndex, int itemsPerPage, string sortBy, string sortDir) : base(pageIndex, itemsPerPage, sortBy, sortDir)
         {
         }
     }

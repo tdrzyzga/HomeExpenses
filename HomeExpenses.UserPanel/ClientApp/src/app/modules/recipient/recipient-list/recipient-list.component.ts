@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpErrorResponse} from "@angular/common/http";
 import {throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
@@ -6,7 +6,7 @@ import {catchError} from "rxjs/operators";
 
 import { Recipient} from "../shared/dto/Recipient";
 import {RecipientsService} from "../shared/recipients.service";
-import {MatDialog, MatDialogConfig, MatTableDataSource} from "@angular/material";
+import {MatDialog, MatDialogConfig, MatPaginator, MatTableDataSource, PageEvent} from "@angular/material";
 import {RecipientCreateDialogComponent} from "../recipient-create-dialog/recipient-create-dialog.component";
 
 @Component({
@@ -17,16 +17,30 @@ import {RecipientCreateDialogComponent} from "../recipient-create-dialog/recipie
 export class RecipientListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'city', 'street', 'number'];
   recipientList: MatTableDataSource<Recipient>;
+  pageIndex: number;
+  itemsPerPage: number;
+  sortBy: string;
+  sortDir: string;
+  totalItems: number;
+  pageSizeOptions: number[] = [2, 5, 10];
 
   constructor(private recipientsService: RecipientsService,
               private createRecipientDialog: MatDialog) { }
 
   ngOnInit() {
-    this.recipientsService.getRecipients()
-      .pipe(
-        catchError(this.handleError)
-      )
-      .subscribe(recipientList => this.recipientList = new MatTableDataSource<Recipient>(recipientList.items));
+    this.pageIndex = 1;
+    this.itemsPerPage = 2;
+    this.sortBy = 'name';
+    this.sortDir = "Asc";
+
+    this.getRecipients();
+  }
+
+  pageEvent($event: PageEvent): void {
+    this.pageIndex = $event.pageIndex + 1;
+    this.itemsPerPage = $event.pageSize;
+
+    return this.getRecipients();
   }
 
   createRecipient() {
@@ -37,6 +51,19 @@ export class RecipientListComponent implements OnInit {
     dialogConfig.autoFocus = true;
 
     this.createRecipientDialog.open(RecipientCreateDialogComponent, dialogConfig);
+
+    this.getRecipients();
+  }
+
+  private getRecipients(){
+    this.recipientsService.getRecipients(this.pageIndex, this.itemsPerPage, this.sortBy, this.sortDir)
+      .pipe(
+        catchError(this.handleError)
+      )
+      .subscribe(recipientList => {
+        this.recipientList = new MatTableDataSource<Recipient>(recipientList.items);
+        this.totalItems = recipientList.totalItems;
+      });
   }
 
   private handleError(error: HttpErrorResponse) {

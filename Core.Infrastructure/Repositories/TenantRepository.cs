@@ -25,11 +25,11 @@ namespace Core.Infrastructure.Repositories
             return await base.Filter(newFilter);
         }
                 
-        public Task<TAggregateRoot[]> GetPagedData(Expression<Func<TAggregateRoot, bool>> filter, int page, int itemsPerPage, string sortBy, SortDirection sortDir, Guid? tenantId = null)
+        public Task<TAggregateRoot[]> GetPagedData(Expression<Func<TAggregateRoot, bool>> filter, int pageIndex, int itemsPerPage, string sortBy, SortDirection sortDir, Guid? tenantId = null)
         {
             var newFilter = ApplyTenantFiltering(filter, tenantId);
 
-            return base.GetPagedData(newFilter, page, itemsPerPage, sortBy, sortDir);
+            return base.GetPagedData(newFilter, pageIndex, itemsPerPage, sortBy, sortDir);
         }
         
         public async Task<long> GetTotalItemsCount(Expression<Func<TAggregateRoot, bool>> filter, Guid? tenantId = null)

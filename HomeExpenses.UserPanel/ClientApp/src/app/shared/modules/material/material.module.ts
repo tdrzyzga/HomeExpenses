@@ -6,7 +6,7 @@ import {
   MatButtonToggleModule, MatDialogModule, MatFormFieldModule,
   MatIconModule, MatInputModule,
   MatListModule,
-  MatMenuModule,
+  MatMenuModule, MatPaginatorModule,
   MatSidenavModule, MatTableModule,
   MatToolbarModule
 } from "@angular/material";
@@ -26,7 +26,8 @@ import {
     MatFormFieldModule,
     MatInputModule,
     FlexLayoutModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   exports: [
     CommonModule,
@@ -41,7 +42,8 @@ import {
     MatFormFieldModule,
     MatInputModule,
     FlexLayoutModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   declarations: []
 })

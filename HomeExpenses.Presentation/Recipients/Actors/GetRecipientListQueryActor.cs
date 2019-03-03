@@ -27,7 +27,7 @@ namespace HomeExpenses.Presentation.Recipients.Actors
             await HandleQuery(query, async x =>
             {
                 var recipients = _recipientRepository.GetPagedData(r => true, 
-                                                                              query.Page, 
+                                                                              query.PageIndex, 
                                                                               query.ItemsPerPage, 
                                                                               query.SortBy, 
                                                                               query.SortDir.ToSortDirection(),

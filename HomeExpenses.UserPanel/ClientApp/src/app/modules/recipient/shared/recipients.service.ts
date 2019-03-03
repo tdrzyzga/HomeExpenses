@@ -15,8 +15,15 @@ export class RecipientsService {
 
   constructor(private http: HttpClient) { }
 
-  getRecipients (): Observable<RecipientList> {
-    return this.http.get<RecipientList>(this.path);
+  getRecipients (pageIndex: number, itemsPerPage: number, sortBy: string, sortDir: string): Observable<RecipientList> {
+    const params: any = {
+      pageIndex: pageIndex,
+      itemsPerPage: itemsPerPage,
+      sortBy: sortBy,
+      sortDir: sortDir
+    };
+
+    return this.http.get<RecipientList>(this.path, { params: params });
   }
 
   createRecipient(recipientData: CreateRecipient) {
