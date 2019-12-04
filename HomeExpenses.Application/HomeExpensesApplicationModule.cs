@@ -1,5 +1,4 @@
-﻿using Akka.Actor;
-using Autofac;
+﻿using Autofac;
 
 namespace HomeExpenses.Application
 {
@@ -7,10 +6,6 @@ namespace HomeExpenses.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(ThisAssembly)
-                   .Where(t => t.IsAssignableTo<ReceiveActor>())
-                   .AsSelf();
-
             builder.RegisterAssemblyTypes(ThisAssembly)
                    .AsImplementedInterfaces()
                    .PreserveExistingDefaults();

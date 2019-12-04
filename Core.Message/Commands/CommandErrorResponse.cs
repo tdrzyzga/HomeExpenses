@@ -2,7 +2,7 @@
 
 namespace Core.Message.Commands
 {
-    public class CommandErrorResponse
+    public class CommandErrorResponse : CommandResponse
     {
         public Guid ErrorId { get; }
         public string Message { get; }

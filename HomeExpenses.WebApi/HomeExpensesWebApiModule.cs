@@ -1,5 +1,4 @@
-﻿using Akka.Configuration;
-using Autofac;
+﻿using Autofac;
 
 namespace HomeExpenses.WebApi
 {

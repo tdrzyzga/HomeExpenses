@@ -1,6 +1,6 @@
 ﻿namespace Core.Message.Commands
 {
-    public class CommandSuccessResponse
+    public class CommandSuccessResponse : CommandResponse
     {
     }
 }
