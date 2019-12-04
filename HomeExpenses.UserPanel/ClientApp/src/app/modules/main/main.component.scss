@@ -1,0 +1,20 @@
+@import "utilities";
+
+.app {
+  height: 100vh;
+
+  &__toolbar {
+    @include margin(0);
+  }
+
+  &__menu {
+    @include size($w: $sidemenu__size--full, $h: 90vh, $hNoRem: true);
+    @include margin(0);
+  }
+
+  &__main {
+    @include size($h: 90vh, $hNoRem: true);
+    @include padding(20px 20px 0px 20px);
+    @include margin(0);
+  }
+}
