@@ -1,9 +1,5 @@
-﻿using System;
-using System.Globalization;
-using Akka.DI.AutoFac;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Core.Akka.ActorSystem;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,14 +7,15 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Globalization;
 
 namespace HomeExpenses.WebApi
 {
     public class Startup
     {
-        public IContainer DiContainer { get; private set; }
-
         public IConfigurationRoot Configuration { get; }
+        public IContainer DiContainer { get; private set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -28,6 +25,34 @@ namespace HomeExpenses.WebApi
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                           .AddEnvironmentVariables();
             Configuration = builder.Build();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo("pl-PL"),
+                new CultureInfo("en-US")
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pl-PL"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
+
+            app.UseMvc();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -46,47 +71,10 @@ namespace HomeExpenses.WebApi
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesWebApiModule>();
 
-            var commandForwarderActorPath = Configuration.GetSection("CommandForwarderActorProvider").GetValue<string>("Path");
-            builder.Register(ctx => new CommandForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), commandForwarderActorPath)).AsImplementedInterfaces().SingleInstance();
-            var queryForwarderActorPath = Configuration.GetSection("QueryForwarderActorProvider").GetValue<string>("Path");
-            builder.Register(ctx => new QueryForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), queryForwarderActorPath)).AsImplementedInterfaces().SingleInstance();
-
             builder.Populate(services);
             DiContainer = builder.Build();
 
-            new AutoFacDependencyResolver(DiContainer, DiContainer.Resolve<ILocalActorSystemManager>().ActorSystem);
-
             return new AutofacServiceProvider(DiContainer);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILocalActorSystemManager localActorSystemManager)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseCors(builder =>
-                            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-            );
-
-            var supportedCultures = new[]
-            {
-                new CultureInfo("pl-PL"),
-                new CultureInfo("en-US")
-            };
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("pl-PL"),
-                // Formatting numbers, dates, etc.
-                SupportedCultures = supportedCultures,
-                // UI strings that we have localized.
-                SupportedUICultures = supportedCultures
-            });
-
-            app.UseMvc();
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Core.Akka.ActorAutostart;
-using Core.Application.Actors;
-using Core.Domain.Repositories;
+﻿using Core.Domain.Repositories;
 using HomeExpenses.Domain.Expenses.Model;
 using HomeExpenses.Message.Expenses.Commands;
+using System;
+using System.Threading.Tasks;
 
 namespace HomeExpenses.Application.Expenses.Actors
 {

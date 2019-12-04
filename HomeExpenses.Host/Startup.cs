@@ -1,10 +1,5 @@
-﻿using System;
-using Akka.DI.AutoFac;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Core.Akka.ActorSystem;
-using Core.Application.Actors;
-using Core.Presentation.Actors;
 using HomeExpenses.Infrastructure.Databases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,15 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
+using System;
 
 namespace HomeExpenses.Host
 {
     public class Startup
     {
-        public IContainer DiContainer { get; private set; }
-
         public IConfigurationRoot Configuration { get; }
+        public IContainer DiContainer { get; private set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -31,6 +25,25 @@ namespace HomeExpenses.Host
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                           .AddEnvironmentVariables();
             Configuration = builder.Build();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IServiceProvider serviceProvider,
+                              IApplicationBuilder app,
+                              IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
+                context.Database.Migrate();
+            }
+
+            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -52,39 +65,7 @@ namespace HomeExpenses.Host
             builder.Populate(services);
             DiContainer = builder.Build();
 
-            new AutoFacDependencyResolver(DiContainer, DiContainer.Resolve<ILocalActorSystemManager>().ActorSystem);
-
             return new AutofacServiceProvider(DiContainer);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IServiceProvider serviceProvider,
-                              IApplicationBuilder app,
-                              IHostingEnvironment env,
-                              IAutostartCommandActorsInitializer autostartCommandActorsInitializer,
-                              IAutostartQueryActorsInitializer autostartQueryActorsInitializer,
-                              ILoggerFactory loggerFactory,
-                              ICommandForwarderActorInitializer commandForwarderActorInitializer,
-                              IQueryForwarderActorInitializer queryForwarderActorInitializer)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
-                context.Database.Migrate();
-            }
-
-            autostartCommandActorsInitializer.FindAndStartCommandActors();
-            commandForwarderActorInitializer.StartCommandForwarderActor(autostartCommandActorsInitializer.AutostartedCommandActors);
-
-            autostartQueryActorsInitializer.FindAndStartQueryActors();
-            queryForwarderActorInitializer.StartQueryForwarderActor(autostartQueryActorsInitializer.AutostartedQueryActors);
-
-            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
         }
     }
 }

@@ -17,14 +17,10 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly ICommandForwarderActorProvider _commandForwarderActorProvider;
-        private readonly IQueryForwarderActorProvider _queryForwarderActorProvider;
         private readonly IServiceProvider _serviceProvider;
 
         protected BaseController(BaseControllerPayload payload)
         {
-            _commandForwarderActorProvider = payload.CommandForwarderActorProvider;
-            _queryForwarderActorProvider = payload.QueryForwarderActorProvider;
             _serviceProvider = payload.ServiceProvider;
         }
 
