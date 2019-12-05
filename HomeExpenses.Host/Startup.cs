@@ -1,14 +1,19 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Core.Infrastructure.MessageBus;
 using HomeExpenses.Infrastructure.Databases;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
 
 namespace HomeExpenses.Host
 {
@@ -17,7 +22,7 @@ namespace HomeExpenses.Host
         public IConfigurationRoot Configuration { get; }
         public IContainer DiContainer { get; private set; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                           .SetBasePath(env.ContentRootPath)
@@ -27,7 +32,55 @@ namespace HomeExpenses.Host
             Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            // Configuration.
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddDbContext<HomeExpensesDbContext>(options => options.UseLazyLoadingProxies()
+                                                                           .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+            services.AddSingleton<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
+            services.AddMassTransit(x =>
+            {
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    var host = cfg.Host("localhost", "/", hostConfigurator =>
+                    {
+                        hostConfigurator.Username("guest");
+                        hostConfigurator.Password("guest");
+                    });
+
+                    //cfg.ReceiveEndpoint(host, "Consumer1.MessageToFirstConsumerHandler", ep =>
+                    //{
+                    //    ep.ConfigureConsumer<MessageToFirstConsumerHandler>(provider);
+                    //});
+
+
+                    //cfg.ReceiveEndpoint(host, "Consumer1.MessageToAllConsumersHandler", ep =>
+                    //{
+                    //    ep.ConfigureConsumer<MessageToAllConsumersHandler>(provider);
+                    //});
+
+                    cfg.UseExtensionsLogging(new LoggerFactory());
+                }));
+            });
+
+            services.AddSingleton<IBus>(provider => provider.GetRequiredService<IBusControl>());
+            services.AddSingleton<IPublishEndpoint>(provider => provider.GetRequiredService<IBusControl>());
+            services.AddSingleton<ISendEndpointProvider>(provider => provider.GetRequiredService<IBusControl>());
+            services.AddSingleton<IHostedService, BusHostedService>();
+
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<HomeExpensesHostModule>();
+            builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
+            builder.Populate(services);
+            DiContainer = builder.Build();
+
+            return new AutofacServiceProvider(DiContainer);
+        }
+
         public void Configure(IServiceProvider serviceProvider,
                               IApplicationBuilder app,
                               IHostingEnvironment env)
@@ -43,29 +96,12 @@ namespace HomeExpenses.Host
                 context.Database.Migrate();
             }
 
-            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
-        }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            // Configuration.
-            services.AddSingleton<IConfiguration>(Configuration);
-
-            services.AddDbContext<HomeExpensesDbContext>(options => options.UseLazyLoadingProxies()
-                                                                                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddLocalization(opt => opt.ResourcesPath = "Resources");
-            services.AddSingleton<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
-
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<HomeExpensesHostModule>();
-            builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
-            builder.Populate(services);
-            DiContainer = builder.Build();
-
-            return new AutofacServiceProvider(DiContainer);
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Hello World!");
+                var hostedService = serviceProvider.GetService<Microsoft.Extensions.Hosting.IHostedService>();
+                await hostedService.StartAsync(CancellationToken.None);
+            });
         }
     }
 }
