@@ -83,7 +83,7 @@ namespace HomeExpenses.Host
 
         public void Configure(IServiceProvider serviceProvider,
                               IApplicationBuilder app,
-                              IHostingEnvironment env)
+                              Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
