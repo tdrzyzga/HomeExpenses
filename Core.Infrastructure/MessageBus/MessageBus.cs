@@ -14,8 +14,7 @@ namespace Core.Infrastructure.MessageBus
             _mediator = mediator;
         }
 
-        public async Task<ICommandResponse> SendCommand<TCommand>(TCommand command) 
-            where TCommand : ICommand
+        public async Task<ICommandResponse> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
             return await _mediator.Send(command);
         }
