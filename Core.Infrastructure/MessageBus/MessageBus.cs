@@ -1,7 +1,5 @@
 ﻿using Core.Application.MessageBus;
 using Core.Message.Commands;
-using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
@@ -18,9 +16,7 @@ namespace Core.Infrastructure.MessageBus
 
         public async Task<CommandResponse> SendCommand<TCommand>(TCommand command) where TCommand : class, ICommand
         {
-            return (await _serviceProvider.GetRequiredService<IBusControl>()
-                                          .CreateRequestClient<TCommand>()
-                                          .GetResponse<CommandResponse>(command)) as CommandResponse;
+            throw new NotImplementedException();
         }
     }
 }

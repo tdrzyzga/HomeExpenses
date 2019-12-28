@@ -1,5 +1,4 @@
-﻿using Core.Application.Exceptions;
-using Core.Application.Handlers;
+﻿using Core.Application.Handlers;
 using Core.Domain.Exceptions;
 using Core.Message.Commands;
 using FluentValidation;
@@ -12,7 +11,6 @@ using ApplicationException = Core.Application.Exceptions.ApplicationException;
 
 namespace Core.Infrastructure.Handlers
 {
-
     public class CommandHandlerInterceptor<TCommand> : ICommandHandlerInterceptor<TCommand> where TCommand : ICommand
     {
         private readonly ILogger<CommandHandlerInterceptor<TCommand>> _logger;
@@ -76,7 +74,7 @@ namespace Core.Infrastructure.Handlers
             }
         }
 
-        private async Task Validate<TCommand>(TCommand command) where TCommand : ICommand
+        private async Task Validate(TCommand command)
         {
             var validator = _scope.ServiceProvider.GetService<IValidator<TCommand>>();
             if (validator != null)

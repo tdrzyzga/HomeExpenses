@@ -1,8 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Core.Infrastructure.MessageBus;
 using HomeExpenses.Infrastructure.Databases;
-using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 
@@ -42,36 +39,6 @@ namespace HomeExpenses.Host
 
             services.AddLocalization(opt => opt.ResourcesPath = "Resources");
             services.AddSingleton<IStringLocalizer>(ctx => ctx.GetService<IStringLocalizer<Program>>());
-            services.AddMassTransit(x =>
-            {
-                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-                {
-                    var host = cfg.Host("localhost", "/", hostConfigurator =>
-                    {
-                        hostConfigurator.Username("guest");
-                        hostConfigurator.Password("guest");
-                    });
-
-                    //cfg.ReceiveEndpoint(host, "Consumer1.MessageToFirstConsumerHandler", ep =>
-                    //{
-                    //    ep.ConfigureConsumer<MessageToFirstConsumerHandler>(provider);
-                    //});
-
-
-                    //cfg.ReceiveEndpoint(host, "Consumer1.MessageToAllConsumersHandler", ep =>
-                    //{
-                    //    ep.ConfigureConsumer<MessageToAllConsumersHandler>(provider);
-                    //});
-
-                    cfg.UseExtensionsLogging(new LoggerFactory());
-                }));
-            });
-
-            services.AddSingleton<IBus>(provider => provider.GetRequiredService<IBusControl>());
-            services.AddSingleton<IPublishEndpoint>(provider => provider.GetRequiredService<IBusControl>());
-            services.AddSingleton<ISendEndpointProvider>(provider => provider.GetRequiredService<IBusControl>());
-            services.AddSingleton<IHostedService, BusHostedService>();
-
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesHostModule>();
             builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
