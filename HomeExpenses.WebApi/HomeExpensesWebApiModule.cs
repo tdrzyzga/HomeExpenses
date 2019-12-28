@@ -9,6 +9,7 @@ using HomeExpenses.Domain;
 using HomeExpenses.Infrastructure;
 using HomeExpenses.Message;
 using HomeExpenses.Presentation;
+using MediatR;
 
 namespace HomeExpenses.WebApi
 {

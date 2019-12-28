@@ -1,6 +1,8 @@
-﻿namespace Core.Message.Commands
+﻿using MediatR;
+
+namespace Core.Message.Commands
 {
-    public interface ICommand
+    public interface ICommand : IRequest<ICommandResponse>
     {
         Metadata Metadata { get; }
 

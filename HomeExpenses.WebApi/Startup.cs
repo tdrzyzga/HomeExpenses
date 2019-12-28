@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using HomeExpenses.Infrastructure.Databases;
 using HomeExpenses.WebApi.Infrastructure.Controller;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
+using System.Reflection;
 
 namespace HomeExpenses.WebApi
 {
@@ -78,7 +80,10 @@ namespace HomeExpenses.WebApi
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
                                          options => options.ResourcesPath = "Resources");
 
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
             var builder = new ContainerBuilder();
+
             builder.RegisterModule<HomeExpensesWebApiModule>();
             builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
             builder.RegisterType<BaseControllerPayload>().AsSelf().SingleInstance();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ApplicationException = Core.Application.Exceptions.ApplicationException;
 
@@ -22,7 +23,7 @@ namespace Core.Infrastructure.Handlers
             _logger = logger;
         }
 
-        public async Task<CommandResponse> Handle(TCommand command)
+        public async Task<ICommandResponse> Handle(TCommand command, CancellationToken cancellationToken)
         {
             try
             {

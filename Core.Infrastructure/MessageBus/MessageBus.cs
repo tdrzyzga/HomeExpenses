@@ -1,22 +1,23 @@
 ﻿using Core.Application.MessageBus;
 using Core.Message.Commands;
-using System;
+using MediatR;
 using System.Threading.Tasks;
 
 namespace Core.Infrastructure.MessageBus
 {
     public class MessageBus : IApplicationMessageBus
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IMediator _mediator;
 
-        public MessageBus(IServiceProvider serviceProvider)
+        public MessageBus(IMediator mediator)
         {
-            _serviceProvider = serviceProvider;
+            _mediator = mediator;
         }
 
-        public async Task<CommandResponse> SendCommand<TCommand>(TCommand command) where TCommand : class, ICommand
+        public async Task<ICommandResponse> SendCommand<TCommand>(TCommand command) 
+            where TCommand : ICommand
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(command);
         }
     }
 }

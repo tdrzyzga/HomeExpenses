@@ -1,10 +1,11 @@
 ﻿using Core.Message.Commands;
+using MediatR;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core.Application.Handlers
 {
-    public interface ICommandHandlerInterceptor<TCommand> where TCommand : ICommand
+    public interface ICommandHandlerInterceptor<TCommand> : IRequestHandler<TCommand, ICommandResponse> where TCommand : ICommand
     {
-        Task<CommandResponse> Handle(TCommand command);
     }
 }
