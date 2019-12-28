@@ -18,12 +18,12 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IApplicationMessageBus _messageBus;
+        private readonly IApplicationMessageBus _applicationMessageBus;
 
         protected BaseController(BaseControllerPayload payload)
         {
             _serviceProvider = payload.ServiceProvider;
-            _messageBus = payload._messageBus;
+            _applicationMessageBus = payload.ApplicationMessageBus;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
@@ -43,7 +43,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var response = await _messageBus.SendCommand(command);
+            var response = await _applicationMessageBus.SendCommand(command);
 
             switch (response)
             {
@@ -63,8 +63,6 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
                 default:
                     return BadRequest();
             }
-
-            return NotFound();
         }
 
         protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : IQuery

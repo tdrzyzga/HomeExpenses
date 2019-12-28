@@ -6,12 +6,12 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     public class BaseControllerPayload
     {
         public IServiceProvider ServiceProvider { get; }
-        public IApplicationMessageBus _messageBus;
+        public IApplicationMessageBus ApplicationMessageBus;
 
-        public BaseControllerPayload(IServiceProvider serviceProvider, IApplicationMessageBus messageBus)
+        public BaseControllerPayload(IServiceProvider serviceProvider, IApplicationMessageBus applicationMessageBus)
         {
             ServiceProvider = serviceProvider;
-            _messageBus = messageBus;
+            ApplicationMessageBus = applicationMessageBus;
         }
     }
 }
