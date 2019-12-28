@@ -1,10 +1,12 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using HomeExpenses.Infrastructure.Databases;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -28,7 +30,7 @@ namespace HomeExpenses.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +55,12 @@ namespace HomeExpenses.WebApi
             });
 
             app.UseMvc();
+
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
+                context.Database.Migrate();
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -60,16 +68,20 @@ namespace HomeExpenses.WebApi
         {
             services.AddSingleton<IConfiguration>(Configuration);
 
+            services.AddDbContext<HomeExpensesDbContext>(options => options.UseLazyLoadingProxies()
+                                                                           .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddCors();
 
             services.AddMvc()
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
                                          options => options.ResourcesPath = "Resources");
 
-            services.AddSingleton<BaseControllerPayload>();
-
             var builder = new ContainerBuilder();
             builder.RegisterModule<HomeExpensesWebApiModule>();
+            builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
+            builder.RegisterType<BaseControllerPayload>().AsSelf().SingleInstance();
 
             builder.Populate(services);
             DiContainer = builder.Build();
