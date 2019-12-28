@@ -14,6 +14,12 @@ namespace HomeExpenses.Application.Recipients.CommandHandlers
         private readonly IRecipientFactory _recipientFactory;
         private readonly IRepository<Recipient> _recipientRepository;
 
+        public CreateRecipientCommandHandler(IRecipientFactory recipientFactory, IRepository<Recipient> recipientRepository)
+        {
+            _recipientFactory = recipientFactory;
+            _recipientRepository = recipientRepository;
+        }
+
         public async Task Handle(CreateRecipientCommand command)
         {
             var address = new AddressValueObject(command.City, command.Street, command.Number);

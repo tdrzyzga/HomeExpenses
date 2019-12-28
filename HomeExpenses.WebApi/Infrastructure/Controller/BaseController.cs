@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Core.Application.MessageBus;
+using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
 using FluentValidation;
 using FluentValidation.Results;
+using HomeExpenses.WebApi.Infrastructure.Seed;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,49 +18,51 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IApplicationMessageBus _messageBus;
 
         protected BaseController(BaseControllerPayload payload)
         {
             _serviceProvider = payload.ServiceProvider;
+            _messageBus = payload._messageBus;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
-            //var validationErrors = await Validate(command);
+            var validationErrors = await Validate(command);
 
-            //if (validationErrors != null && validationErrors.Any())
-            //{
-            //    foreach (var validationError in validationErrors)
-            //    {
-            //        ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
-            //    }
+            if (validationErrors != null && validationErrors.Any())
+            {
+                foreach (var validationError in validationErrors)
+                {
+                    ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
+                }
 
-            //    return BadRequest(ModelState);
-            //}
+                return BadRequest(ModelState);
+            }
 
-            //var culture = GetCulture();
-            //command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
+            var culture = GetCulture();
+            command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            //var response = await _commandForwarderActorProvider.Ask(command);
+            var response = await _messageBus.SendCommand(command);
 
-            //switch (response)
-            //{
-            //    case ValidationErrorResponse validationErrorResponse:
-            //    {
-            //        foreach (var validationError in validationErrorResponse.Errors)
-            //        {
-            //            ModelState.AddModelError(validationError.Key, validationError.Value);
-            //        }
+            switch (response)
+            {
+                case ValidationErrorResponse validationErrorResponse:
+                    {
+                        foreach (var validationError in validationErrorResponse.Errors)
+                        {
+                            ModelState.AddModelError(validationError.Key, validationError.Value);
+                        }
 
-            //        return BadRequest(ModelState);
-            //    }
-            //    case CommandErrorResponse errorResponse:
-            //        return BadRequest(errorResponse);
-            //    case CommandSuccessResponse _:
-            //        return Ok();
-            //    default:
-            //        return BadRequest();
-            //}
+                        return BadRequest(ModelState);
+                    }
+                case CommandErrorResponse errorResponse:
+                    return BadRequest(errorResponse);
+                case CommandSuccessResponse _:
+                    return Ok();
+                default:
+                    return BadRequest();
+            }
 
             return NotFound();
         }
