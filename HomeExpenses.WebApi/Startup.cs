@@ -2,7 +2,6 @@
 using Autofac.Extensions.DependencyInjection;
 using HomeExpenses.Infrastructure.Databases;
 using HomeExpenses.WebApi.Infrastructure.Controller;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
-using System.Reflection;
 
 namespace HomeExpenses.WebApi
 {
@@ -31,7 +29,6 @@ namespace HomeExpenses.WebApi
             Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -50,9 +47,7 @@ namespace HomeExpenses.WebApi
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("pl-PL"),
-                // Formatting numbers, dates, etc.
                 SupportedCultures = supportedCultures,
-                // UI strings that we have localized.
                 SupportedUICultures = supportedCultures
             });
 
@@ -65,7 +60,6 @@ namespace HomeExpenses.WebApi
             }
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
@@ -79,8 +73,6 @@ namespace HomeExpenses.WebApi
             services.AddMvc()
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
                                          options => options.ResourcesPath = "Resources");
-
-            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             var builder = new ContainerBuilder();
 
