@@ -3,7 +3,8 @@ using MediatR;
 
 namespace Core.Application.Handlers
 {
-    public interface ICommandHandlerInterceptor<in TCommand> : IRequestHandler<TCommand, ICommandResult> where TCommand : class, ICommand
+    public interface ICommandHandlerInterceptor<in TCommand> : IRequestHandler<TCommand, ICommandResult> 
+        where TCommand : class, ICommand
     {
     }
 }
