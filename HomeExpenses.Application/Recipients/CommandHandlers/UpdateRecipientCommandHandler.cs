@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeExpenses.Application.Recipients.CommandHandlers
 {
-    public class UpdateRecipientCommandActor : ICommandHandler<UpdateRecipientCommand>
+    public class UpdateRecipientCommandHandler : ICommandHandler<UpdateRecipientCommand>
     {
         private readonly IRepository<Recipient> _recipientRepository;
 

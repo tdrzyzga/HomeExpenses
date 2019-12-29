@@ -13,7 +13,7 @@ namespace HomeExpenses.Message.Recipients.Queries
         }
     }
 
-    public class GetRecipientDetailsResult : IQueryResult
+    public class GetRecipientDetailsQueryResult : IQueryResult
     {
         public Guid Id { get; }
         public string Name { get; }
@@ -21,7 +21,7 @@ namespace HomeExpenses.Message.Recipients.Queries
         public string Street { get; }
         public string Number { get; }
 
-        public GetRecipientDetailsResult(Guid id, string name, string city, string street, string number)
+        public GetRecipientDetailsQueryResult(Guid id, string name, string city, string street, string number)
         {
             Id = id;
             Name = name;

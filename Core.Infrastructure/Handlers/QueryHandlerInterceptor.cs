@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Core.Infrastructure.Handlers
 {
     public class QueryHandlerInterceptor<TQuery, TQueryResult> : IQueryHandlerInterceptor<TQuery, TQueryResult>
-        where TQuery : IQuery
-        where TQueryResult : IQueryResult
+        where TQuery : class, IQuery
+        where TQueryResult : class, IQueryResult
     {
         private readonly IQueryHandler<TQuery, TQueryResult> _handler;
         private readonly ILogger<QueryHandlerInterceptor<TQuery, TQueryResult>> _logger;

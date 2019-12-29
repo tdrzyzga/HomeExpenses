@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeExpenses.Presentation.Recipients.QueryHandlers
 {
-    public class GetRecipientDetailsQueryHandler : IQueryHandler<GetRecipientDetailsQuery, GetRecipientDetailsResult>
+    public class GetRecipientDetailsQueryHandler : IQueryHandler<GetRecipientDetailsQuery, GetRecipientDetailsQueryResult>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 
@@ -15,7 +15,7 @@ namespace HomeExpenses.Presentation.Recipients.QueryHandlers
             _recipientRepository = recipientRepository;
         }
 
-        public async Task<GetRecipientDetailsResult> Handle(GetRecipientDetailsQuery query)
+        public async Task<GetRecipientDetailsQueryResult> Handle(GetRecipientDetailsQuery query)
         {
             var recipient = await _recipientRepository.Get(query.Id, query.Metadata.TenantId);
 
@@ -24,7 +24,7 @@ namespace HomeExpenses.Presentation.Recipients.QueryHandlers
                 return null;
             }
 
-            return new GetRecipientDetailsResult(recipient.Id, recipient.Name, recipient.Address.City, recipient.Address.Street, recipient.Address.Number);
+            return new GetRecipientDetailsQueryResult(recipient.Id, recipient.Name, recipient.Address.City, recipient.Address.Street, recipient.Address.Number);
         }
     }
 }

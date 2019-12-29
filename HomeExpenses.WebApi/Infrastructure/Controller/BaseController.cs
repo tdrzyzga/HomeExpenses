@@ -6,6 +6,7 @@ using Core.Application.MessageBus;
 using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
+using Core.Presentation.MessageBus;
 using FluentValidation;
 using FluentValidation.Results;
 using HomeExpenses.WebApi.Infrastructure.Seed;
@@ -19,11 +20,13 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IApplicationMessageBus _applicationMessageBus;
+        private readonly IPresentationMessageBus _presentationMessageBus;
 
         protected BaseController(BaseControllerPayload payload)
         {
             _serviceProvider = payload.ServiceProvider;
             _applicationMessageBus = payload.ApplicationMessageBus;
+            _presentationMessageBus = payload.PresentationMessageBus;
         }
 
         protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
@@ -65,24 +68,24 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             }
         }
 
-        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : IQuery
+        protected async Task<IActionResult> SendQuery<TQuery, TQueryResult>(TQuery query) 
+            where TQuery : class, IQuery
+            where TQueryResult : class, IQueryResult
         {
-            //var culture = GetCulture();
-            //query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
+            var culture = GetCulture();
+            query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            //var result = await _queryForwarderActorProvider.Ask(query);
+            var result = await _presentationMessageBus.SendQuery<TQuery, TQueryResult>(query);
 
-            //switch (result)
-            //{
-            //    case null:
-            //        return NotFound();
-            //    case QueryErrorResult errorResponse:
-            //        return BadRequest(errorResponse);
-            //    default:
-            //        return Ok(result);
-            //}
-
-            return NotFound();
+            switch (result)
+            {
+                case null:
+                    return NotFound();
+                case QueryErrorResult errorResponse:
+                    return BadRequest(errorResponse);
+                default:
+                    return Ok(result);
+            }
         }
 
         private string GetCulture()

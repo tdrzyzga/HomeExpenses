@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HomeExpenses.Presentation.Recipients.QueryHandlers
 {
-    public class GetRecipientListQueryHandler : IQueryHandler<GetRecipientListQuery, GetRecipientListResult>
+    public class GetRecipientListQueryHandler : IQueryHandler<GetRecipientListQuery, GetRecipientListQueryResult>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 
@@ -18,7 +18,7 @@ namespace HomeExpenses.Presentation.Recipients.QueryHandlers
             _recipientRepository = recipientRepository;
         }
 
-        public async Task<GetRecipientListResult> Handle(GetRecipientListQuery query)
+        public async Task<GetRecipientListQueryResult> Handle(GetRecipientListQuery query)
         {
             var recipients = _recipientRepository.GetPagedData(r => true,
                                                                           query.PageIndex,
@@ -31,9 +31,9 @@ namespace HomeExpenses.Presentation.Recipients.QueryHandlers
 
             await Task.WhenAll(recipients, totalItems);
 
-            var recipientDtos = recipients.Result.Select(r => new GetRecipientListResult.RecipientDto(r.Id, r.Name, r.Address.City, r.Address.Street, r.Address.Number));
+            var recipientDtos = recipients.Result.Select(r => new GetRecipientListQueryResult.RecipientDto(r.Id, r.Name, r.Address.City, r.Address.Street, r.Address.Number));
 
-            return new GetRecipientListResult(recipientDtos.ToImmutableArray(), (int)totalItems.Result);
+            return new GetRecipientListQueryResult(recipientDtos.ToImmutableArray(), (int)totalItems.Result);
         }
     }
 }

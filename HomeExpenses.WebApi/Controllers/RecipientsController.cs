@@ -32,14 +32,14 @@ namespace HomeExpenses.WebApi.Controllers
         public async Task<IActionResult> GetRecipient(Guid id)
         {
             var query = new GetRecipientDetailsQuery(id);
-            return await SendQuery(query);
+            return await SendQuery<GetRecipientDetailsQuery, GetRecipientDetailsQueryResult>(query);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetRecipients(int pageIndex, int itemsPerPage, string sortBy, string sortDir)
         {
             var query = new GetRecipientListQuery(pageIndex, itemsPerPage, sortBy, sortDir);
-            return await SendQuery(query);
+            return await SendQuery<GetRecipientListQuery, GetRecipientListQueryResult>(query);
         }
     }
 }

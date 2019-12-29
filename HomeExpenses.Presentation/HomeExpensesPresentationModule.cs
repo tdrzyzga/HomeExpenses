@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Core.Presentation.Handlers;
 using Core.Presentation.Pagination;
 
 namespace HomeExpenses.Presentation
@@ -7,6 +8,10 @@ namespace HomeExpenses.Presentation
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterAssemblyTypes(ThisAssembly)
+       .Where(t => t.IsClosedTypeOf(typeof(IQueryHandler<,>)))
+       .AsImplementedInterfaces();
+
             builder.RegisterAssemblyTypes(ThisAssembly)
                    .Where(t => t.IsClosedTypeOf(typeof(ISortExpression<>)))
                    .AsImplementedInterfaces();
