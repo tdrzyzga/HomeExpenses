@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Core.Application.Handlers
 {
-    public interface ICommandHandlerInterceptor<TCommand> : IRequestHandler<TCommand, ICommandResponse> where TCommand : ICommand
+    public interface ICommandHandlerInterceptor<TCommand> : IRequestHandler<TCommand, ICommandResult> where TCommand : ICommand
     {
     }
 }

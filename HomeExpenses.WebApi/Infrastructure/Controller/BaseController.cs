@@ -43,22 +43,22 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var response = await _applicationMessageBus.SendCommand(command);
+            var result = await _applicationMessageBus.SendCommand(command);
 
-            switch (response)
+            switch (result)
             {
-                case ValidationErrorResponse validationErrorResponse:
+                case ValidationErrorResult validationErrorResult:
                     {
-                        foreach (var validationError in validationErrorResponse.Errors)
+                        foreach (var validationError in validationErrorResult.Errors)
                         {
                             ModelState.AddModelError(validationError.Key, validationError.Value);
                         }
 
                         return BadRequest(ModelState);
                     }
-                case CommandErrorResponse errorResponse:
-                    return BadRequest(errorResponse);
-                case CommandSuccessResponse _:
+                case CommandErrorResult errorResult:
+                    return BadRequest(errorResult);
+                case CommandSuccessResult _:
                     return Ok();
                 default:
                     return BadRequest();

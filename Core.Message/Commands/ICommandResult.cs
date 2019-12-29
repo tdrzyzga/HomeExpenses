@@ -1,6 +1,6 @@
 ﻿namespace Core.Message.Commands
 {
-    public interface ICommandResponse
+    public interface ICommandResult
     {
     }
 }

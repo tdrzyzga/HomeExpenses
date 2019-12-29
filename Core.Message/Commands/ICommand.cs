@@ -2,7 +2,7 @@
 
 namespace Core.Message.Commands
 {
-    public interface ICommand : IRequest<ICommandResponse>
+    public interface ICommand : IRequest<ICommandResult>
     {
         Metadata Metadata { get; }
 

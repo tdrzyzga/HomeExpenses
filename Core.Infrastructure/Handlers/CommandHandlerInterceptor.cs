@@ -23,7 +23,7 @@ namespace Core.Infrastructure.Handlers
             _logger = logger;
         }
 
-        public async Task<ICommandResponse> Handle(TCommand command, CancellationToken cancellationToken)
+        public async Task<ICommandResult> Handle(TCommand command, CancellationToken cancellationToken)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Core.Infrastructure.Handlers
 
                 _logger.LogDebug("Command {Command} successfuly handled", command);
 
-                return new CommandSuccessResponse();
+                return new CommandSuccessResult();
             }
             catch (ValidationException validationException)
             {
@@ -42,8 +42,8 @@ namespace Core.Infrastructure.Handlers
 
                 _logger.LogError(validationException, "Validation errors during handling command {Command}", command);
 
-                return new ValidationErrorResponse(errorId,
-                                                   validationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.PropertyName, x.ErrorMessage)).ToArray());
+                return new ValidationErrorResult(errorId,
+                                                   validationException.Errors.Select(x => new CommandErrorResult.ErrorItem(x.PropertyName, x.ErrorMessage)).ToArray());
             }
             catch (DomainException domainException)
             {
@@ -51,9 +51,9 @@ namespace Core.Infrastructure.Handlers
 
                 _logger.LogError(domainException, "Error occured during handling command {Command}", command);
 
-                return new CommandErrorResponse(errorId,
+                return new CommandErrorResult(errorId,
                                                 domainException.PublicMessage,
-                                                domainException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray());
+                                                domainException.Errors.Select(x => new CommandErrorResult.ErrorItem(x.Key, x.Value)).ToArray());
             }
             catch (ApplicationException applicationException)
             {
@@ -61,9 +61,9 @@ namespace Core.Infrastructure.Handlers
 
                 _logger.LogError(applicationException, "Error occured during handling command {Command}", command);
 
-                return new CommandErrorResponse(errorId,
+                return new CommandErrorResult(errorId,
                                                 applicationException.PublicMessage,
-                                                applicationException.Errors.Select(x => new CommandErrorResponse.ErrorItem(x.Key, x.Value)).ToArray());
+                                                applicationException.Errors.Select(x => new CommandErrorResult.ErrorItem(x.Key, x.Value)).ToArray());
             }
             catch (Exception exception)
             {
@@ -71,7 +71,7 @@ namespace Core.Infrastructure.Handlers
 
                 _logger.LogError(exception, "Error occured during handling command {Command}", command);
 
-                return new CommandErrorResponse(errorId, "GENERAL ERROR");
+                return new CommandErrorResult(errorId, "GENERAL ERROR");
             }
         }
 

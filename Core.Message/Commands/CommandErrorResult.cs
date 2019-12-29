@@ -2,13 +2,13 @@
 
 namespace Core.Message.Commands
 {
-    public class CommandErrorResponse : CommandResponse
+    public class CommandErrorResult : CommandResult
     {
         public Guid ErrorId { get; }
         public string Message { get; }
         public ErrorItem[] Errors { get; }
 
-        public CommandErrorResponse(Guid errorId, string message, ErrorItem[] errors = null)
+        public CommandErrorResult(Guid errorId, string message, ErrorItem[] errors = null)
         {
             ErrorId = errorId;
             Message = message;
