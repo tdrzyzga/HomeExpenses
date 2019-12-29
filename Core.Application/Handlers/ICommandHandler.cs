@@ -8,7 +8,7 @@ namespace Core.Application.Handlers
     }
 
     public interface ICommandHandler<in TCommand> : ICommandHandler
-        where TCommand : ICommand
+        where TCommand : class, ICommand
     {
         Task Handle(TCommand command);
     }

@@ -5,6 +5,6 @@ namespace Core.Application.MessageBus
 {
     public interface IApplicationMessageBus
     {
-        Task<ICommandResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand;
+        Task<ICommandResult> SendCommand<TCommand>(TCommand command) where TCommand : class, ICommand;
     }
 }

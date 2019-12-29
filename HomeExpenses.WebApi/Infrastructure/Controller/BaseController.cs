@@ -29,7 +29,7 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             _presentationMessageBus = payload.PresentationMessageBus;
         }
 
-        protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
+        protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : class, ICommand
         {
             var validationErrors = await Validate(command);
 

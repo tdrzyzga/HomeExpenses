@@ -12,7 +12,7 @@ using ApplicationException = Core.Application.Exceptions.ApplicationException;
 
 namespace Core.Infrastructure.Handlers
 {
-    public class CommandHandlerInterceptor<TCommand> : ICommandHandlerInterceptor<TCommand> where TCommand : ICommand
+    public class CommandHandlerInterceptor<TCommand> : ICommandHandlerInterceptor<TCommand> where TCommand : class, ICommand
     {
         private readonly ILogger<CommandHandlerInterceptor<TCommand>> _logger;
         private readonly IServiceScope _scope;
