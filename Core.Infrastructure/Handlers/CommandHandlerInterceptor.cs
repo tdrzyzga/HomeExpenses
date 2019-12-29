@@ -23,7 +23,7 @@ namespace Core.Infrastructure.Handlers
             _logger = logger;
         }
 
-        public async Task<ICommandResult> Handle(TCommand command, CancellationToken cancellationToken)
+        public async Task<ICommandResult> Handle(TCommand command, CancellationToken cancellationToken = default)
         {
             try
             {

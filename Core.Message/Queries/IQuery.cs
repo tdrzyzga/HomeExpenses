@@ -1,6 +1,8 @@
-﻿namespace Core.Message.Queries
+﻿using MediatR;
+
+namespace Core.Message.Queries
 {
-    public interface IQuery
+    public interface IQuery : IRequest<IQueryResult>
     {
         Metadata Metadata { get; }
 

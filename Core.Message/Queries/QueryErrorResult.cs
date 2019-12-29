@@ -2,7 +2,7 @@
 
 namespace Core.Message.Queries
 {
-    public class QueryErrorResult
+    public class QueryErrorResult : IQueryResult
     {
         public Guid ErrorId { get; }
         public string Message { get; }
