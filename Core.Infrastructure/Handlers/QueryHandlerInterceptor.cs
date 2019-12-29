@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace Core.Infrastructure.Handlers
 {
-    public class QueryHandlerInterceptor<TQuery, TQueryResult> : IQueryHandlerInterceptor<TQuery, TQueryResult>
-        where TQuery : class, IQuery
-        where TQueryResult : class, IQueryResult
+    public class QueryHandlerInterceptor<TQuery> : IQueryHandlerInterceptor<TQuery> where TQuery : class, IQuery
     {
-        private readonly IQueryHandler<TQuery, TQueryResult> _handler;
-        private readonly ILogger<QueryHandlerInterceptor<TQuery, TQueryResult>> _logger;
+        private readonly IQueryHandler<TQuery> _handler;
+        private readonly ILogger<QueryHandlerInterceptor<TQuery>> _logger;
 
-        public QueryHandlerInterceptor(IQueryHandler<TQuery, TQueryResult> handler, ILogger<QueryHandlerInterceptor<TQuery, TQueryResult>> logger)
+        public QueryHandlerInterceptor(IQueryHandler<TQuery> handler, ILogger<QueryHandlerInterceptor<TQuery>> logger)
         {
             _handler = handler;
             _logger = logger;

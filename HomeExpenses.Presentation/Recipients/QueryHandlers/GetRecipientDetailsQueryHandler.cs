@@ -1,4 +1,5 @@
-﻿using Core.Presentation.Handlers;
+﻿using Core.Message.Queries;
+using Core.Presentation.Handlers;
 using Core.Presentation.Repositories;
 using HomeExpenses.Domain.Recipients.Model;
 using HomeExpenses.Message.Recipients.Queries;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeExpenses.Presentation.Recipients.QueryHandlers
 {
-    public class GetRecipientDetailsQueryHandler : IQueryHandler<GetRecipientDetailsQuery, GetRecipientDetailsQueryResult>
+    public class GetRecipientDetailsQueryHandler : IQueryHandler<GetRecipientDetailsQuery>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 
@@ -15,7 +16,7 @@ namespace HomeExpenses.Presentation.Recipients.QueryHandlers
             _recipientRepository = recipientRepository;
         }
 
-        public async Task<GetRecipientDetailsQueryResult> Handle(GetRecipientDetailsQuery query)
+        public async Task<IQueryResult> Handle(GetRecipientDetailsQuery query)
         {
             var recipient = await _recipientRepository.Get(query.Id, query.Metadata.TenantId);
 

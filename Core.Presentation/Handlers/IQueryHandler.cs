@@ -7,10 +7,8 @@ namespace Core.Presentation.Handlers
     {
     }
 
-    public interface IQueryHandler<in TQuery, TQueryResult> : IQueryHandler
-        where TQuery : class, IQuery
-        where TQueryResult : class, IQueryResult
+    public interface IQueryHandler<in TQuery> : IQueryHandler where TQuery : class, IQuery
     {
-        Task<TQueryResult> Handle(TQuery query);
+        Task<IQueryResult> Handle(TQuery query);
     }
 }

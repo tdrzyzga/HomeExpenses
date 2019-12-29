@@ -68,14 +68,12 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             }
         }
 
-        protected async Task<IActionResult> SendQuery<TQuery, TQueryResult>(TQuery query) 
-            where TQuery : class, IQuery
-            where TQueryResult : class, IQueryResult
+        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : class, IQuery
         {
             var culture = GetCulture();
             query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var result = await _presentationMessageBus.SendQuery<TQuery, TQueryResult>(query);
+            var result = await _presentationMessageBus.SendQuery(query);
 
             switch (result)
             {

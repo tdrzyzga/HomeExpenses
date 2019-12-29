@@ -1,4 +1,5 @@
-﻿using Core.Presentation.Handlers;
+﻿using Core.Message.Queries;
+using Core.Presentation.Handlers;
 using Core.Presentation.Pagination;
 using Core.Presentation.Repositories;
 using HomeExpenses.Domain.Recipients.Model;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HomeExpenses.Presentation.Recipients.QueryHandlers
 {
-    public class GetRecipientListQueryHandler : IQueryHandler<GetRecipientListQuery, GetRecipientListQueryResult>
+    public class GetRecipientListQueryHandler : IQueryHandler<GetRecipientListQuery>
     {
         private readonly IReadOnlyRepository<Recipient> _recipientRepository;
 
@@ -18,7 +19,7 @@ namespace HomeExpenses.Presentation.Recipients.QueryHandlers
             _recipientRepository = recipientRepository;
         }
 
-        public async Task<GetRecipientListQueryResult> Handle(GetRecipientListQuery query)
+        public async Task<IQueryResult> Handle(GetRecipientListQuery query)
         {
             var recipients = _recipientRepository.GetPagedData(r => true,
                                                                           query.PageIndex,

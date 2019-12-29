@@ -21,9 +21,7 @@ namespace Core.Infrastructure.MessageBus
             return await _mediator.Send(command);
         }
 
-        public async Task<IQueryResult> SendQuery<TQuery, TQueryResult>(TQuery query)
-            where TQuery : class, IQuery
-            where TQueryResult : class, IQueryResult
+        public async Task<IQueryResult> SendQuery<TQuery>(TQuery query) where TQuery : class, IQuery
         {
             return await _mediator.Send(query);
         }

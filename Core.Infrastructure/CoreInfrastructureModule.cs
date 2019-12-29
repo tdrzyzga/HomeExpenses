@@ -12,7 +12,7 @@ namespace Core.Infrastructure
             builder.RegisterGeneric(typeof(NoTenantRepository<>)).AsImplementedInterfaces().InstancePerDependency();
             builder.RegisterGeneric(typeof(TenantRepository<>)).AsImplementedInterfaces().InstancePerDependency();
             builder.RegisterGeneric(typeof(CommandHandlerInterceptor<>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(QueryHandlerInterceptor<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(QueryHandlerInterceptor<>)).AsImplementedInterfaces();
 
             builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
             builder.Register<ServiceFactory>(context =>
