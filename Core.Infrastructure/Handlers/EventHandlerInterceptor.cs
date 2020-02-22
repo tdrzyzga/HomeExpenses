@@ -21,9 +21,12 @@ namespace Core.Infrastructure.Handlers
 
         public async Task Handle(TEvent @event, CancellationToken cancellationToken)
         {
-            var handler = _scope.ServiceProvider.GetRequiredService<IEventHandler<TEvent>>();
+            var handlers = _scope.ServiceProvider.GetServices<IEventHandler<TEvent>>();
 
-            await handler.Handle(@event);
+            foreach (var handler in handlers)
+            {
+                await handler.Handle(@event);
+            }
         }
     }
 }
