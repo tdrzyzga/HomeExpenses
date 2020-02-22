@@ -27,9 +27,11 @@ namespace Core.Infrastructure.MessageBus
             return await _mediator.Send(query);
         }
         
-        public async Task SendEvent<TEvent>(TEvent @event) where TEvent : class, IEvent
+        public Task SendEvent<TEvent>(TEvent @event) where TEvent : class, IEvent
         {
-            await _mediator.Publish(@event);
+            Task.Run(() => _mediator.Publish(@event));
+            
+            return Task.CompletedTask;
         }
     }
 }

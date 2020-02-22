@@ -9,8 +9,8 @@ namespace Core.Infrastructure
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterGeneric(typeof(NoTenantRepository<>)).AsImplementedInterfaces().InstancePerDependency();
-            builder.RegisterGeneric(typeof(TenantRepository<>)).AsImplementedInterfaces().InstancePerDependency();
+            builder.RegisterGeneric(typeof(NoTenantRepository<>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(TenantRepository<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(CommandHandlerInterceptor<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(QueryHandlerInterceptor<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(EventHandlerInterceptor<>)).AsImplementedInterfaces();

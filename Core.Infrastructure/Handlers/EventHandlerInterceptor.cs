@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Application.Handlers;
@@ -21,11 +22,17 @@ namespace Core.Infrastructure.Handlers
 
         public async Task Handle(TEvent @event, CancellationToken cancellationToken)
         {
-            var handlers = _scope.ServiceProvider.GetServices<IEventHandler<TEvent>>();
+            var handlers = _scope.ServiceProvider.GetServices<IEventHandler<TEvent>>().ToArray();
 
-            foreach (var handler in handlers)
+            var tasks = handlers.Select(handler => Task.Run(() => handler.Handle(@event)));
+
+            try
             {
-                await handler.Handle(@event);
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Error occured during handling event {Event}", @event);
             }
         }
     }

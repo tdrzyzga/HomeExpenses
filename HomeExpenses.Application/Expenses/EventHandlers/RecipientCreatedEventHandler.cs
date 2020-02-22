@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Core.Application.Handlers;
 using HomeExpenses.Message.Recipients.Events;
@@ -16,7 +17,9 @@ namespace HomeExpenses.Application.Expenses.EventHandlers
 
         public async Task Handle(RecipientCreatedEvent @event)
         {
-            _logger.LogDebug("Recipient {recipientId} {recipientName} created -- expenses", @event.RecipientId, @event.Name);
+            _logger.LogDebug("Recipient {recipientId} {recipientName} created {dateTime} -- expenses", @event.RecipientId, @event.Name,
+                             DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
+            throw new ArgumentNullException();
         }
     }
 }
