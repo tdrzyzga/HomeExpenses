@@ -29,7 +29,7 @@ namespace Core.Infrastructure.Handlers
             {
                 await Validate(command);
 
-                var handler = _scope.ServiceProvider.GetService<ICommandHandler<TCommand>>();
+                var handler = _scope.ServiceProvider.GetRequiredService<ICommandHandler<TCommand>>();
                 await handler.Handle(command);
 
                 _logger.LogDebug("Command {Command} successfuly handled", command);

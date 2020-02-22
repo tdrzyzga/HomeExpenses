@@ -4,6 +4,7 @@ using Core.Message.Queries;
 using Core.Presentation.MessageBus;
 using MediatR;
 using System.Threading.Tasks;
+using Core.Message.Events;
 
 namespace Core.Infrastructure.MessageBus
 {
@@ -24,6 +25,11 @@ namespace Core.Infrastructure.MessageBus
         public async Task<IQueryResult> SendQuery<TQuery>(TQuery query) where TQuery : class, IQuery
         {
             return await _mediator.Send(query);
+        }
+        
+        public async Task SendEvent<TEvent>(TEvent @event) where TEvent : class, IEvent
+        {
+            await _mediator.Publish(@event);
         }
     }
 }
