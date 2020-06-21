@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Core.Domain.Entities;
 using Core.Domain.ValueObjects;
 
 namespace HomeExpenses.Domain.Recipients.Model
 {
-    public class Recipient : AggregateRoot, IHaveTenant
+    public class Recipient : AggregateRoot, IHaveTenant, IDeletable
     {
         public Guid? TenantId { get; private set; }
+        public bool IsDeleted { get; private set; }
         public string Name { get; private set; }
         public virtual AddressValueObject Address { get; private set; }
 
@@ -22,18 +22,19 @@ namespace HomeExpenses.Domain.Recipients.Model
             Address = new AddressValueObject(address);
         }
 
-        public Task ChangeName(string name)
+        public void ChangeName(string name)
         {
             Name = name;
-
-            return Task.CompletedTask;
         }
 
-        public Task ChangeAddress(AddressValueObject address)
+        public void ChangeAddress(AddressValueObject address)
         {
             Address = new AddressValueObject(address);
+        }
 
-            return Task.CompletedTask;
+        public virtual void Delete()
+        {
+            IsDeleted = true;
         }
     }
 }

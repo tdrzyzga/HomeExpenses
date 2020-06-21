@@ -17,8 +17,8 @@ namespace HomeExpenses.Application.Recipients.CommandHandlers
 
             var address = new AddressValueObject(command.City, command.Street, command.Number);
 
-            await recipient.ChangeName(command.Name);
-            await recipient.ChangeAddress(address);
+            recipient.ChangeName(command.Name);
+            recipient.ChangeAddress(address);
 
             await _recipientRepository.Save(recipient);
         }

@@ -2,10 +2,13 @@
 using System.Threading.Tasks;
 using Core.Domain.Entities;
 
-namespace HomeExpenses.Domain.Expenses.Model
+namespace HomeExpenses.Domain.Payments.Model
 {
-    public class Payment : Entity
+    public class Payment : AggregateRoot, IHaveTenant, IDeletable
     {
+        
+        public Guid? TenantId { get; private set; }
+        public bool IsDeleted { get; private set; }
         public Guid? RecipientId { get; private set; }
         public decimal Amount { get; private set; }
         public DateTime DateTime { get; private set; }
@@ -14,26 +17,24 @@ namespace HomeExpenses.Domain.Expenses.Model
         {
         }
 
-        public Payment(Guid id, Guid? recipientId, decimal amount, DateTime dateTime) : base(id)
+        public Payment(Guid id, Guid? tenantId, Guid? recipientId, decimal amount, DateTime dateTime) : base(id)
         {
+            TenantId = tenantId;
             RecipientId = recipientId;
             Amount = amount;
             DateTime = dateTime;
         }
 
-        public Task ChangeRecipient(Guid? recipientId)
+        public void ChangeRecipient(Guid? recipientId)
         {
             RecipientId = recipientId;
-
-            return Task.CompletedTask;
         }
 
-        public Task ChangePaymentData(decimal amount, DateTime dateTime)
+        public void ChangePaymentData(decimal amount, DateTime dateTime)
         {
             Amount = amount;
             DateTime = dateTime;
-
-            return Task.CompletedTask;
         }
+
     }
 }

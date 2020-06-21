@@ -25,7 +25,7 @@ namespace Core.Infrastructure.Repositories
 
         protected async Task<TAggregateRoot[]> Filter(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+            filter = PredicateBuilder.New<TAggregateRoot>(filter);
 
             var query = _dbSet.Where(filter);
 
@@ -34,7 +34,7 @@ namespace Core.Infrastructure.Repositories
 
         protected async Task<TAggregateRoot> Get(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+            filter = PredicateBuilder.New<TAggregateRoot>(filter);
 
             var query = _dbSet.Where(filter);
 
@@ -46,7 +46,7 @@ namespace Core.Infrastructure.Repositories
             pageIndex = pageIndex > 0 ? pageIndex : 1;
             itemsPerPage = itemsPerPage > 0 ? itemsPerPage : 1; 
 
-            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+            filter = PredicateBuilder.New<TAggregateRoot>(filter);
 
             var query = _dbSet.Where(filter);
 
@@ -59,7 +59,7 @@ namespace Core.Infrastructure.Repositories
 
         protected async Task<long> GetTotalItemsCount(Expression<Func<TAggregateRoot, bool>> filter)
         {
-            filter = PredicateBuilder.New<TAggregateRoot>(x => x.IsDeleted == false).And(filter);
+            filter = PredicateBuilder.New<TAggregateRoot>(filter);
 
             return await _dbSet.CountAsync(filter);
         }
