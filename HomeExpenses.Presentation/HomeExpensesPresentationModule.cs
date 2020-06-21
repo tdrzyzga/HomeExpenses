@@ -1,5 +1,4 @@
-﻿using Akka.Actor;
-using Autofac;
+﻿using Autofac;
 using Core.Presentation.Pagination;
 
 namespace HomeExpenses.Presentation
@@ -11,10 +10,6 @@ namespace HomeExpenses.Presentation
             builder.RegisterAssemblyTypes(ThisAssembly)
                    .Where(t => t.IsClosedTypeOf(typeof(ISortExpression<>)))
                    .AsImplementedInterfaces();
-            
-            builder.RegisterAssemblyTypes(ThisAssembly)
-                   .Where(t => t.IsAssignableTo<ReceiveActor>())
-                   .AsSelf();
 
             builder.RegisterAssemblyTypes(ThisAssembly)
                    .AsImplementedInterfaces()

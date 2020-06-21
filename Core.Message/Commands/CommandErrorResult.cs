@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace Core.Message.Queries
+namespace Core.Message.Commands
 {
-    public class QueryErrorResult : IQueryResult
+    public class CommandErrorResult : CommandResult
     {
         public Guid ErrorId { get; }
         public string Message { get; }
         public ErrorItem[] Errors { get; }
 
-        public QueryErrorResult(Guid errorId, string message, ErrorItem[] errors = null)
+        public CommandErrorResult(Guid errorId, string message, ErrorItem[] errors = null)
         {
             ErrorId = errorId;
             Message = message;

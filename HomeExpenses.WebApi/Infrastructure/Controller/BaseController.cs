@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Akka.Actor;
+using Core.Application.MessageBus;
 using Core.Message;
 using Core.Message.Commands;
 using Core.Message.Queries;
+using Core.Presentation.MessageBus;
 using FluentValidation;
 using FluentValidation.Results;
 using HomeExpenses.WebApi.Infrastructure.Seed;
@@ -17,18 +18,18 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
 {
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private readonly ICommandForwarderActorProvider _commandForwarderActorProvider;
-        private readonly IQueryForwarderActorProvider _queryForwarderActorProvider;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IApplicationMessageBus _applicationMessageBus;
+        private readonly IPresentationMessageBus _presentationMessageBus;
 
         protected BaseController(BaseControllerPayload payload)
         {
-            _commandForwarderActorProvider = payload.CommandForwarderActorProvider;
-            _queryForwarderActorProvider = payload.QueryForwarderActorProvider;
             _serviceProvider = payload.ServiceProvider;
+            _applicationMessageBus = payload.ApplicationMessageBus;
+            _presentationMessageBus = payload.PresentationMessageBus;
         }
 
-        protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : ICommand
+        protected async Task<IActionResult> SendCommand<TCommand>(TCommand command) where TCommand : class, ICommand
         {
             var validationErrors = await Validate(command);
 
@@ -45,34 +46,34 @@ namespace HomeExpenses.WebApi.Infrastructure.Controller
             var culture = GetCulture();
             command.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var response = await _commandForwarderActorProvider.Ask(command);
+            var result = await _applicationMessageBus.SendCommand(command);
 
-            switch (response)
+            switch (result)
             {
-                case ValidationErrorResponse validationErrorResponse:
-                {
-                    foreach (var validationError in validationErrorResponse.Errors)
+                case ValidationErrorResult validationErrorResult:
                     {
-                        ModelState.AddModelError(validationError.Key, validationError.Value);
-                    }
+                        foreach (var validationError in validationErrorResult.Errors)
+                        {
+                            ModelState.AddModelError(validationError.Key, validationError.Value);
+                        }
 
-                    return BadRequest(ModelState);
-                }
-                case CommandErrorResponse errorResponse:
-                    return BadRequest(errorResponse);
-                case CommandSuccessResponse _:
+                        return BadRequest(ModelState);
+                    }
+                case CommandErrorResult errorResult:
+                    return BadRequest(errorResult);
+                case CommandSuccessResult _:
                     return Ok();
                 default:
                     return BadRequest();
             }
         }
 
-        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : IQuery
+        protected async Task<IActionResult> SendQuery<TQuery>(TQuery query) where TQuery : class, IQuery
         {
             var culture = GetCulture();
             query.SetMetadata(new Metadata(culture, FakeSeedData.TenantId));
 
-            var result = await _queryForwarderActorProvider.Ask(query);
+            var result = await _presentationMessageBus.SendQuery(query);
 
             switch (result)
             {

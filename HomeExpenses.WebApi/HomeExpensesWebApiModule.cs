@@ -1,36 +1,33 @@
-﻿using Akka.Configuration;
-using Autofac;
-using Core.Akka;
-using Core.Akka.ActorSystem;
+﻿using Autofac;
 using Core.Application;
+using Core.Domain;
+using Core.Infrastructure;
+using Core.Message;
+using Core.Presentation;
+using HomeExpenses.Application;
+using HomeExpenses.Domain;
+using HomeExpenses.Infrastructure;
 using HomeExpenses.Message;
+using HomeExpenses.Presentation;
+using MediatR;
 
 namespace HomeExpenses.WebApi
 {
     public class HomeExpensesWebApiModule : Module
     {
-        private readonly Config AkkaConfig = ConfigurationFactory.ParseString(@"
-                                                                        akka {
-                                                                            actor {
-                                                                                provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""
-                                                                            }
-
-                                                                            remote {
-                                                                                dot-netty.tcp {
-                                                                                    port = 9992
-                                                                                    hostname = localhost
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        ");
-
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<CoreAkkaModule>();
             builder.RegisterModule<CoreApplicationModule>();
-            builder.RegisterModule<HomeExpensesMessageModule>();
+            builder.RegisterModule<CoreDomainModule>();
+            builder.RegisterModule<CoreInfrastructureModule>();
+            builder.RegisterModule<CoreMessageModule>();
+            builder.RegisterModule<CorePresentationModule>();
 
-            builder.Register(ctx => new LocalActorSystemManager("WebApiActorSystem", AkkaConfig)).AsImplementedInterfaces().SingleInstance();
+            builder.RegisterModule<HomeExpensesApplicationModule>();
+            builder.RegisterModule<HomeExpensesDomainModule>();
+            builder.RegisterModule<HomeExpensesInfrastructureModule>();
+            builder.RegisterModule<HomeExpensesMessageModule>();
+            builder.RegisterModule<HomeExpensesPresentationModule>();
         }
     }
 }

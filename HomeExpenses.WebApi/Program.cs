@@ -13,6 +13,7 @@ namespace HomeExpenses.WebApi
             WebHost.CreateDefaultBuilder()
                    .UseKestrel()
                    .UseContentRoot(Directory.GetCurrentDirectory())
+                   .UseUrls("http://localhost:60440")
                    .UseIISIntegration()
                    .UseStartup<Startup>()
                    .UseEnvironment(environmentName)

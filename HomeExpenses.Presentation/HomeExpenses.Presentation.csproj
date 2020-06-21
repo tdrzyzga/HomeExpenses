@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Akka\Core.Akka.csproj" />
     <ProjectReference Include="..\Core.Presentation\Core.Presentation.csproj" />
     <ProjectReference Include="..\HomeExpenses.Domain\HomeExpenses.Domain.csproj" />
     <ProjectReference Include="..\HomeExpenses.Message\HomeExpenses.Message.csproj" />

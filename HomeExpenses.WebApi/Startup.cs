@@ -1,24 +1,23 @@
-﻿using System;
-using System.Globalization;
-using Akka.DI.AutoFac;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Core.Akka.ActorSystem;
+using HomeExpenses.Infrastructure.Databases;
 using HomeExpenses.WebApi.Infrastructure.Controller;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Globalization;
 
 namespace HomeExpenses.WebApi
 {
     public class Startup
     {
-        public IContainer DiContainer { get; private set; }
-
         public IConfigurationRoot Configuration { get; }
+        public IContainer DiContainer { get; private set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -30,46 +29,14 @@ namespace HomeExpenses.WebApi
             Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<IConfiguration>(Configuration);
-
-            services.AddCors();
-
-            services.AddMvc()
-                    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
-                                         options => options.ResourcesPath = "Resources");
-
-            services.AddSingleton<BaseControllerPayload>();
-
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<HomeExpensesWebApiModule>();
-
-            var commandForwarderActorPath = Configuration.GetSection("CommandForwarderActorProvider").GetValue<string>("Path");
-            builder.Register(ctx => new CommandForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), commandForwarderActorPath)).AsImplementedInterfaces().SingleInstance();
-            var queryForwarderActorPath = Configuration.GetSection("QueryForwarderActorProvider").GetValue<string>("Path");
-            builder.Register(ctx => new QueryForwarderActorProvider(DiContainer.Resolve<ILocalActorSystemManager>(), queryForwarderActorPath)).AsImplementedInterfaces().SingleInstance();
-
-            builder.Populate(services);
-            DiContainer = builder.Build();
-
-            new AutoFacDependencyResolver(DiContainer, DiContainer.Resolve<ILocalActorSystemManager>().ActorSystem);
-
-            return new AutofacServiceProvider(DiContainer);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILocalActorSystemManager localActorSystemManager)
+        public void Configure(IServiceProvider serviceProvider, IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder =>
-                            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-            );
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             var supportedCultures = new[]
             {
@@ -80,13 +47,43 @@ namespace HomeExpenses.WebApi
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("pl-PL"),
-                // Formatting numbers, dates, etc.
                 SupportedCultures = supportedCultures,
-                // UI strings that we have localized.
                 SupportedUICultures = supportedCultures
             });
 
             app.UseMvc();
+
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<HomeExpensesDbContext>();
+                context.Database.Migrate();
+            }
+        }
+
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddDbContext<HomeExpensesDbContext>(options => options.UseLazyLoadingProxies()
+                                                                           .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
+            services.AddCors();
+
+            services.AddMvc()
+                    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
+                                         options => options.ResourcesPath = "Resources");
+
+            var builder = new ContainerBuilder();
+
+            builder.RegisterModule<HomeExpensesWebApiModule>();
+            builder.Register(ctx => ctx.Resolve<HomeExpensesDbContext>()).As<DbContext>();
+            builder.RegisterType<BaseControllerPayload>().AsSelf().SingleInstance();
+
+            builder.Populate(services);
+            DiContainer = builder.Build();
+
+            return new AutofacServiceProvider(DiContainer);
         }
     }
 }
